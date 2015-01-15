@@ -1,0 +1,37 @@
+{
+  "name": "strider-android",
+  "version": "1.0.0",
+  "description": "Tests Android projects",
+  "main": "webapp.js",
+  "scripts": {
+    "test": "mocha -R spec --recursive test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitwit/strider-template.git"
+  },
+  "keywords": [
+    "strider",
+    "plugin",
+    "template"
+  ],
+  "author": "Chris Rokita",
+  "license": "ISC",
+  "dependencies": {},
+  "strider": {
+    "type": "job",
+    "id": "strider-android",
+    "title": "Plugin Template",
+    "worker": "worker.js",
+    "webapp": "webapp.js",
+    "icon": "icon.png",
+    "config": {
+      "controller": "TemplateCtrl"
+    }
+  },
+  "devDependencies": {
+    "chai": "^1.9.1",
+    "mocha": "^1.20.1",
+    "sinon-chai": "^2.5.0"
+  }
+}
