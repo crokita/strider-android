@@ -1,7 +1,7 @@
 {
   "name": "strider-android",
   "version": "1.0.0",
-  "description": "Tests Android projects",
+  "description": "A Strider plugin for Android testing",
   "main": "webapp.js",
   "scripts": {
     "test": "mocha -R spec --recursive test"
@@ -20,13 +20,13 @@
   "dependencies": {},
   "strider": {
     "type": "job",
-    "id": "strider-android",
-    "title": "Plugin Template",
+    "id": "android",
+    "title": "Android Plugin",
     "worker": "worker.js",
     "webapp": "webapp.js",
     "icon": "icon.png",
     "config": {
-      "controller": "TemplateCtrl"
+      "controller": "AndroidController"
     }
   },
   "devDependencies": {

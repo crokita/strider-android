@@ -1,2 +1,11 @@
-node_modules
+# Specific files
+.DS_Store
+
+# File types
+.log
 .idea
+
+# Directories
+tmp
+node_modules
+

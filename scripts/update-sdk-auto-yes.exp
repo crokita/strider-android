@@ -1,0 +1,11 @@
+#!/usr/bin/expect -f
+set androidDir [lindex $argv 0]
+set timeout -1
+
+spawn $androidDir update sdk --no-ui 
+expect {
+	"Do you accept the license" { 
+		exp_send "y\r" ; exp_continue 
+	}
+	eof 
+}
