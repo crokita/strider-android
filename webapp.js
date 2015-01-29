@@ -8,6 +8,7 @@ module.exports = {
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         }
+        askForDevices: {type: Boolean, default: false}
     },
     // Define project-specific routes
     //   all routes created here are namespaced within /:org/:repo/api/:pluginid
@@ -31,6 +32,25 @@ module.exports = {
     //   the main strider eventemitter, so you can listen for them here.
     //   Other events include `job.new`, `job.done` and `browser.update`.
     listen: function (emitter, context) {
+        emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
+            //console.log("Project Info");
+            //console.log(project);
+            //console.log("Branch Info");
+            //console.log(branch);
+            //console.log("Plugin Info");
+            //console.log(plugin);
+
+            //body is the config's current state
+            //console.log("Body Info");
+            //console.log(body);
+            if (body.askForDevices) { //the user wants to update/install the android SDK
+              exec('chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;', function (err, stdout, stderr) {
+                console.log("Successed!");
+                console.log(stdout);
+                body.askForDevices = false;
+              });
+            }  
+        });
     }
 
 

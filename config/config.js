@@ -22,4 +22,9 @@ app.controller('AndroidController', ['$scope', function ($scope) {
 		});
 	};
 
+	$scope.retrieveData = function () {
+		$scope.config.askForDevices = true;
+		$scope.save();
+	}
+
 }]);
