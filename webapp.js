@@ -1,3 +1,5 @@
+var exec = require('child_process').exec;
+
 module.exports = {
     // mongoose schema, if you need project-specific config
     config: {
