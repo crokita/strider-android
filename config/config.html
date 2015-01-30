@@ -18,18 +18,46 @@
             <th>Target</th>
             <th>ABI</th>
             <th>Skin</th>
-        </tr>
+            <th>Selected</th>
         <tr ng-repeat="device in results">
             <th>[[device.name]]</th>
             <th>[[device.target]]</th>
             <th>[[device.abi]]</th>
             <th>[[device.skin]]</th>
+            <th><input type="radio" ng-model="selected"></th>
         </tr>
     </table>
 
     <br/>
 
     <!--
+        <table class="results-table table table-striped table-bordered">
+            <tr> 
+                <th>method</th>
+                <th>ip</th>
+                <th>url</th>
+                <th>status</th>
+                <th>time</th>
+            </tr>
+            
+            <tr ng-repeat-start="(key,value) in data">
+                <div ng-init="visiblePretty = false">
+                    <th>{{value.request.method}}</th>
+                    <th>{{value.request.ip}}</th>
+                    <th>{{value.request.url}}</th>
+                    <th>{{value.response.status}}</th>
+                    <th>{{value.request.time}}</th>
+                    <th><button ng-click="makePretty(key); visiblePretty = !visiblePretty">View</button></th>
+                </div>
+            </tr>
+            <tr ng-repeat-end>
+                <td colspan="6"><pre ng-bind-html="result" ng-show="visiblePretty"></pre></td>
+            </tr>
+
+        </table>
+
+
+
     <h3>Environment</h3>
     <div class="row-fluid">
         <div class="span12">
