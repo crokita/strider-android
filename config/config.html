@@ -19,11 +19,13 @@
             <th>ABI</th>
             <th>Skin</th>
             <!--<th>Selected</th>-->
-        <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)" bgcolor="#FF0000">
-            <th>[[value.name]]</th>
-            <th>[[value.target]]</th>
-            <th>[[value.abi]]</th>
-            <th>[[value.skin]]</th>
+        <tr ng-repeat="(key, value) in results" >
+            <div ng-click="selectDevice(key)">
+                <th>[[value.name]]</th>
+                <th>[[value.target]]</th>
+                <th>[[value.abi]]</th>
+                <th>[[value.skin]]</th>
+            </div>
             <!--<th><input type="radio", ng-model="selectedDevice">[[key]]</th>-->
         </tr>
     </table>
