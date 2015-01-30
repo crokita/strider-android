@@ -11,8 +11,8 @@
     <button ng-click="retrieveData()" class="btn btn-primary">Grab Android Devices</button>
     <br/>
 
-    Device List:
-    <table class="table" ng-if="results != ''">
+    <div ng-if="results != ''"> Device List: </div>
+    <table class="table">
         <tr>
             <th>Name</th>
             <th>Target</th>
@@ -24,7 +24,7 @@
             <th>[[value.target]]</th>
             <th>[[value.abi]]</th>
             <th>[[value.skin]]</th>
-            <th><input type="radio" ng-model="selected[value]">[{{$key}}]</th>
+            <th><input type="radio" ng-model="selected[key]">{{key}}</th>
         </tr>
     </table>
 
