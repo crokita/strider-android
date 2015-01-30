@@ -1,4 +1,4 @@
-var SDK = require("./retrieveSDKInfo");
+var SDK = require("./bin/retrieveSDKInfo");
 
 module.exports = {
     // mongoose schema, if you need project-specific config
