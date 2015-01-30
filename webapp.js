@@ -1,5 +1,5 @@
 var exec = require('child_process').exec;
-var SDK = require('bin/retrieveSDKInfo');
+var SDK = require('./bin/retrieveSDKInfo');
 
 module.exports = {
     // mongoose schema, if you need project-specific config
@@ -37,6 +37,7 @@ module.exports = {
     listen: function (emitter, context) {
         emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
             //update android device list when any changes occur
+            console.log(SDK);
             var result = SDK.getDeviceList();
             console.log(result);
         });
