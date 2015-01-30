@@ -20,7 +20,7 @@ module.exports = {
     //   req.pluginConfig() -> get the config for this plugin
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
-        console.log("THIS SHOULD BE CALLED\n\n\n\n");
+
         app.get('/devices', function(req, res) {
             console.log("Testing");
             /*SDK.getDeviceList( function (result) {
@@ -30,12 +30,25 @@ module.exports = {
             res.json("hello");
         });
     },
+    /*
+    if project specific,    try api/:pluginid
+    global,                 try /ext/pluginid/myroute
+
+    */
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
     //   req.user is the current user
     //   req.user.account_level can be used for authorization
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
+        app.get('/devices', function(req, res) {
+            console.log("Testing");
+            /*SDK.getDeviceList( function (result) {
+                console.log(result);
+                res.send(result);
+            });  */
+            res.json("hello");
+        });
     },
     // Listen for global events
     //   all job-local events that begin with `plugin.` are proxied to
