@@ -19,7 +19,7 @@
             <th>ABI</th>
             <th>Skin</th>
             <!--<th>Selected</th>-->
-        <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)" bgcolor="#FF0000">
+        <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)" ng-model="deviceList[key]" bgcolor="deviceList[key]">
             <th>[[value.name]]</th>
             <th>[[value.target]]</th>
             <th>[[value.abi]]</th>
