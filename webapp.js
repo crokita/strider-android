@@ -11,6 +11,7 @@ module.exports = {
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         },
         askForDevices: {type: Boolean, default: false},
+        testingBool: {type: Boolean, default: true},
         deviceList: []
     },
     // Define project-specific routes
