@@ -29,7 +29,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
 			console.log(data);
 			$scope.results = data;
-			console.log($scope.deviceList);
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
@@ -41,7 +40,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.selectDevice = function (index) {
 		console.log("you have picked item number " + index);
-		$scope.deviceList[index] = "#FF0000";
+		console.log($scope.deviceList[index]);
 	}
 
 }]);
