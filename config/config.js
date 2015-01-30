@@ -4,6 +4,7 @@ var app = window.app;
 * */
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
+	$scope.results = "";
 	$scope.saving = false;
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
