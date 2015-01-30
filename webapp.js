@@ -22,6 +22,9 @@ module.exports = {
     //   req.pluginConfig() -> get the config for this plugin
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
+        app.get('/', function(req, res) {
+            res.send("YOYOYO");
+        })
     },
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
