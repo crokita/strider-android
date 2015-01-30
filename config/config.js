@@ -5,7 +5,6 @@ var app = window.app;
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.results = "";
-	$scope.deviceList = [];
 	$scope.saving = false;
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
@@ -30,6 +29,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
 			console.log(data);
 			$scope.results = data;
+			console.log($scope.deviceList);
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
