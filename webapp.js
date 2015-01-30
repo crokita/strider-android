@@ -20,7 +20,8 @@ module.exports = {
     //   req.pluginConfig() -> get the config for this plugin
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
-        app.get('/crokita/auto_dummy/config/plugin-android/devices', function(req, res) {
+        console.log("THIS SHOULD BE CALLED\n\n\n\n");
+        app.get('/devices', function(req, res) {
             console.log("Testing");
             /*SDK.getDeviceList( function (result) {
                 console.log(result);
@@ -28,7 +29,6 @@ module.exports = {
             });  */
             res.json("hello");
         });
-        console.log(app.get);
     },
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
