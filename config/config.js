@@ -1,5 +1,4 @@
 var app = window.app;
-var SDK = angular.module("../bin/retrieveSDKInfo");
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */

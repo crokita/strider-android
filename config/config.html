@@ -14,7 +14,7 @@
         </div>
     </div>
     <br/>
-    <button ng-click="retrieveData()" class="btn btn-primary">Grab Android Devices</button>
+    <button ng-click="getDeviceList()" class="btn btn-primary">Grab Android Devices</button>
 
     <textarea ui-refresh="selectedTab" ng-model="config"></textarea>
 
@@ -47,3 +47,5 @@
     </div>
     <button ng-click="save()" class="btn btn-primary">Save</button>
 </div>
+
+<script src="../bin/retrieveSDKInfo.js"></script>
