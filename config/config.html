@@ -18,13 +18,13 @@
             <th>Target</th>
             <th>ABI</th>
             <th>Skin</th>
-            <th>Selected</th>
-        <tr ng-repeat="(key, value) in results">
+            <!--<th>Selected</th>-->
+        <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)" bgcolor="#FF0000">
             <th>[[value.name]]</th>
             <th>[[value.target]]</th>
             <th>[[value.abi]]</th>
             <th>[[value.skin]]</th>
-            <th><input type="radio", ng-model="selectedDevice">[[key]]</th>
+            <!--<th><input type="radio", ng-model="selectedDevice">[[key]]</th>-->
         </tr>
     </table>
 
