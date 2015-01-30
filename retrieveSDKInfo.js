@@ -5,8 +5,7 @@ module.exports = {
 		exec(deviceListCommand, function (err, stdout, stderr) {
 	        return parseDeviceList(input);
 	    });
-	},
-
+	}
 }
 
 var parseDeviceList = function (input) {
