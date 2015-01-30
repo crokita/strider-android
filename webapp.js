@@ -21,10 +21,11 @@ module.exports = {
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
         app.get('/devices', function(req, res) {
-            SDK.getDeviceList( function (result) {
+            /*SDK.getDeviceList( function (result) {
                 console.log(result);
                 res.send(result);
-            });            
+            });  */
+            res.send("hello");          
         })
     },
     // Define global routes

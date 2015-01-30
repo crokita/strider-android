@@ -2,20 +2,8 @@ var app = window.app;
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
-app.factory('exampleService', function($http) {
-   return {
-        getDevices: function() {
-			//return the promise directly.
-			return $http.get('/devices')
-				.then(function(result) {
-				//resolve the promise as the data
-				return result.data;
-        	});
-        }
-   }
-});
 
-app.controller('AndroidController', function ($scope, exampleService) {
+app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.saving = false;
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
@@ -37,11 +25,10 @@ app.controller('AndroidController', function ($scope, exampleService) {
 
 	$scope.retrieveData = function () {
 		$scope.save();
-		exampleService.getDevices().then(function (result) {
-			$scope.result = result;
-			console.log($scope.result);
-		})
+		$http.get('/devices').success(function(data, status) {
+			$scope.result = data;
+		}
 	}
 
-});
+}]);
 
