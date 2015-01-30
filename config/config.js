@@ -25,7 +25,7 @@ app.controller('AndroidController', ['$scope', function ($scope) {
 	$scope.retrieveData = function () {
 		$scope.config.askForDevices = true;
 		$scope.deviceList = $scope.config.deviceList; //testing
-		alert(deviceList);
+		alert($scope.deviceList);
 		$scope.save();
 	}
 
