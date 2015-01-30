@@ -39,10 +39,8 @@ module.exports = {
             //update android device list when any changes occur
             SDK.getDeviceList( function (result) {
                 console.log(body);
-                console.log(context);
-                context.pluginConfig(result, function (err) {
-                    console.log(body);
-                });
+                body = result;
+                console.log(body);
             });
             
         });
