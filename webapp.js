@@ -1,5 +1,5 @@
 var SDK = require('./bin/retrieveSDKInfo');
-console.log(SDK);
+
 module.exports = {
     // mongoose schema, if you need project-specific config
     config: {
@@ -37,7 +37,8 @@ module.exports = {
         emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
             //update android device list when any changes occur
             console.log(SDK);
-            var result = SDK.getDeviceList();
+            //var result = SDK.getDeviceList();
+            var result = SDK();
             console.log(result);
         });
     }
