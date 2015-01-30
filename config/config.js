@@ -6,7 +6,7 @@ app.factory('exampleService', function($http) {
    return {
         getDevices: function() {
 			//return the promise directly.
-			return $http.get('/')
+			return $http.get('/devices')
 				.then(function(result) {
 				//resolve the promise as the data
 				return result.data;
