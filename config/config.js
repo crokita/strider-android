@@ -26,6 +26,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.retrieveData = function () {
 		$scope.save();
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
+			console.log(data);
 			$scope.result = data;
 		});
 		/*
