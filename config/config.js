@@ -23,10 +23,24 @@ app.controller('AndroidController', ['$scope', function ($scope) {
 	};
 
 	$scope.retrieveData = function () {
-		$scope.config.askForDevices = true;
-		$scope.config.deviceList = [];
-		console.log($scope.config);
 		$scope.save();
+		exampleService.getDevices().then(function (result) {
+			$scope.result = result;
+			console.log($scope.result);
+		})
 	}
 
 }]);
+
+app.factory('exampleService', function($http) {
+   return {
+        getDevices: function() {
+			//return the promise directly.
+			return $http.get('/')
+				.then(function(result) {
+				//resolve the promise as the data
+				return result;
+        	});
+        }
+   }
+});
