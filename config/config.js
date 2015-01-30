@@ -5,6 +5,7 @@ var app = window.app;
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.results = "";
+	$scope.targetDevice = "";
 	$scope.saving = false;
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
@@ -40,7 +41,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.selectDevice = function (index) {
 		console.log("you have picked item number " + index);
-		console.log($scope.deviceList);
+		console.log($scope.results[index]);
 	}
 
 }]);
