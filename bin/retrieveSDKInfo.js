@@ -1,0 +1,3 @@
+var getDeviceList = function () {
+	
+}

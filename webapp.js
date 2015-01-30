@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var SDK = require('./bin/retrieveSDKInfo');
 
 module.exports = {
     // mongoose schema, if you need project-specific config
@@ -35,25 +36,10 @@ module.exports = {
     //   Other events include `job.new`, `job.done` and `browser.update`.
     listen: function (emitter, context) {
         emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
-            //console.log("Project Info");
-            //console.log(project);
-            //console.log("Branch Info");
-            //console.log(branch);
-            //console.log("Plugin Info");
-            //console.log(plugin);
-
-            //body is the config's current state
-            //console.log("Body Info");
-            //console.log(body);
-            if (body.askForDevices) { //the user wants to update/install the android SDK
-              exec('chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;', function (err, stdout, stderr) {
-                console.log("Successed!");
-                console.log(stdout);
-                body.askForDevices = false;
-              });
-            }  
+            //update android device list when any changes occur
+            var result = SDK.getDeviceList();
+            console.log(result);
         });
     }
-
 
 };
