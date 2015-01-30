@@ -30,7 +30,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			console.log(config);
 			$scope.result = data;
 		});*/
-		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
+		$http.get('/api/android/devices').success(function(data, status, headers, config) {
 			console.log(data);
 			console.log(config);
 			$scope.result = data;
