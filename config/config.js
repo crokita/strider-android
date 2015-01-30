@@ -1,6 +1,5 @@
 var app = window.app;
-var SDK = require("./bin/retrieveSDKInfo");
-
+var SDK = angular.module("../bin/retrieveSDKInfo");
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
@@ -29,9 +28,6 @@ app.controller('AndroidController', ['$scope', function ($scope) {
 		$scope.config.deviceList = [];
 		console.log($scope.config);
 		$scope.save();
-		SDK.getDeviceList( function (result) {
-        	console.log(result);
-        });
 	}
 
 }]);
