@@ -11,7 +11,7 @@
     <button ng-click="retrieveData()" class="btn btn-primary">Grab Android Devices</button>
     <br/>
 
-    <div ng-if="results != ''"> Device List: </div>
+    <div ng-if="results != ''"> <b> Device List: </b> </div>
     <table class="table" ng-if="results != ''">
         <tr>
             <th>Name</th>
@@ -31,6 +31,7 @@
     </table>
 
     <br/>
+    <b> Current target device: [[targetDevice]] </b>
 
     <!--
         <table class="results-table table table-striped table-bordered">

@@ -40,7 +40,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.selectDevice = function (index) {
-		console.log("you have picked item number " + index);
 		console.log($scope.results[index]);
 	}
 
