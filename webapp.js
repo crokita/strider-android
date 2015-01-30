@@ -1,4 +1,3 @@
-var exec = require('child_process').exec;
 var SDK = require('./bin/retrieveSDKInfo');
 
 module.exports = {
