@@ -4,7 +4,7 @@ var deviceListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HO
 
 module.exports = {
 	getDeviceList: function () {
-		exec(deviceListCommand, function (err, stdout, stderr) {
+		exec('chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;', function (err, stdout, stderr) {
 	        return stdout;
 	    });
 	}
