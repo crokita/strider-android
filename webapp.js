@@ -23,7 +23,8 @@ module.exports = {
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
         app.get('/', function(req, res) {
-            res.send("YOYOYO");
+            console.log("testing\n\n\n");
+            res.send("YOYOYO\n\n\n");
         })
     },
     // Define global routes
