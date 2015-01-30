@@ -11,7 +11,7 @@ module.exports = {
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         },
         askForDevices: {type: Boolean, default: false},
-        deviceList: []
+        deviceList: {type: Array}
     },
     // Define project-specific routes
     //   all routes created here are namespaced within /:org/:repo/api/:pluginid
