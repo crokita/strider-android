@@ -26,7 +26,7 @@ module.exports = {
                 res.send(result);
             });  */
             res.send("hello");          
-        })
+        });
     },
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
@@ -34,6 +34,13 @@ module.exports = {
     //   req.user.account_level can be used for authorization
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
+        app.get('/devices', function(req, res) {
+            /*SDK.getDeviceList( function (result) {
+                console.log(result);
+                res.send(result);
+            });  */
+            res.send("hello");          
+        });
     },
     // Listen for global events
     //   all job-local events that begin with `plugin.` are proxied to
