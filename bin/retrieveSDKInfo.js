@@ -11,7 +11,7 @@ module.exports = {
 	}
 }
 
-//this function takes the list of android devices that are usuable and outputs each name, target, and abi to the user
+//this function takes the list of android devices that are usuable and converts each name, target, abi and skin to an object and returns a list
 var parseDeviceList = function (input) {
 	var deviceList = [];
 	var list = input.split("\n");

@@ -10,7 +10,8 @@ module.exports = {
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         },
-        askForDevices: {type: Boolean, default: false}
+        askForDevices: {type: Boolean, default: false},
+        deviceList: []
     },
     // Define project-specific routes
     //   all routes created here are namespaced within /:org/:repo/api/:pluginid
@@ -37,7 +38,8 @@ module.exports = {
         emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
             //update android device list when any changes occur
             SDK.getDeviceList( function (result) {
-                console.log(result);
+                body.deviceList = result;
+                console.log(body);
             });
             
         });
