@@ -26,7 +26,7 @@ module.exports = {
                 console.log(result);
                 res.send(result);
             });  */
-            res.json("hello");
+            res.send("hello");
         });
 
     },
