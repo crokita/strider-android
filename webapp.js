@@ -20,15 +20,11 @@ module.exports = {
     //   req.pluginConfig() -> get the config for this plugin
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
-        app.get('/devices', function(req, res) {
-            console.log("Testing");
-            /*SDK.getDeviceList( function (result) {
-                console.log(result);
-                res.send(result);
-            });  */
-            res.json("hello");
-        });
-
+        /*app.get('/devices', function(req, res) {
+            SDK.getDeviceList( function (result) {
+                res.json(result);
+            });  
+        });*/
     },
     /*
     if project specific,    try api/:pluginid
@@ -42,12 +38,9 @@ module.exports = {
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
-            console.log("Testing");
-            /*SDK.getDeviceList( function (result) {
-                console.log(result);
-                res.send(result);
-            });  */
-            res.json("hello");
+            SDK.getDeviceList( function (result) {
+                res.json(result);
+            });  
         });
     },
     // Listen for global events
