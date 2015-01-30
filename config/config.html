@@ -9,10 +9,20 @@
     </p>
 
     <button ng-click="retrieveData()" class="btn btn-primary">Grab Android Devices</button>
+    <br/>
+
     Device List:
-    <div ng-repeat="device in results">  
-        [[device.name]]
-    </div>
+    <table class="table" ng-if="inputResult != ''">
+        <tr>
+            <th>Name</th>
+            <th>Object</th>
+        </tr>
+        <tr ng-repeat="device in results">
+            <th>[[device.name]]</th>
+        </tr>
+    </table>
+
+    <br/>
 
     <!--
     <h3>Environment</h3>
