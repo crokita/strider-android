@@ -19,12 +19,12 @@
             <th>ABI</th>
             <th>Skin</th>
             <th>Selected</th>
-        <tr ng-repeat="device in results">
-            <th>[[device.name]]</th>
-            <th>[[device.target]]</th>
-            <th>[[device.abi]]</th>
-            <th>[[device.skin]]</th>
-            <th><input type="radio" ng-model="selected[$index]">[{{$index}}]</th>
+        <tr ng-repeat="(key, value) in results">
+            <th>[[value.name]]</th>
+            <th>[[value.target]]</th>
+            <th>[[value.abi]]</th>
+            <th>[[value.skin]]</th>
+            <th><input type="radio" ng-model="selected[value]">[{{$key}}]</th>
         </tr>
     </table>
 
