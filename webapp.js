@@ -1,5 +1,5 @@
 var exec = require('child_process').exec;
-var SDK = require('./bin/retrieveSDKInfo.js');
+var SDK = require('./bin/retrieveSDKInfo');
 
 module.exports = {
     // mongoose schema, if you need project-specific config
