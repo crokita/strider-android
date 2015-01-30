@@ -27,7 +27,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.save();
 		$http.get('/devices').success(function(data, status) {
 			$scope.result = data;
-		}
+		});
 	}
 
 }]);
