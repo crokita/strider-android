@@ -20,6 +20,14 @@ module.exports = {
     //   req.pluginConfig() -> get the config for this plugin
     //   req.pluginConfig(config, cb(err)) -> set the config for this plugin
     routes: function (app, context) {
+        app.get('/devices', function(req, res) {
+            console.log("Testing");
+            /*SDK.getDeviceList( function (result) {
+                console.log(result);
+                res.send(result);
+            });  */
+            res.json("hello");
+        });
 
     },
     /*
