@@ -7,5 +7,4 @@ function parseDeviceList () {
 	for (index in list) {
 		console.log(list[index].replace("Name: ", "")); //print out only the names of the available devices
 	}
-
 }
