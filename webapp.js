@@ -23,7 +23,7 @@ module.exports = {
         app.get('/', function(req, res) {
             SDK.getDeviceList( function (result) {
                 console.log(result);
-                res.send(result);
+                res.send(result.data);
             });            
         })
     },

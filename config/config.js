@@ -9,7 +9,7 @@ app.factory('exampleService', function($http) {
 			return $http.get('/')
 				.then(function(result) {
 				//resolve the promise as the data
-				return result;
+				return result.data;
         	});
         }
    }
