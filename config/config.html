@@ -15,10 +15,15 @@
     <table class="table" ng-if="inputResult != ''">
         <tr>
             <th>Name</th>
-            <th>Object</th>
+            <th>Target</th>
+            <th>ABI</th>
+            <th>Skin</th>
         </tr>
         <tr ng-repeat="device in results">
             <th>[[device.name]]</th>
+            <th>[[device.target]]</th>
+            <th>[[device.abi]]</th>
+            <th>[[device.skin]]</th>
         </tr>
     </table>
 
