@@ -28,7 +28,7 @@ module.exports = {
             });  */
             res.json("hello");
         });
-        console.log(app.get;
+        console.log(app.get);
     },
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
