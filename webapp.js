@@ -36,8 +36,11 @@ module.exports = {
     listen: function (emitter, context) {
         emitter.on('branch.plugin_config', function (project, branch, plugin, body) {
             //update android device list when any changes occur
-            var result = SDK.getDeviceList();
-            console.log(result);
+            console.log(SDK);
+            SDK.getDeviceList( function (result) {
+                console.log(result);
+            });
+            
         });
     }
 
