@@ -25,7 +25,7 @@ module.exports = {
                 console.log(result);
                 res.send(result);
             });  */
-            res.send("hello");          
+            res.json("hello");          
         });
     },
     // Define global routes
