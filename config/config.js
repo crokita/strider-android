@@ -15,7 +15,7 @@ app.factory('exampleService', function($http) {
    }
 });
 
-app.controller('AndroidController', ['$scope', function ($scope, exampleService) {
+app.controller('AndroidController', function ($scope, exampleService) {
 	$scope.saving = false;
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
@@ -43,5 +43,5 @@ app.controller('AndroidController', ['$scope', function ($scope, exampleService)
 		})
 	}
 
-}]);
+});
 
