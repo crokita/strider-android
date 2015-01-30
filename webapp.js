@@ -1,5 +1,5 @@
 var SDK = require('./bin/retrieveSDKInfo');
-
+console.log(SDK);
 module.exports = {
     // mongoose schema, if you need project-specific config
     config: {
