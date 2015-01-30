@@ -25,7 +25,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.retrieveData = function () {
 		$scope.save();
-		$http.get('/devices').success(function(data, status) {
+		$http.get('/crokita/auto_dummy/config/plugin-android/devices').success(function(data, status) {
 			$scope.result = data;
 		});
 	}
