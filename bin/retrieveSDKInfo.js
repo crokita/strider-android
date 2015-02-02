@@ -25,7 +25,7 @@ module.exports = {
 		var includeTarget = ' -t ' + data.target;
 		var includeAbi = ' -b ' + data.abi;
 		var includeSkin = ' -s ' + data.skin;
-		includeAbi = str.replace("default/", ""); //remove the "default/" appended to the abi selection
+		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
 		if (data.skin.search("default") != -1) { //if the default option was picked then ignore it
 			includeSkin = "";
 		}
