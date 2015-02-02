@@ -59,12 +59,15 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
 		};
+		//only make the request if name target and abi are defined
+		if (data.name != "" && data.target != "" && data.abi != "") {
+			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
+				alert("Device added");
+				//now update the device list
+				$scope.retrieveDevices();
+			});
+		}
 
-		$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
-			alert("Device added");
-			//now update the device list
-			$scope.retrieveDevices();
-		});
 
 	}
 }]);
