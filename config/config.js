@@ -8,6 +8,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.targetResults = "";
 	$scope.targetDevice = "";
 	$scope.saving = false;
+	//user configurations for devices
+	$scope.deviceName = "";
+	$scope.targetOptions = "";
+	$scope.abiOptions = "";
+	$scope.skinOptions = "";
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
 		$scope.config = value || {
@@ -59,16 +64,16 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
 		};
-		//only make the request if name target and abi are defined
-		console.log($scope.targetOptions);
-		console.log($scope.abiOptions);
-		console.log($scope.skinOptions);
-		if (data.name != "" && data.target != "" && data.abi != "") {
+		//only make the request if name and target and abi and skin are defined
+		if (data.name != "" && data.target != "" && data.abi != "" && data.skin != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 				alert("Device added");
 				//now update the device list
 				$scope.retrieveDevices();
 			});
+		}
+		else {
+			alert("Please fill out all fields before creating a device.");
 		}
 
 
