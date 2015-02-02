@@ -8,13 +8,14 @@
         Each message used slightly differently, so see `worker.js` for different ways to execute actions using config data
     </p>
 
-    <button ng-click="retrieveData()" class="btn btn-primary">Grab Android Devices</button>
+    <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
     <br/>
 
-    <div ng-if="results != ''"> <b> Device List: </b> </div>
+    <div ng-if="deviceResults != ''"> <b> Device List: </b> </div>
     <br/>
 
-    <table class="table" ng-if="results != ''">
+	<!-- just make it a dropdown menu (combo box?) -->
+    <table class="table" ng-if="deviceResults != ''">
         <tr>
             <th>Name</th>
             <th>Target</th>
@@ -22,7 +23,7 @@
             <th>Skin</th>
             <!--<th>Selected</th>-->
 		</tr>
-        <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)">
+        <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
             <div ng-model="deviceList">
                 <th>[[value.name]]</th>
                 <th>[[value.target]]</th>
@@ -42,6 +43,10 @@
 	<br/>
 	<br/>
 	
+	
+	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
+	[[targetResults]]
+	<!-- uncomment me once you are able to grab target list and abi
 	<b> Add a new virtual device here: </b>
 	
 	<table class="table">
@@ -52,6 +57,7 @@
             <th>Skin <input type="text" ng-model="skinName"> </th>
         </tr>
     </table>
+	-->
 	
 
     <!--

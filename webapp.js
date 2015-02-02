@@ -42,6 +42,12 @@ module.exports = {
                 res.json(result);
             });  
         });
+		
+		app.get('/targets', function(req, res) {
+            SDK.getTargetList( function (result) {
+                res.json(result);
+            });  
+        });
     },
     // Listen for global events
     //   all job-local events that begin with `plugin.` are proxied to

@@ -4,7 +4,8 @@ var app = window.app;
 * */
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
-	$scope.results = "";
+	$scope.deviceResults = "";
+	$scope.targetResults = "";
 	$scope.targetDevice = "";
 	$scope.saving = false;
 
@@ -25,11 +26,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});
 	};
 
-	$scope.retrieveData = function () {
+	$scope.retrieveDevices = function () {
 		$scope.save();
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
 			console.log(data);
-			$scope.results = data;
+			$scope.deviceResults = data;
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
@@ -41,6 +42,14 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.selectDevice = function (index) {
 		$scope.targetDevice = $scope.results[index].name;
+	}
+	
+	$scope.retrieveTargets = function () {
+		$scope.save();
+		$http.get('/ext/android/targets').success(function(data, status, headers, config) {
+			console.log(data);
+			$scope.targetResults = data;
+		});
 	}
 
 }]);

@@ -1,11 +1,19 @@
 var exec = require('child_process').exec;
 
 var deviceListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;';
+var targetListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list targets;';
 
 module.exports = {
 	getDeviceList: function (callback) {
 		exec(deviceListCommand, function (err, stdout, stderr) {
 			var result = parseDeviceList(stdout);
+	        return callback(result);
+	    });
+	}
+	
+	getTargetList: function (callback) {
+		exec(targetListCommand, function (err, stdout, stderr) {
+			var result = stdout;
 	        return callback(result);
 	    });
 	}
