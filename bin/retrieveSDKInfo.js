@@ -30,7 +30,7 @@ module.exports = {
 			includeSkin = "";
 		}
 		//default to "no" for custom hardware profile
-		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin + " | no");
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin + " --no");
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
