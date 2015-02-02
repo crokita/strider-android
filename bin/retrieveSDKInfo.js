@@ -2,7 +2,7 @@ var exec = require('child_process').exec;
 
 var deviceListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;';
 var targetListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list targets;';
-var createDeviceCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android create avd';
+var createDeviceCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; echo | ${HOME}/android-sdk-linux/tools/android create avd';
 
 module.exports = {
 	getDeviceList: function (callback) {
@@ -29,8 +29,7 @@ module.exports = {
 		if (data.skin.search("default") != -1) { //if the default option was picked then ignore it
 			includeSkin = "";
 		}
-		//default to "no" for custom hardware profile
-		var finalCommand = createDeviceCommand.concat("echo no | " + includeName + includeTarget + includeAbi + includeSkin);
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin);
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
