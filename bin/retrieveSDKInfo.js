@@ -52,8 +52,8 @@ parseTargetList = function (input) {
 
 	var success = groupedList.every(function (element, index, array) {
 		var name = element[0].replace("Name: ", "");
-		var type = element[1].replace("Type : ", "");
-		var api = element[2].replace("API : ", "");
+		var type = element[1].replace("Type: ", "");
+		var api = element[2].replace("API level: ", "");
 		var abis = element[3].replace("Tag/ABIs :", "");
 		//console.log("Name: " + name);
 		console.log("Type: " + type);
