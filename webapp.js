@@ -51,9 +51,10 @@ module.exports = {
 		
 		app.post('/devices', function(req, res) {
 			//prepare to add the device
-			SDK.addDevice(req.data, function () {
+			console.log(req);
+			/*SDK.addDevice(req.data, function () {
 				res.json(""); //TODO: add anything here?
-			});
+			});*/
         });
     },
     // Listen for global events
