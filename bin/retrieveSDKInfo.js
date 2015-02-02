@@ -21,7 +21,15 @@ module.exports = {
 	
 	addDevice: function (data, callback) {
 		//concatenate all the options given from data
-		var finalCommand = createDeviceCommand.concat(' -n ' + data.name + ' -t ' + data.target + ' -b ' + data.abi + ' -s ' + data.skin);
+		var includeName = ' -n ' + data.name;
+		var includeTarget = ' -t ' + data.target;
+		var includeAbi = ' -b ' + data.abi;
+		var includeSkin = ' -s ' + data.skin;
+		includeAbi = str.replace("default/", ""); //remove the "default/" appended to the abi selection
+		if (data.skin.search("default") != -1) { //if the default option was picked then ignore it
+			includeSkin = "";
+		}
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin);
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
