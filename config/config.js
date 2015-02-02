@@ -55,12 +55,15 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//construct the data
 		var data =  {
 			name: $scope.deviceName,
-			target: $scope.targetOptions,
+			target: $scope.targetOptions.api,
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
 		};
-		console.log(data);
-		//$androidDir create avd -n android_emulator -t 14 -b armeabi-v7a
+		$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
+			alert("Device added");
+			//now update the device list
+			$scope.retrieveDevices();
+		});
 
 	}
 }]);

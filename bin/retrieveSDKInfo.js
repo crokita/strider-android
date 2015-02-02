@@ -2,6 +2,7 @@ var exec = require('child_process').exec;
 
 var deviceListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;';
 var targetListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list targets;';
+var createDeviceCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android create avd';
 
 module.exports = {
 	getDeviceList: function (callback) {
@@ -17,6 +18,14 @@ module.exports = {
 	        return callback(result);
 	    });
 	}
+	
+	addDevice: function (data, callback) {
+		//concatenate all the options given from data
+		var finalCommand = createDeviceCommand.concat(' -n ' + data.name + ' -t ' + data.target + ' -b ' + data.abi + ' -s ' + data.skin);
+		exec(finalCommand, function (err, stdout, stderr) {
+	        return callback();
+	    });
+	},
 }
 
 //this function takes the list of android devices that are usuable and converts each name, target, abi and skin to an object and returns a list
