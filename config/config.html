@@ -21,6 +21,7 @@
             <th>ABI</th>
             <th>Skin</th>
             <!--<th>Selected</th>-->
+		</tr>
         <tr ng-repeat="(key, value) in results" ng-click="selectDevice(key)">
             <div ng-model="deviceList">
                 <th>[[value.name]]</th>
@@ -38,6 +39,20 @@
     <br/>
 
     <div ng-if="targetDevice != ''"> <b> READY FOR TESTING </b> </div>
+	<br/>
+	<br/>
+	
+	<b> Add a new virtual device here: </b>
+	
+	<table class="table">
+        <tr>
+            <th>Name: <input type="text" ng-model="deviceName"> </th>
+            <th>Target <input type="text" ng-model="targetName"> </th>
+            <th>ABI <input type="text" ng-model="abiName"> </th>
+            <th>Skin <input type="text" ng-model="skinName"> </th>
+        </tr>
+    </table>
+	
 
     <!--
         <table class="results-table table table-striped table-bordered">
