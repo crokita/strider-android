@@ -60,6 +60,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			skin: $scope.skinOptions
 		};
 		//only make the request if name target and abi are defined
+		console.log($scope.targetOptions);
+		console.log($scope.abiOptions);
+		console.log($scope.skinOptions);
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 				alert("Device added");
