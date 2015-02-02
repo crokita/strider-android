@@ -9,7 +9,7 @@ module.exports = {
 			var result = parseDeviceList(stdout);
 	        return callback(result);
 	    });
-	}
+	},
 	
 	getTargetList: function (callback) {
 		exec(targetListCommand, function (err, stdout, stderr) {
