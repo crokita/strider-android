@@ -17,7 +17,7 @@ module.exports = {
 			var result = parseTargetList(stdout);
 	        return callback(result);
 	    });
-	}
+	},
 	
 	addDevice: function (data, callback) {
 		//concatenate all the options given from data
