@@ -52,7 +52,7 @@
 	The API level is [[targetOptions.api]]
 	<br/>
 	Select your ABI
-	<select ng-options="abi in targetOptions.abis" ng-model="abiOptions"> </select>
+	<select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </select>
 	<br/>
 	[[abiOptions]]
 	<br/>
