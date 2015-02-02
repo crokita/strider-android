@@ -56,9 +56,9 @@ parseTargetList = function (input) {
 		var api = element[2].replace("API : ", "");
 		var abis = element[3].replace("Tag/ABIs :", "");
 		//console.log("Name: " + name);
-		//console.log("Type: " + type);
+		console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
-		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
+		if (abis == "no ABIs") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
 		
