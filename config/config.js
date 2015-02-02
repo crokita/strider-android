@@ -47,7 +47,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.retrieveTargets = function () {
 		$scope.save();
 		$http.get('/ext/android/targets').success(function(data, status, headers, config) {
-			console.log(data);
 			$scope.targetResults = data;
 		});
 	}

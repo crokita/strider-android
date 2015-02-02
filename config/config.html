@@ -61,9 +61,9 @@
 	<table class="table">
         <tr>
             <th>Name: <input type="text" ng-model="deviceName"> </th>
-            <th>Target <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
-            <th>ABI <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
-            <th>Skin <input type="text" ng-model="skinName"> </th>
+            <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
+            <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
+            <th>Skin: <select ng-options="skin for skin in targetOptions.skins" ng-model="skinOptions"> </th>
         </tr>
     </table>
 	

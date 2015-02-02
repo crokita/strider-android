@@ -42,11 +42,11 @@ var parseDeviceList = function (input) {
 
 //this function takes the list of android targets that are usuable and returns a list of them
 parseTargetList = function (input) {
-	var list = input.match(/Name: .*|Type: .*|API level: .*|Tag\/ABIs : .*/g);
+	var list = input.match(/Name: .*|Type: .*|API level: .*|Skins: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
 	for (match in list) {
-		var fourProperties = list.splice(0,4);
-		groupedList.push(fourProperties);
+		var fiveProperties = list.splice(0,4);
+		groupedList.push(fiveProperties);
 	}
 	var targetList = [];
 
@@ -54,19 +54,22 @@ parseTargetList = function (input) {
 		var name = element[0].replace("Name: ", "");
 		var type = element[1].replace("Type: ", "");
 		var api = element[2].replace("API level: ", "");
-		var abis = element[3].replace("Tag/ABIs :", "");
+		var skins = element[3].replace("Skins: ", "");
+		var abis = element[4].replace("Tag/ABIs :", "");
 		//console.log("Name: " + name);
-		console.log("Type: " + type);
+		//console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
 		if (abis == "no ABIs") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
 		
+		var skinList = skins.split(",");
 		var abiList = abis.split(",");
 		
 		var targetFound = {
 			name: name,
 			api: api,
+			skins: skinList,
 			abis: abiList
 		};
 		targetList.push(targetFound);
