@@ -13,7 +13,7 @@ module.exports = {
 	
 	getTargetList: function (callback) {
 		exec(targetListCommand, function (err, stdout, stderr) {
-			var result = stdout;
+			var result = parseTargetList(stdout);
 	        return callback(result);
 	    });
 	}
@@ -36,6 +36,18 @@ var parseDeviceList = function (input) {
 		
 		deviceList.push(deviceObj);
 	}	
+
+	return deviceList;
+}
+
+//this function takes the list of android targets that are usuable and returns a list of them
+var parseTargetList = function (input) {
+	var targetList = [];
+	var list = input.split("\n");
+	//remove the first line
+	list.splice(0,1);
+
+	
 
 	return deviceList;
 }
