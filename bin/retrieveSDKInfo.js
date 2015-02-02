@@ -40,6 +40,7 @@ var parseDeviceList = function (input) {
 	return deviceList;
 }
 
+//this function takes the list of android targets that are usuable and returns a list of them
 parseTargetList = function (input) {
 	var list = input.match(/Name: .*|Type: .*|API level: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
@@ -57,7 +58,7 @@ parseTargetList = function (input) {
 		//console.log("Name: " + name);
 		//console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
-		if (abis == "no ABIs" || type == "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
+		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
 		
@@ -81,17 +82,3 @@ parseTargetList = function (input) {
 	}
 
 }
-
-/*
-//this function takes the list of android targets that are usuable and returns a list of them
-var parseTargetList = function (input) {
-	var targetList = [];
-	var list = input.split("\n");
-	//remove the first line
-	list.splice(0,1);
-
-	
-
-	return targetList;
-}
-*/
