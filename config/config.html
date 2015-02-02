@@ -45,9 +45,14 @@
 	
 	
 	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
-	
+	<br/>
+	Select your target
 	<select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </select>
-	[[targetOptions]]
+	<br/>
+	The API level is [[targetOptions.api]]
+	Select your ABI
+	<select ng-options="abi.name for abi in targetResults.abis" ng-model="abiOptions"> </select>
+	[[abiOptions]]
 
 	<!-- uncomment me once you are able to grab target list and abi
 	<b> Add a new virtual device here: </b>
