@@ -57,7 +57,7 @@ parseTargetList = function (input) {
 		//console.log("Name: " + name);
 		//console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
-		if (abis == "no ABIs" || type == "Platform" {//a platform which has no ABIs cannot run on an emulator. error out
+		if (abis == "no ABIs" || type == "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
 		
