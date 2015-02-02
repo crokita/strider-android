@@ -55,7 +55,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//construct the data
 		var data =  {
 			name: $scope.deviceName,
-			target: $scope.targetOptions.api,
+			target: $scope.targetOptions.id,
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
 		};

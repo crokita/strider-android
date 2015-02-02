@@ -22,7 +22,7 @@ module.exports = {
 	addDevice: function (data, callback) {
 		//concatenate all the options given from data
 		var includeName = ' -n ' + data.name;
-		var includeTarget = ' --target ' + data.target;
+		var includeTarget = ' -t ' + data.target;
 		var includeAbi = ' -b ' + data.abi;
 		var includeSkin = ' -s ' + data.skin;
 		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
@@ -60,24 +60,25 @@ var parseDeviceList = function (input) {
 
 //this function takes the list of android targets that are usuable and returns a list of them
 parseTargetList = function (input) {
-	var list = input.match(/Name: .*|Type: .*|API level: .*|Skins: .*|Tag\/ABIs : .*/g);
+	var list = input.match(/id: \d*|Name: .*|Type: .*|API level: .*|Skins: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
 	for (match in list) {
-		var fiveProperties = list.splice(0,5);
-		groupedList.push(fiveProperties);
+		var sixProperties = list.splice(0,6);
+		groupedList.push(sixProperties);
 	}
 	var targetList = [];
 
 	var success = groupedList.every(function (element, index, array) {
-		var name = element[0].replace("Name: ", "");
-		var type = element[1].replace("Type: ", "");
-		var api = element[2].replace("API level: ", "");
-		var skins = element[3].replace("Skins: ", "");
-		var abis = element[4].replace("Tag/ABIs :", "");
+		var id = element[0].replace("id: ", "");
+		var name = element[1].replace("Name: ", "");
+		var type = element[2].replace("Type: ", "");
+		var api = element[3].replace("API level: ", "");
+		var skins = element[4].replace("Skins: ", "");
+		var abis = element[5].replace("Tag/ABIs :", "");
 		//console.log("Name: " + name);
 		//console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
-		if (abis == "no ABIs") {//a platform which has no ABIs cannot run on an emulator. error out
+		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
 		
@@ -85,6 +86,7 @@ parseTargetList = function (input) {
 		var abiList = abis.split(",");
 		
 		var targetFound = {
+			id: id,
 			name: name,
 			api: api,
 			skins: skinList,
