@@ -29,7 +29,8 @@ module.exports = {
 		if (data.skin.search("default") != -1) { //if the default option was picked then ignore it
 			includeSkin = "";
 		}
-		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin + "; echo");
+		//default to "no" for custom hardware profile
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin + "| no");
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
