@@ -29,7 +29,7 @@ module.exports = {
 		if (data.skin.search("default") != -1) { //if the default option was picked then ignore it
 			includeSkin = "";
 		}
-		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin);
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin + "; echo");
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
