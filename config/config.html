@@ -45,6 +45,19 @@
 	
 	
 	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
+	<br/>
+	<b> Add a new virtual device here: </b>
+
+	<table class="table">
+        <tr>
+            <th>Name: <input type="text" ng-model="deviceName"> </th>
+            <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
+            <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
+            <th>Skin: <select ng-options="skin for skin in targetOptions.skins" ng-model="skinOptions"> </th>
+        </tr>
+    </table>
+	
+	<br/>
 	<!--
 	<br/>
 	Select your target
@@ -56,17 +69,7 @@
 	<select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </select>
 	<br/>
 	-->
-	<b> Add a new virtual device here: </b>
-	<!--
-	<table class="table">
-        <tr>
-            <th>Name: <input type="text" ng-model="deviceName"> </th>
-            <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
-            <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
-            <th>Skin: <select ng-options="skin for skin in targetOptions.skins" ng-model="skinOptions"> </th>
-        </tr>
-    </table>
-	-->
+
 
     <!--
         <table class="results-table table table-striped table-bordered">
