@@ -41,7 +41,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.selectDevice = function (index) {
-		$scope.targetDevice = $scope.results[index].name;
+		$scope.targetDevice = $scope.deviceResults[index].name;
 	}
 	
 	$scope.retrieveTargets = function () {
