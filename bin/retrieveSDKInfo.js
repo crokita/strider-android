@@ -21,6 +21,7 @@ module.exports = {
 	
 	addDevice: function (data, callback) {
 		//concatenate all the options given from data
+		console.log(data);
 		/*var finalCommand = createDeviceCommand.concat(' -n ' + data.name + ' -t ' + data.target + ' -b ' + data.abi + ' -s ' + data.skin);
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
