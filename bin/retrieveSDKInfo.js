@@ -41,33 +41,40 @@ var parseDeviceList = function (input) {
 }
 
 parseTargetList = function (input) {
-	var list = input.match(/Name: .*|Type: .*|Tag\/ABIs : .*/g);
+	var list = input.match(/Name: .*|Type: .*|API level: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
 	for (match in list) {
-		var threeProperties = list.splice(0,3);
-		groupedList.push(threeProperties);
+		var fourProperties = list.splice(0,4);
+		groupedList.push(fourProperties);
 	}
-	var result = "";
+	var targetList = [];
 
 	var success = groupedList.every(function (element, index, array) {
 		var name = element[0].replace("Name: ", "");
 		var type = element[1].replace("Type : ", "");
-		var abis = element[2].replace("Tag/ABIs :", "");
+		var api = element[2].replace("API : ", "");
+		var abis = element[3].replace("Tag/ABIs :", "");
 		//console.log("Name: " + name);
 		//console.log("Type: " + type);
 		//console.log("ABIs: " + abis);
-		if (abis == "no ABIs") {
-			if (type == "Platform") { //a platform which has no ABIs cannot run on an emulator. error out
-				return false;
-			}
+		if (abis == "no ABIs" || type == "Platform" {//a platform which has no ABIs cannot run on an emulator. error out
+			return false;
 		}
-		result += name + "\n"
+		
+		var abiList = abis.split(",");
+		
+		var targetFound = {
+			name: name,
+			api: api,
+			abis: abiList
+		};
+		targetList.push(targetFound);
 		return true;
 	});
 
 	if (success) {
 		//return the list of android targets
-		return result;
+		return targetList;
 	}
 	else {
 		//don't return anything
