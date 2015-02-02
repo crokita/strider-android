@@ -51,5 +51,17 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});
 	}
 
+	$scope.createDevice = function () {
+		//construct the data
+		var data =  {
+			name: $scope.deviceName,
+			target: $scope.targetOptions,
+			abi: $scope.abiOptions,
+			skin: $scope.skinOptions
+		};
+		console.log(data);
+		//$androidDir create avd -n android_emulator -t 14 -b armeabi-v7a
+
+	}
 }]);
 
