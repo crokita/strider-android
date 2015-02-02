@@ -45,7 +45,7 @@ parseTargetList = function (input) {
 	var list = input.match(/Name: .*|Type: .*|API level: .*|Skins: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
 	for (match in list) {
-		var fiveProperties = list.splice(0,4);
+		var fiveProperties = list.splice(0,5);
 		groupedList.push(fiveProperties);
 	}
 	var targetList = [];
