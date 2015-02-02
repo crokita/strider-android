@@ -45,10 +45,9 @@
 	
 	
 	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
-	<select>
-		<option ng-model="targetResults"> </option>
-	</select> 
 	
+	<select ng-options="item.name for item in targetResults" ng-model="targetOptions">
+
 	<!-- uncomment me once you are able to grab target list and abi
 	<b> Add a new virtual device here: </b>
 	
