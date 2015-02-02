@@ -22,7 +22,7 @@ module.exports = {
 	addDevice: function (data, callback) {
 		//concatenate all the options given from data
 		var includeName = ' -n ' + data.name;
-		var includeTarget = ' -t ' + data.target;
+		var includeTarget = ' --target ' + data.target;
 		var includeAbi = ' -b ' + data.abi;
 		var includeSkin = ' -s ' + data.skin;
 		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
