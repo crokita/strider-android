@@ -59,6 +59,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
 		};
+		console.log(data);
 		$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 			alert("Device added");
 			//now update the device list
