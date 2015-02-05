@@ -20,7 +20,6 @@ module.exports = {
 		config = config || {};
 		console.log(config);
 
-		console.log(okay.status(job));
 
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
@@ -50,6 +49,8 @@ module.exports = {
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
+		console.log(okay.status(job));
+				
 				//this will show up in the terminal log as 'info'
 				console.log(config.test);
 
