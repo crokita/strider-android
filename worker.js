@@ -1,6 +1,4 @@
 /* Functions for demonstration purposes only */
-var index = require('index.js');
-
 var checkSomething = function(context, callback){
 	//Do something here, then call back
 	callback(true);
@@ -9,6 +7,7 @@ var doThings = function(callback){
 	callback(null);
 };
 
+var okay = require('../../lib/jobs.js');
 
 module.exports = {
 	// Initialize the plugin for a job
@@ -20,6 +19,8 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		config = config || {};
 		console.log(config);
+
+		console.log(okay.status(job));
 
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
