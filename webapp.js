@@ -9,9 +9,7 @@ module.exports = {
             test: {type: String, default: 'Hi from `test`'},
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'}
-        },
-
-        "targetDevice": {type: String, default: ""}
+        }
     },
     // Define project-specific routes
     //   all routes created here are namespaced within /:org/:repo/api/:pluginid
@@ -68,8 +66,6 @@ module.exports = {
             /*SDK.getDeviceList( function (result) {
                 console.log(result);
             });*/
-            console.log(body);
-
             
         });
     }
