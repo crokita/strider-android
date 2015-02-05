@@ -7,7 +7,6 @@ var doThings = function(callback){
 	callback(null);
 };
 
-var jobs = require('../../lib/routes/jobs/index.js');
 
 module.exports = {
 	// Initialize the plugin for a job
@@ -30,9 +29,6 @@ module.exports = {
 			listen: function (emitter, context) {
 				console.log(emitter.listenerTree.job);
 				emitter.on('job.status.phase.done', function (id, data) {
-
-					console.log("TESTING");
-					console.log(jobs.jobs);
 
 					var phase = data.phase;
 					console.log('the ' + phase + ' phase has completed');
