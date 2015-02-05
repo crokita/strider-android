@@ -6,7 +6,7 @@ var app = window.app;
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
-	$scope.targetDevice = "";
+	$scope.config.device = "";
 	$scope.saving = false;
 	//user configurations for devices
 	$scope.deviceName = "";
@@ -46,8 +46,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.selectDevice = function (index) {
-		$scope.targetDevice = $scope.deviceResults[index].name;
-		$scope.config.device = $scope.targetDevice;
+		$scope.config.device = $scope.deviceResults[index].name;
 		$scope.save();
 	}
 	
