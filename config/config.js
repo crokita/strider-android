@@ -48,6 +48,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.selectDevice = function (index) {
 		$scope.targetDevice = $scope.deviceResults[index].name;
 		$scope.config.device = $scope.targetDevice;
+		$scope.save();
 	}
 	
 	$scope.retrieveTargets = function () {
