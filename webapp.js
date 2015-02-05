@@ -68,7 +68,7 @@ module.exports = {
             /*SDK.getDeviceList( function (result) {
                 console.log(result);
             });*/
-            console.log("Testing whether a device is selected: " + body);
+            console.log(body);
 
             
         });
