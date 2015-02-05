@@ -10,6 +10,8 @@ module.exports = {
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         },
+        
+        targetDevice: {type: String, default: ""}
     },
     // Define project-specific routes
     //   all routes created here are namespaced within /:org/:repo/api/:pluginid

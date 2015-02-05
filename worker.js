@@ -15,6 +15,7 @@ module.exports = {
 	//   context: currently only defines "dataDir"
 	//   cb(err, initializedPlugin)
 	init: function (config, job, context, cb) {
+		console.log("Testing whether a device is selected: " + config.targetDevice);
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
