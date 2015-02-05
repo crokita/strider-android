@@ -68,7 +68,7 @@ module.exports = {
             /*SDK.getDeviceList( function (result) {
                 console.log(result);
             });*/
-            
+
             
         });
     }

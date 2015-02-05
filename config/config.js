@@ -6,7 +6,7 @@ var app = window.app;
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
-	$scope.config.targetDevice = "";
+	//$scope.config.targetDevice = "";
 	$scope.saving = false;
 	//user configurations for devices
 	$scope.deviceName = "";

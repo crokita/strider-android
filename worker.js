@@ -15,7 +15,7 @@ module.exports = {
 	//   context: currently only defines "dataDir"
 	//   cb(err, initializedPlugin)
 	init: function (config, job, context, cb) {
-		
+
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -44,7 +44,7 @@ module.exports = {
 			//function style (calling done is a MUST)
 			test: function (context, done) {
 				//this will show up in the terminal log as 'info'
-				console.log("Testing whether a device is selected: " + config.targetDevice);
+				//console.log("Testing whether a device is selected: " + config.targetDevice);
 
 				//demonstration of how to perform async tasks, finishing with a call to done()
 				checkSomething(context, function (shouldDoThings) {
