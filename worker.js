@@ -45,8 +45,9 @@ module.exports = {
 			test: function (context, done) {
 				//this will show up in the terminal log as 'info'
 				console.log(config.test);
+				
 				console.log("CHECKING DEVICE");
-				console.log(config.device);
+				console.log(config);
 
 				//demonstration of how to perform async tasks, finishing with a call to done()
 				checkSomething(context, function (shouldDoThings) {
