@@ -10,7 +10,7 @@ module.exports = {
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'}
         },
-        
+
         targetDevice: {type: String, default: ""}
     },
     // Define project-specific routes
@@ -68,6 +68,7 @@ module.exports = {
             /*SDK.getDeviceList( function (result) {
                 console.log(result);
             });*/
+            
             
         });
     }
