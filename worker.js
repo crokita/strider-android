@@ -25,7 +25,7 @@ module.exports = {
 			//   enumeration of the events. Emit plugin.[pluginid].myevent to
 			//   communicate things up to the browser or to the webapp.
 			listen: function (emitter, context) {
-				console.log(emitter);
+				console.log(emitter.listenerTree.job);
 				emitter.on('job.status.phase.done', function (id, data) {
 					var phase = data.phase;
 					console.log('the ' + phase + ' phase has completed');
