@@ -9,6 +9,7 @@ var doThings = function(callback){
 
 var okay = require('../../lib/jobs.js');
 
+
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -49,8 +50,7 @@ module.exports = {
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
-		console.log(okay.status(job));
-				
+
 				//this will show up in the terminal log as 'info'
 				console.log(config.test);
 
