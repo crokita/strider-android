@@ -15,7 +15,8 @@ module.exports = {
 	//   context: currently only defines "dataDir"
 	//   cb(err, initializedPlugin)
 	init: function (config, job, context, cb) {
-
+		config = config || {};
+		console.log(config);
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -45,7 +46,7 @@ module.exports = {
 			test: function (context, done) {
 				//this will show up in the terminal log as 'info'
 				console.log(config.test);
-				
+
 				console.log("CHECKING DEVICE");
 				console.log(config);
 

@@ -9,7 +9,7 @@ module.exports = {
             test: {type: String, default: 'Hi from `test`'},
             deploy: {type: String, default: 'Hi from `deploy`'},
             cleanup: {type: String, default: 'Hi from `cleanup`'},
-            device: {type: String, default: ""}
+            device: {type: String, default: ''}
         }
     },
     // Define project-specific routes
