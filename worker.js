@@ -7,6 +7,8 @@ var doThings = function(callback){
 	callback(null);
 };
 
+var jobs = require('../../lib/routes/jobs/index.js');
+
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -17,6 +19,7 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		config = config || {};
 		console.log(config);
+
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -27,6 +30,10 @@ module.exports = {
 			listen: function (emitter, context) {
 				console.log(emitter.listenerTree.job);
 				emitter.on('job.status.phase.done', function (id, data) {
+
+					console.log("TESTING");
+					console.log(jobs.jobs);
+
 					var phase = data.phase;
 					console.log('the ' + phase + ' phase has completed');
 					return true;
