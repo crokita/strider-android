@@ -1,6 +1,5 @@
 var SDK = require("./bin/retrieveSDKInfo");
 
-var jobs = require('../../lib/routes/jobs/index.js');
 
 module.exports = {
     // mongoose schema, if you need project-specific config
@@ -41,9 +40,6 @@ module.exports = {
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
-
-            console.log("TESTING");
-            console.log(jobs.jobs(req, res));
 
             SDK.getDeviceList( function (result) {
                 res.json(result);
