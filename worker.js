@@ -7,9 +7,6 @@ var doThings = function(callback){
 	callback(null);
 };
 
-var okay = require('../../lib/jobs.js');
-
-
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -18,9 +15,8 @@ module.exports = {
 	//   context: currently only defines "dataDir"
 	//   cb(err, initializedPlugin)
 	init: function (config, job, context, cb) {
-		config = config || {};
-		console.log(config);
-
+		//config = config || {};
+		//console.log(config);
 
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
