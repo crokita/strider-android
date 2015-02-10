@@ -15,8 +15,8 @@ module.exports = {
 	//   context: currently only defines "dataDir"
 	//   cb(err, initializedPlugin)
 	init: function (config, job, context, cb) {
-		config = config || {};
-		console.log(config);
+		//config = config || {};
+		//console.log(config);
 
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
@@ -48,7 +48,10 @@ module.exports = {
 			test: function (context, done) {
 
 				//this will show up in the terminal log as 'info'
-				console.log(config.test);
+				//console.log(config.test);
+
+				console.log("THIS IS THE DEVICE");
+				console.log(config.device);
 
 				//demonstration of how to perform async tasks, finishing with a call to done()
 				checkSomething(context, function (shouldDoThings) {
