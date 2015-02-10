@@ -47,7 +47,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.selectDevice = function (index) {
 		$scope.deviceSelected = $scope.deviceResults[index].name;
-		$scope.config.device = $scope.deviceResults[index].name;
+		//$scope.config.device = $scope.deviceResults[index].name;
 		$scope.save();
 	}
 	
