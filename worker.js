@@ -40,18 +40,15 @@ module.exports = {
 			//string style
 			environment: 'echo "' + config.environment + '"',
 			//object style
-			prepare: {
-				command: 'echo',
-				args: ['"' + config.prepare + '"']
+			prepare: function (context, done) {
+				//CONGRATS YOU GOT THE DEVICE. NOW WHAT?
+				console.log(config.device);
+				return done(null, true);
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
-
 				//this will show up in the terminal log as 'info'
 				//console.log(config.test);
-
-				console.log("THIS IS THE DEVICE");
-				console.log(config.device);
 
 				//demonstration of how to perform async tasks, finishing with a call to done()
 				checkSomething(context, function (shouldDoThings) {
