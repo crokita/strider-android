@@ -7,6 +7,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
 	$scope.saving = false;
+	$scope.deviceSelected = "";
 	//user configurations for devices
 	$scope.deviceName = "";
 	$scope.targetOptions = "";
@@ -45,7 +46,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.selectDevice = function (index) {
-		$scope.deviceName = $scope.deviceResults[index].name;
+		$scope.deviceSelected = $scope.deviceResults[index].name;
 		$scope.config.device = $scope.deviceResults[index].name;
 		$scope.save();
 	}
@@ -60,7 +61,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.createDevice = function () {
 		//construct the data
 		var data =  {
-			name: $scope.deviceName,
+			name: $scope.deviceSelected,
 			target: $scope.targetOptions.id,
 			abi: $scope.abiOptions,
 			skin: $scope.skinOptions
