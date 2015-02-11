@@ -1,14 +1,15 @@
 var exec = require('child_process').exec;
 
-var permitAndroid		 	= 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ';
-var androidDir 				= '${HOME}/android-sdk-linux/tools/android';
-var emulatorDir				= '${HOME}/android-sdk-linux/tools/emulator';
+var permitAndroid		= 	'chmod 755 ${HOME}/android-sdk-linux/tools/android; ';
+var androidDir 			= 	'${HOME}/android-sdk-linux/tools/android';
+var emulatorDir			= 	'${HOME}/android-sdk-linux/tools/emulator';
 
-var deviceListCommand 	 	= permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
-var targetListCommand 		= permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
-var createDeviceCommand  	= permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
-var startEmulatorFront	    = permitAndroid + emulatorDir + ' -avd ';
-var startEmulatorBack  		= ' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; ls';
+var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
+var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
+var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
+var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
+var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ' + 
+							androidDir + ' update project --path; ant clean debug;';
 
 /*
 androidDir=${HOME}/android-sdk-linux/tools/android #the location of where the android tool is 
