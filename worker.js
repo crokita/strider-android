@@ -44,7 +44,7 @@ module.exports = {
 			//object style
 			prepare: function (context, done) {
 				SDK.startEmulator(config.device, function () {
-					console.log("Emulator booted");
+					//console.log("Emulator booted");
 					return done(null, true);
 				});
 			},
