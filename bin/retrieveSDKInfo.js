@@ -9,7 +9,7 @@ var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/andro
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
 var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ' + 
-							androidDir + ' update project --path; ant clean debug;';
+							androidDir + ' update project --path; ant clean debug; cd bin/; ls';
 
 /*
 androidDir=${HOME}/android-sdk-linux/tools/android #the location of where the android tool is 
