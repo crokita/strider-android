@@ -57,6 +57,10 @@ module.exports = {
 
 	startEmulator: function (deviceName, callback) {
 		exec(startEmulatorFront + deviceName + startEmulatorBack, function (err, stdout, stderr) {
+			console.log(err);
+			console.log(stdout);
+			console.log(stderr);
+
 	        return callback();
 	    });
 	}
