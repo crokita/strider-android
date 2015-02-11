@@ -1,9 +1,28 @@
 var exec = require('child_process').exec;
 
-var deviceListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list avd;';
-var targetListCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ${HOME}/android-sdk-linux/tools/android list targets;';
-var createDeviceCommand = 'chmod 755 ${HOME}/android-sdk-linux/tools/android; echo | ${HOME}/android-sdk-linux/tools/android create avd';
+var permitAndroid		 	= 'chmod 755 ${HOME}/android-sdk-linux/tools/android; ';
+var androidDir 				= '${HOME}/android-sdk-linux/tools/android';
+var emulatorDir				= '${HOME}/android-sdk-linux/tools/emulator';
 
+var deviceListCommand 	 	= permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
+var targetListCommand 		= permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
+var createDeviceCommand  	= permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
+var startEmulatorFront	    = permitAndroid + emulatorDir + ' -avd ';
+var startEmulatorBack  		= ' -no-skin -no-audio -no-window -no-boot-anim &';
+
+/*
+androidDir=${HOME}/android-sdk-linux/tools/android #the location of where the android tool is 
+emulatorDir=${HOME}/android-sdk-linux/tools/emulator64-arm #the location of where the android emulator is (emulator64-arm) (emulator64-x86) (emulator64-mips) 
+
+#start the emulator so that it doesn't block the program flow
+$emulatorDir -avd $device -no-skin -no-audio -no-window -no-boot-anim &
+adb wait-for-device #continue only once the device boots up
+echo "Device $device booted!"
+
+#go to the root directory of the project
+cd ${HOME}/.strider/data/
+ls #derp
+*/
 module.exports = {
 	getDeviceList: function (callback) {
 		exec(deviceListCommand, function (err, stdout, stderr) {
@@ -35,6 +54,12 @@ module.exports = {
 	        return callback();
 	    });
 	},
+
+	startEmulator: function (deviceName, callback) {
+		exec(startEmulatorFront + deviceName + startEmulatorBack, function (err, stdout, stderr) {
+	        return callback();
+	    });
+	}
 }
 
 //this function takes the list of android devices that are usuable and converts each name, target, abi and skin to an object and returns a list
@@ -59,7 +84,7 @@ var parseDeviceList = function (input) {
 }
 
 //this function takes the list of android targets that are usuable and returns a list of them
-parseTargetList = function (input) {
+var parseTargetList = function (input) {
 	var list = input.match(/id: \d*|Name: .*|Type: .*|API level: .*|Skins: .*|Tag\/ABIs : .*/g);
 	var groupedList = [];
 	for (match in list) {

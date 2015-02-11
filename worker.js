@@ -1,3 +1,5 @@
+var SDK = require("./bin/retrieveSDKInfo");
+
 /* Functions for demonstration purposes only */
 var checkSomething = function(context, callback){
 	//Do something here, then call back
@@ -41,9 +43,10 @@ module.exports = {
 			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
-				//CONGRATS YOU GOT THE DEVICE. NOW WHAT?
-				console.log(config.device);
-				return done(null, true);
+				SDK.startEmulator(config.device, function () {
+					console.log("Emulator booted");
+					return done(null, true);
+				});
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
