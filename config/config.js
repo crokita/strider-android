@@ -81,7 +81,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.changeIsLibrary = function () {
-		$scope.config.isLibrary = $scope.isLibrary;
+		$scope.config.isLibrary = !$scope.isLibrary; //because of how ng-click is working the actual value is set to the opposite one intended
 		$scope.save();
 		console.log($scope.config.isLibrary);
 	}
