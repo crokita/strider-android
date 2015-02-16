@@ -8,6 +8,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.targetResults = "";
 	$scope.saving = false;
 	$scope.deviceSelected = "";
+	$scope.isLibrary = false;
 	//user configurations for devices
 	$scope.deviceName = "";
 	$scope.targetOptions = "";
@@ -77,8 +78,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		else {
 			alert("Please fill out all fields before creating a device.");
 		}
+	}
 
-
+	$scope.changeIsLibrary = function (isLibrary) {
+		$scope.config.isLibrary = $scope.isLibrary;
+		$scope.save();
 	}
 }]);
 

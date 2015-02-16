@@ -43,7 +43,13 @@ module.exports = {
 			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
-				SDK.startEmulator(config.device, function () {
+				if (config.isLibrary) {
+					console.log("This project is testing a library!");
+				}
+				else {
+					console.log("This project is not testing a library!");
+				}
+				SDK.startEmulator(config.device, config.isLibrary, function () {
 					console.log("Emulator booted");
 					return done(null, true);
 				});

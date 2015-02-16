@@ -8,10 +8,20 @@ var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/andro
 var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
 var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
-var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ' + 
-							androidDir + ' update project --path ${HOME}/.strider/data/*/*/.; ant clean debug; cd bin/; ls';
+var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ';
+
+var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.;' +  
+							'cd sdl_android_tests;' + //TODO: replace the hardcoded test project
+							'ant clean debug;';
+var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/*/.; ant clean debug; cd bin/; ls';
 
 /*
+TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
+${HOME}/android-sdk-linux/tools/android update project --subprojects -p .
+cd into android tests
+ant clean debug
+
+
 androidDir=${HOME}/android-sdk-linux/tools/android #the location of where the android tool is 
 emulatorDir=${HOME}/android-sdk-linux/tools/emulator64-arm #the location of where the android emulator is (emulator64-arm) (emulator64-x86) (emulator64-mips) 
 
@@ -56,8 +66,17 @@ module.exports = {
 	    });
 	},
 
-	startEmulator: function (deviceName, callback) {
-		exec(startEmulatorFront + deviceName + startEmulatorBack, function (err, stdout, stderr) {
+	startEmulator: function (deviceName, isLibrary, callback) {
+		var finalCommand = startEmulator + deviceName + startEmulator;
+
+		if (isLibrary) {
+			finalCommand.concat(isLibraryAppend);
+		}
+		else {
+			finalCommand.concat(isNotLibraryAppend);
+		}
+		
+		exec(finalCommand, function (err, stdout, stderr) {
 			console.log(err);
 			console.log(stdout);
 			console.log(stderr);
