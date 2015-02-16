@@ -9,7 +9,7 @@
     </p>
 
     If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.
-    <input type="checkbox" ng-model="isLibrary"> 
+    <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary(isLibrary)"> 
     <br/>
 
     <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
