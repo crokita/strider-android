@@ -67,7 +67,7 @@ module.exports = {
 	},
 
 	startEmulator: function (deviceName, isLibrary, callback) {
-		var finalCommand = startEmulator + deviceName + startEmulator;
+		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
 
 		if (isLibrary) {
 			finalCommand.concat(isLibraryAppend);
@@ -75,7 +75,7 @@ module.exports = {
 		else {
 			finalCommand.concat(isNotLibraryAppend);
 		}
-		
+
 		exec(finalCommand, function (err, stdout, stderr) {
 			console.log(err);
 			console.log(stdout);
