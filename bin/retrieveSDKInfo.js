@@ -75,6 +75,7 @@ module.exports = {
 		else {
 			finalCommand.concat(isNotLibraryAppend);
 		}
+		console.log(finalCommand);
 
 		exec(finalCommand, function (err, stdout, stderr) {
 			console.log(err);
