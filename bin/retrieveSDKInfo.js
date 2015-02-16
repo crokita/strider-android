@@ -10,8 +10,9 @@ var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/too
 var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ';
 
+//TODO: replace the hardcoded test project
 var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.;' +  
-							'cd sdl_android_tests;' + //TODO: replace the hardcoded test project
+							'cd sdl_android_tests;' + 
 							'ant clean debug;';
 var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/*/.; ant clean debug; cd bin/; ls';
 
@@ -70,10 +71,10 @@ module.exports = {
 		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
 
 		if (isLibrary) {
-			finalCommand.concat(isLibraryAppend);
+			finalCommand = finalCommand.concat(isLibraryAppend);
 		}
 		else {
-			finalCommand.concat(isNotLibraryAppend);
+			finalCommand = finalCommand.concat(isNotLibraryAppend);
 		}
 		console.log(finalCommand);
 
