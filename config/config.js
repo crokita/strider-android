@@ -80,8 +80,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 	}
 
-	$scope.changeIsLibrary = function (isLibrary) {
-		console.log(isLibrary);
+	$scope.changeIsLibrary = function () {
 		$scope.config.isLibrary = $scope.isLibrary;
 		$scope.save();
 	}
