@@ -49,6 +49,7 @@ module.exports = {
 				else {
 					console.log("This project is not testing a library!");
 				}
+				console.log(config);
 				SDK.startEmulator(config.device, config.isLibrary, function () {
 					console.log("Emulator booted");
 					return done(null, true);
