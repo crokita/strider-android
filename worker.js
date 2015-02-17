@@ -44,7 +44,7 @@ module.exports = {
 				// anything. This is so we can warn users when no plugins
 				// actually do anything during a test run, and avoid false
 				// positives.
-				done(err, true);
+				done(null, true);
 			},
 			deploy: 'echo "' + config.deploy + '"',
 			cleanup: 'echo "' + config.cleanup + '"'
