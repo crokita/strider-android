@@ -86,10 +86,10 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.save();
 	}
 
-	//save whenever testFolderName updates from the user
-	$scope.$watch('testFolderName', function(newValue, oldValue) {
-		$scope.config.testFolderName = newValue;
+	$scope.changeTestFolderName = function () {
+		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();
-	});
+	}
+
 }]);
 
