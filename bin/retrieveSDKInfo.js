@@ -9,18 +9,14 @@ var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/andro
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
 
 var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
-var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ';
+var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ' +
+							androidDir + ' update project --subprojects -p .; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
 
 //TODO: replace the hardcoded test project (sdl_android_tests)
 var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
 							'cd sdl_android_tests; ant clean debug; cd bin/; ';
 var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
 							'cd sdl_android_tests; ant clean debug; cd bin/; ';
-
-var deviceName = '';
-var startEmulatorCommand = 	permitAndroid + emulatorDir + ' -avd ' + deviceName + 
-							' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
-							androidDir + ' update project --subprojects -p .; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
 
 /*
 TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
@@ -77,20 +73,18 @@ module.exports = {
 	},
 
 	startEmulator: function (deviceName, isLibrary, callback) {
-		/*var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
+		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
 
-		if (isLibrary) {
+		/*if (isLibrary) {
 			finalCommand = finalCommand.concat(isLibraryAppend);
 		}
 		else {
 			finalCommand = finalCommand.concat(isNotLibraryAppend);
-		}
+		}*/
+
 		console.log(finalCommand);
-		*/
-		this.deviceName = deviceName;
-		console.log(startEmulatorCommand);
-		console.log("device name: " + this.deviceName);
-		exec(startEmulatorCommand, function (err, stdout, stderr) {
+
+		exec(finalCommand, function (err, stdout, stderr) {
 			console.log(err);
 			console.log(stdout);
 			console.log(stderr);
