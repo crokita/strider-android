@@ -33,10 +33,10 @@ module.exports = {
 			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
-				SDK.startEmulator(config.device, config.isLibrary, config.testFolderName, function (result) {
+				/*SDK.startEmulator(config.device, config.isLibrary, config.testFolderName, function (result) {
 					console.log(result);
 					return done(null, true);
-				});
+				});*/
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {

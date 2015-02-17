@@ -64,7 +64,6 @@ module.exports = {
 	        	testFolderName = stdout;
 	    	});
 		}
-		console.log("Final name: " + testFolderName);
 		
 		var finalCommand = startEmulator1 + deviceName + startEmulator2 + testFolderName + startEmulator3;
 
