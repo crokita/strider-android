@@ -13,7 +13,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.deviceName = "";
 	$scope.targetOptions = "";
 	$scope.abiOptions = "";
-	$scope.skinOptions = "";
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
 		$scope.config = value || {
@@ -65,10 +64,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			name: $scope.deviceSelected,
 			target: $scope.targetOptions.id,
 			abi: $scope.abiOptions,
-			skin: $scope.skinOptions
 		};
 		//only make the request if name and target and abi and skin are defined
-		if (data.name != "" && data.target != "" && data.abi != "" && data.skin != "") {
+		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 				alert("Device added");
 				//now update the device list

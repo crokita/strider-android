@@ -1,5 +1,5 @@
 <div id="template" class="well">
-    <h2>Template Config Page</h2>
+    <h2>Android Config Page</h2>
     <button ng-click="save()" class="btn btn-primary">Save</button>
     <br/>
     <br/>
@@ -9,6 +9,7 @@
     </p>
 
     If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.
+    <br/>
     <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
     [[isLibrary]]
     <br/>
@@ -25,7 +26,6 @@
             <th>Name</th>
             <th>Target</th>
             <th>ABI</th>
-            <th>Skin</th>
             <!--<th>Selected</th>-->
 		</tr>
         <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
@@ -33,7 +33,6 @@
                 <th>[[value.name]]</th>
                 <th>[[value.target]]</th>
                 <th>[[value.abi]]</th>
-                <th>[[value.skin]]</th>
             </div> 
             <!--<th><input type="radio", ng-model="selectedDevice">[[key]]</th>-->
         </tr>
@@ -60,7 +59,6 @@
             <th>Name: <input type="text" ng-model="deviceName"> </th>
             <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
             <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
-            <th>Skin: <select ng-options="skin for skin in targetOptions.skins" ng-model="skinOptions"> </th>
         </tr>
     </table>
 	<br/>
