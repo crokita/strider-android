@@ -4,11 +4,14 @@ var app = window.app;
 * */
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
+	$scope.saving = false;
+
+	//information grabbed from android sdk or from the user concerning project settings
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
-	$scope.saving = false;
 	$scope.deviceSelected = "";
 	$scope.isLibrary = false;
+	$scope.testFolderName = "";
 	//user configurations for devices
 	$scope.deviceName = "";
 	$scope.targetOptions = "";
@@ -82,5 +85,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.config.isLibrary = !$scope.isLibrary; //because of how ng-click is working the actual value is set to the opposite one intended
 		$scope.save();
 	}
+
+	//save whenever testFolderName updates from the user
+	$scope.$watch('testFolderName', function(newValue, oldValue) {
+		$scope.config.testFolderName = newValue;
+		$scope.save();
+	});
 }]);
 

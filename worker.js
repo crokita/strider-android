@@ -1,14 +1,5 @@
 var SDK = require("./bin/retrieveSDKInfo");
 
-/* Functions for demonstration purposes only */
-var checkSomething = function(context, callback){
-	//Do something here, then call back
-	callback(true);
-};
-var doThings = function(callback){
-	callback(null);
-};
-
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -29,7 +20,6 @@ module.exports = {
 			//   communicate things up to the browser or to the webapp.
 			listen: function (emitter, context) {
 				emitter.on('job.status.phase.done', function (id, data) {
-
 					var phase = data.phase;
 					console.log('the ' + phase + ' phase has completed');
 					return true;
@@ -43,29 +33,18 @@ module.exports = {
 			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
-				SDK.startEmulator(config.device, config.isLibrary, function () {
-					console.log("Emulator booted");
+				SDK.startEmulator(config.device, config.isLibrary, config.testFolderName, function (result) {
+					console.log(result);
 					return done(null, true);
 				});
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
-				//this will show up in the terminal log as 'info'
-				//console.log(config.test);
-
-				//demonstration of how to perform async tasks, finishing with a call to done()
-				checkSomething(context, function (shouldDoThings) {
-					if (!shouldDoThings) {
-						// Send `false` to indicate that we didn't actually run
-						// anything. This is so we can warn users when no plugins
-						// actually do anything during a test run, and avoid false
-						// positives.
-						return done(null, false);
-					}
-					doThings(function (err) {
-						done(err, true);
-					});
-				});
+				// Send `false` to indicate that we didn't actually run
+				// anything. This is so we can warn users when no plugins
+				// actually do anything during a test run, and avoid false
+				// positives.
+				done(err, true);
 			},
 			deploy: 'echo "' + config.deploy + '"',
 			cleanup: 'echo "' + config.cleanup + '"'

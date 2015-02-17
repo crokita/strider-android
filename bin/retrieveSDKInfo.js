@@ -57,9 +57,9 @@ module.exports = {
 	    });
 	},
 
-	startEmulator: function (deviceName, isLibrary, callback) {
+	startEmulator: function (deviceName, isLibrary, testFolderName, callback) {
 		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
-
+		
 		/*if (isLibrary) {
 			finalCommand = finalCommand.concat(isLibraryAppend);
 		}
@@ -70,11 +70,7 @@ module.exports = {
 		console.log(finalCommand);
 
 		exec(finalCommand, function (err, stdout, stderr) {
-			console.log(err);
-			console.log(stdout);
-			console.log(stderr);
-
-	        return callback();
+	        return callback(stdout);
 	    });
 	}
 }
