@@ -8,16 +8,16 @@ var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/andro
 var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
 
-var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
-var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ' +
-							androidDir + ' update project --subprojects -p .; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
+var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
+var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
+							androidDir + ' update project --subprojects -p .; ' + 'cd ';
+var startEmulator3 		=	'; ant clean debug; cd bin/ ls';
 
-//TODO: replace the hardcoded test project (sdl_android_tests)
-var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
-							'cd sdl_android_tests; ant clean debug; cd bin/; ';
-var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
-							'cd sdl_android_tests; ant clean debug; cd bin/; ' + 
-							'find $directory -type f -name \*.apk | xargs adb install ';
+//var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
+//							'cd sdl_android_tests; ant clean debug; cd bin/; ';
+//var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
+//							'cd sdl_android_tests; ant clean debug; cd bin/; ' + 
+//							'find $directory -type f -name \*.apk | xargs adb install ';
 
 /*
 TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
@@ -58,8 +58,16 @@ module.exports = {
 	},
 
 	startEmulator: function (deviceName, isLibrary, testFolderName, callback) {
-		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
+		if (testFolderName == '') {
+			//attempt to figure out which folder is the test folder
+			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
+	        	testFolderName = stdout;
+	    	});
+		}
+		console.log("Final name: " + testFolderName);
 		
+		var finalCommand = startEmulator1 + deviceName + startEmulator2 + testFolderName + startEmulator3;
+
 		/*if (isLibrary) {
 			finalCommand = finalCommand.concat(isLibraryAppend);
 		}
