@@ -7,21 +7,30 @@ var emulatorDir			= 	'${HOME}/android-sdk-linux/tools/emulator';
 var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
 var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
+
 var startEmulatorFront	= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulatorBack  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/; cd */.; ';
 
-//TODO: replace the hardcoded test project
-var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.;' +  
-							'cd sdl_android_tests;' + 
-							'ant clean debug;';
-var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/*/.; ant clean debug; cd bin/; ls';
+//TODO: replace the hardcoded test project (sdl_android_tests)
+var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
+							'cd sdl_android_tests; ant clean debug; cd bin/; ';
+var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
+							'cd sdl_android_tests; ant clean debug; cd bin/; ';
+
+var deviceName = '';
+var startEmulatorCommand = 	permitAndroid + emulatorDir + ' -avd ' + deviceName + 
+							' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
+							androidDir + ' update project --subprojects -p ,; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
 
 /*
 TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
+TODO: MIGHT NOT NEED IT NOW ^^
 ${HOME}/android-sdk-linux/tools/android update project --subprojects -p .
 cd into android tests
 ant clean debug
 
+USE VVV
+find $directory -type f -name \*.apk to return the apk file (in the bin directory of the specified project)
 
 androidDir=${HOME}/android-sdk-linux/tools/android #the location of where the android tool is 
 emulatorDir=${HOME}/android-sdk-linux/tools/emulator64-arm #the location of where the android emulator is (emulator64-arm) (emulator64-x86) (emulator64-mips) 
@@ -68,7 +77,7 @@ module.exports = {
 	},
 
 	startEmulator: function (deviceName, isLibrary, callback) {
-		var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
+		/*var finalCommand = startEmulatorFront + deviceName + startEmulatorBack;
 
 		if (isLibrary) {
 			finalCommand = finalCommand.concat(isLibraryAppend);
@@ -77,8 +86,10 @@ module.exports = {
 			finalCommand = finalCommand.concat(isNotLibraryAppend);
 		}
 		console.log(finalCommand);
-
-		exec(finalCommand, function (err, stdout, stderr) {
+		*/
+		this.deviceName = deviceName;
+		console.log(startEmulatorCommand);
+		exec(startEmulatorCommand, function (err, stdout, stderr) {
 			console.log(err);
 			console.log(stdout);
 			console.log(stderr);
