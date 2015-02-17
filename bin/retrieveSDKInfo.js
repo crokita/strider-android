@@ -20,7 +20,7 @@ var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider
 var deviceName = '';
 var startEmulatorCommand = 	permitAndroid + emulatorDir + ' -avd ' + deviceName + 
 							' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
-							androidDir + ' update project --subprojects -p ,; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
+							androidDir + ' update project --subprojects -p .; ' + 'cd sdl_android_tests; ant clean debug; cd bin/ ls';
 
 /*
 TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
