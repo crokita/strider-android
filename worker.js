@@ -37,6 +37,7 @@ module.exports = {
 					console.log(result);
 					return done(null, true);
 				});*/
+				done(null, true);
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
