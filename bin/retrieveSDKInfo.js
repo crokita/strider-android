@@ -89,6 +89,7 @@ module.exports = {
 		*/
 		this.deviceName = deviceName;
 		console.log(startEmulatorCommand);
+		console.log("device name: " + this.deviceName);
 		exec(startEmulatorCommand, function (err, stdout, stderr) {
 			console.log(err);
 			console.log(stdout);
