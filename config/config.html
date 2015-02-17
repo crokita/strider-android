@@ -3,18 +3,13 @@
     <button ng-click="save()" class="btn btn-primary">Save</button>
     <br/>
     <br/>
-    <p class="help-text">
-        These are some messages for demonstrating how the plugin saves config data and reports it during the test process.
-        Each message used slightly differently, so see `worker.js` for different ways to execute actions using config data
-    </p>
-
     If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.
     <br/>
     <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
-    [[isLibrary]]
+    <br/>
     <br/>
 
-    <p>
+    <p class="help-text"> 
         In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will base its decision on the first one that contains 'test' in the name.
     </p>
     <br/>
@@ -47,10 +42,7 @@
     <!--<b> Current target device: [[config.device]] </b>-->
     <b> Current target device: [[deviceSelected]] </b>
 
-    <br/>
-    <br/>
-
-    <div ng-if="targetDevice != ''"> <b> READY FOR TESTING </b> </div>
+    <div ng-if="targetDevice != ''"> <b> (READY FOR TESTING) </b> </div>
 	<br/>
 	<br/>
 	
@@ -66,7 +58,6 @@
             <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
         </tr>
     </table>
-	<br/>
 	API Level: [[targetOptions.api]]
 	<br/>
 	
