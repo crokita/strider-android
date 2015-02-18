@@ -1,28 +1,25 @@
 <div id="template" class="well">
     <h2>Android Config Page</h2>
-    <button ng-click="save()" class="btn btn-primary">Save</button>
-    <br/>
-    <br/>
-    If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.
-    <br/>
+    <br><br>
+    <h4>If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.</h4>
+    <br>
     <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
-    <br/>
-    <br/>
+    <br><br>
 
-    <p class="help-text"> 
+    <p> 
         In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will base its decision on the first one that contains 'test' in the name.
     </p>
-    <br/>
+    <br>
     <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()">
-    <br/>
+    <br><br>
 
     <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
-    <br/>
+    <br>
 
-    <div ng-if="deviceResults != ''"> <b> Device List: </b> </div>
-    <br/>
+    <!--<div ng-if="deviceResults != ''"> <h3> Device List: </h3> </div>-->
+    <br>
 
-	<!-- just make it a dropdown menu (combo box?) -->
+	<!-- make it a dropdown menu? -->
     <table class="table" ng-if="deviceResults != ''">
         <tr>
             <th>Name</th>
@@ -38,18 +35,19 @@
         </tr>
     </table>
 
-    <br/>
+    <br>
     <!--<b> Current target device: [[config.device]] </b>-->
     <b> Current target device: [[deviceSelected]] </b>
 
     <div ng-if="deviceSelected != ''"> <b> (READY FOR TESTING) </b> </div>
-	<br/>
-	<br/>
+	<br>
+	<br>
 	
-	
+
+	<h3> Add a new virtual device here: </h3>
+    <br>
 	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
-	<br/>
-	<b> Add a new virtual device here: </b>
+	<br>
 
 	<table class="table">
         <tr>
@@ -59,10 +57,9 @@
         </tr>
     </table>
 	API Level: [[targetOptions.api]]
-	<br/>
-	
+	<br>
 	<button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
-	<br/>
+	<br>
 
     <!--
     <h3>Environment</h3>
