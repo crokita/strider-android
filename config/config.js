@@ -37,7 +37,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.retrieveDevices = function () {
 		$scope.save();
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
-			console.log(data);
+			//console.log(data);
 			$scope.deviceResults = data;
 		});
 		/*
@@ -66,7 +66,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		var data =  {
 			name: $scope.deviceSelected,
 			target: $scope.targetOptions.id,
-			abi: $scope.abiOptions,
+			abi: $scope.abiOptions
 		};
 		//only make the request if name and target and abi are defined
 		if (data.name != "" && data.target != "" && data.abi != "") {
