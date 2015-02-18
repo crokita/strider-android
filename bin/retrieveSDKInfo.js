@@ -11,8 +11,8 @@ var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/too
 var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
 							androidDir + ' update project --subprojects -p .; ' + 'cd ';
-var startEmulator3 		=	'; ant clean debug; cd bin/ ls';
-
+var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -name \*.apk | xargs adb install';
+//TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
 //							'cd sdl_android_tests; ant clean debug; cd bin/; ';
 //var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
@@ -50,7 +50,7 @@ module.exports = {
 		var includeTarget = ' -t ' + data.target;
 		var includeAbi = ' -b ' + data.abi;
 		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
-		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi + includeSkin);
+		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi);
 		console.log(finalCommand);
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
@@ -64,7 +64,7 @@ module.exports = {
 	        	testFolderName = stdout;
 	    	});
 		}
-		
+
 		var finalCommand = startEmulator1 + deviceName + startEmulator2 + testFolderName + startEmulator3;
 
 		/*if (isLibrary) {
