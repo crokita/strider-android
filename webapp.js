@@ -60,11 +60,11 @@ module.exports = {
         app.delete('/devices', function(req, res) {
             //prepare to add the device
             console.log(req.body);
-            /*
-            SDK.deleteDevice(req.body, function () {
+            
+            //SDK.deleteDevice(req.body, function () {
                 res.json(""); //TODO: add anything here?
-            });
-        */
+            //});
+        
         });
     },
     // Listen for global events
