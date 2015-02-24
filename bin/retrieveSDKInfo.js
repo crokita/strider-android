@@ -7,6 +7,7 @@ var emulatorDir			= 	'${HOME}/android-sdk-linux/tools/emulator';
 var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
 var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
 var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
+var deleteDeviceCommand = 	permitAndroid + '${HOME}/android-sdk-linux/tools/android delete avd -n '
 
 var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
@@ -51,7 +52,7 @@ module.exports = {
 		var includeAbi = ' -b ' + data.abi;
 		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
 		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi);
-		console.log(finalCommand);
+		
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
 	    });
@@ -78,6 +79,15 @@ module.exports = {
 
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback(stdout);
+	    });
+	},
+
+	deleteDevice: function (data, callback) {
+		var deviceName = data.name;
+		var finalCommand = deleteDeviceCommand.concat(deviceName);
+		console.log(finalCommand);
+		exec(finalCommand, function (err, stdout, stderr) {
+	        return callback();
 	    });
 	}
 }

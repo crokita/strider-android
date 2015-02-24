@@ -57,14 +57,10 @@ module.exports = {
 			});
         });
 
-        app.put('/devices', function(req, res) {
-            //prepare to add the device
-            console.log(req.body);
-            
-            //SDK.deleteDevice(req.body, function () {
+        app.put('/devices', function(req, res) { 
+            SDK.deleteDevice(req.body, function () {
                 res.json(""); //TODO: add anything here?
-            //});
-        
+            });
         });
     },
     // Listen for global events
