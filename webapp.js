@@ -59,7 +59,7 @@ module.exports = {
 
         app.delete('/devices', function(req, res) {
             //prepare to add the device
-            console.log(req.body);
+            console.log(req);
             
             //SDK.deleteDevice(req.body, function () {
                 res.json(""); //TODO: add anything here?
