@@ -25,12 +25,14 @@
             <th>Name</th>
             <th>Target</th>
             <th>ABI</th>
+            <th>Remove</th>
 		</tr>
         <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
             <div ng-model="deviceList">
                 <th>[[value.name]]</th>
                 <th>[[value.target]]</th>
                 <th>[[value.abi]]</th>
+                <button ng-click="deleteDevice(value.name)" class="btn btn-primary">Delete device</button>
             </div> 
         </tr>
     </table>

@@ -21,7 +21,7 @@ var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -nam
 
 /*
 TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
-TODO: MIGHT NOT NEED IT NOW ^^
+TODO: MIGHT NOT NEED THE ABOVE NOW
 ${HOME}/android-sdk-linux/tools/android update project --subprojects -p .
 cd into android tests
 ant clean debug
@@ -59,7 +59,7 @@ module.exports = {
 
 	startEmulator: function (deviceName, isLibrary, testFolderName, callback) {
 		if (testFolderName == '') {
-			//attempt to figure out which folder is the test folder
+			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
 			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
 	        	testFolderName = stdout;
 	    	});
