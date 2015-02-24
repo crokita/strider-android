@@ -100,7 +100,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
 		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
 			alert(device + " deleted");
-			$scope.save();
+			$scope.retrieveDevices();
 		});
 	}
 

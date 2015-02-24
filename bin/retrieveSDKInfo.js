@@ -52,7 +52,7 @@ module.exports = {
 		var includeAbi = ' -b ' + data.abi;
 		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
 		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi);
-		
+
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
 	    });
@@ -85,7 +85,7 @@ module.exports = {
 	deleteDevice: function (data, callback) {
 		var deviceName = data.name;
 		var finalCommand = deleteDeviceCommand.concat(deviceName);
-		console.log(finalCommand);
+
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback();
 	    });
