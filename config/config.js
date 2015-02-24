@@ -92,13 +92,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.deleteDevice = function (device) {
-		console.log(device);
 		var data =  {
 			name: device
 		};
-		console.log(data);
 
-		$http.delete('/ext/android/devices', data).success(function(data, status, headers, config) {
+		//use the put method because Express does not allow a body for a delete request
+		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
+		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
 			alert(device + " deleted");
 			$scope.save();
 		});
