@@ -92,11 +92,14 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.deleteDevice = function (deviceName) {
-		console.log(deviceName);
-		/*$scope.save();
-		$http.delete('/ext/android/devices', deviceName).success(function(data, status, headers, config) {
+		var data =  {
+			name: deviceName
+		};
+		
+		$http.delete('/ext/android/devices', data).success(function(data, status, headers, config) {
 			alert("Device deleted?");
-		});*/
+			$scope.save();
+		});
 	}
 
 }]);
