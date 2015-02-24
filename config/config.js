@@ -64,7 +64,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.createDevice = function () {
 		//construct the data
 		var data =  {
-			name: $scope.deviceSelected,
+			name: $scope.deviceName,
 			target: $scope.targetOptions.id,
 			abi: $scope.abiOptions
 		};
