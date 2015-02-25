@@ -21,7 +21,7 @@
         </p>
         <br>
         Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> </input>
-        <br><br>
+        <br>
     </div>
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
         Nothing here yet...
@@ -30,11 +30,11 @@
     <!-- General device settings -->
     <h4> Device Settings </h4>
     <div class="well well-sm">
-        <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
+        <button ng-click="retrieveDevices()" class="btn btn-info">Grab Android Devices</button>
+        <br>
+        Click on any row to select the corresponding device
         <br><br>
 
-
-        <!-- make it a dropdown menu? -->
         <table class="table" ng-if="deviceResults != ''">
             <tr>
                 <th>Name</th>
@@ -43,14 +43,12 @@
                 <th></th>
             </tr>
             <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
-                <button>
-                    <div ng-model="deviceList">
-                        <th>[[value.name]]</th>
-                        <th>[[value.target]]</th>
-                        <th>[[value.abi]]</th>
-                        <th><button ng-click="deleteDevice(value.name)" class="btn btn-primary">Delete device</button></th>
-                    </div> 
-                </button>
+                <div ng-model="deviceList">
+                    <th>[[value.name]]</th>
+                    <th>[[value.target]]</th>
+                    <th>[[value.abi]]</th>
+                    <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
+                </div> 
             </tr>
         </table>
 
@@ -65,9 +63,9 @@
 
         <br><br>
 
-        <h3> Add a new virtual device here: </h3>
+        <h4> Add a new virtual device here: </h4>
         <br>
-        <button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
+        <button ng-click="retrieveTargets()" class="btn btn-info">Grab Targets</button>
         <br>
 
         <table class="table">
