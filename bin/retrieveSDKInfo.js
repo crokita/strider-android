@@ -13,6 +13,8 @@ var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
 							androidDir + ' update project --subprojects -p .; ' + 'cd ';
 var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -name \*.apk | xargs adb install';
+
+var startEmulatorStudio = 	'chmod +x gradlew; '
 //TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
 //							'cd sdl_android_tests; ant clean debug; cd bin/; ';
