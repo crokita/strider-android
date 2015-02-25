@@ -70,11 +70,12 @@
         API Level: [[targetOptions.api]]
         <br>
         <button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
-        <br>
+        <br><br>
 
-        <br>
-        Output:
-        <div class="alert alert-info" role="alert"> [[dataResult]] </div>
+        <div class="jumbotron" role="alert" ng-if="dataResult != ''"> 
+            Output:<pre>[[dataResult]] </pre> 
+        </div>
+
     </div>
 
 </div>
