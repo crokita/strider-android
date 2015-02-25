@@ -42,11 +42,11 @@
                 <th>ABI</th>
                 <th></th>
             </tr>
-            <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
+            <tr ng-repeat="(key, value) in deviceResults">
                 <div ng-model="deviceList">
-                    <th>[[value.name]]</th>
-                    <th>[[value.target]]</th>
-                    <th>[[value.abi]]</th>
+                    <th ng-click="selectDevice(key)">[[value.name]]</th>
+                    <th ng-click="selectDevice(key)">[[value.target]]</th>
+                    <th ng-click="selectDevice(key)">[[value.abi]]</th>
                     <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
                 </div> 
             </tr>
@@ -74,7 +74,7 @@
                 <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
             </tr>
         </table>
-        <h4> API Level: <span class="label label-default">[[targetOptions.api]]</span> </h4>
+        <h5> API Level: <span class="label label-warning"> <b> [[targetOptions.api]] </b> </span> </h5>
         <br><br>
         <button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
         <br>

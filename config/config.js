@@ -91,9 +91,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.deleteDevice = function (device) {
-		//reset the selected device
-		$scope.deviceSelected = "";
-
 		var data =  {
 			name: device
 		};
