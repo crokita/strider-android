@@ -71,7 +71,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//only make the request if name and target and abi are defined
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
-				$scope.displayOnPage(data);
+				$scope.dataResult = data;
 				//now update the device list
 				$scope.retrieveDevices();
 			});
@@ -89,7 +89,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//use the put method because Express does not allow a body for a delete request
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
 		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
-			$scope.displayOnPage(data);
+			$scope.dataResult = data;
+			//now update the device list
 			$scope.retrieveDevices();
 		});
 	}
@@ -102,15 +103,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.changeTestFolderName = function () {
 		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();
-	}
-
-	//output to the webpage in a more readable format
-	$scope.displayOnPage = function (data) {
-
-		//remove the quotes
-		//data = data.substr(1, data.length - 2);
-		//data = data.replace("\n", "<br>");
-		$scope.dataResult = data;
 	}
 
 }]);
