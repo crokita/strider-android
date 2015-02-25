@@ -109,7 +109,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		//remove the quotes
 		data = data.substr(1, data.length - 2);
-		data = data.split("\n").join("<br>");
+		data = data.replace("\n", "<br>");
 		$scope.dataResult = data;
 	}
 
