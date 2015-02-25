@@ -87,7 +87,7 @@ module.exports = {
 		var finalCommand = deleteDeviceCommand.concat(deviceName);
 
 		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback(result);
+	        return callback(stdout);
 	    });
 	}
 }
