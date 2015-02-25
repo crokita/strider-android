@@ -2,6 +2,7 @@ var app = window.app;
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
+var timeoutVar; //this is used for a timeout function whenever a user is typing and changes need to be saved
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.saving = false;
@@ -132,11 +133,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	//saves the input of what is the Eclipse testing folder name
 	$scope.changeTestFolderName = function () {
-		$scope.config.testFolderName = $scope.testFolderName;
-		$scope.save();
+		//whenever a change is made, reset the automatic save timer
+		clearTimeout(timeoutVar);
 
-		setTimeout(function () {
-			alert("yo");
+		timeoutVar = setTimeout(function () {
+			$scope.config.testFolderName = $scope.testFolderName;
+			$scope.save();
 		}, 1000);
 	}
 
