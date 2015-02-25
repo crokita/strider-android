@@ -110,6 +110,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.changeTestFolderName = function () {
+		console.log("Change");
 		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();
 	}

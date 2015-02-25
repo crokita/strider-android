@@ -30,7 +30,7 @@
     <!-- General device settings -->
     <h4> Device Settings </h4>
     <div class="well well-sm">
-        <button ng-click="retrieveDevices()" class="btn btn-info">Grab Android Devices</button>
+        <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
         <br>
         Click on any row to select the corresponding device
         <br><br>
@@ -60,12 +60,11 @@
         <div ng-if="deviceSelected != ''" class="alert alert-success" role="alert">
             <b> [[deviceSelected]] is your selected device </b> 
         </div>
-
-        <br><br>
+        <br>
 
         <h4> Add a new virtual device here: </h4>
         <br>
-        <button ng-click="retrieveTargets()" class="btn btn-info">Grab Targets</button>
+        <button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
         <br>
 
         <table class="table">
