@@ -19,7 +19,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.targetOptions = "";
 	$scope.abiOptions = "";
 
-	/*$scope.$watch('configs[branch.name].android.config', function (value) {
+	$scope.$watch('configs[branch.name].android.config', function (value) {
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
@@ -27,7 +27,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-	});*/
+	});
 
 	$scope.save = function () {
 		$scope.saving = true;
@@ -110,7 +110,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	$scope.changeTestFolderName = function () {
-		console.log("Change");
 		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();
 	}
