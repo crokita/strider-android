@@ -40,7 +40,7 @@
                 <th>Name</th>
                 <th>Target</th>
                 <th>ABI</th>
-                <th>Remove</th>
+                <th></th>
             </tr>
             <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
                 <div ng-model="deviceList">
@@ -53,10 +53,10 @@
         </table>
 
         <br>
-        <!--<b> Current target device: [[config.device]] </b>-->
-        <b> Current target device: [[deviceSelected]] </b>
+        
+        <div ng-if="deviceSelected == ''" class="alert alert-warning" role="alert"><b> No device selected </b> 
+        <div ng-if="deviceSelected != ''" class="alert alert-success" role="alert"><b> [[deviceSelected]] is your selected device </b> 
 
-        <div ng-if="deviceSelected != ''"> <b> (READY FOR TESTING) </b> </div>
         <br><br>
 
         <h3> Add a new virtual device here: </h3>
