@@ -44,9 +44,9 @@
             </tr>
             <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
                 <div ng-model="deviceList">
-                    <ul class="pagination"> <li> <th>[[value.name]]</th> </li> </ul>
-                    <ul class="pagination"> <li> <th>[[value.target]]</th> </li> </ul>
-                    <ul class="pagination"> <li> <th>[[value.abi]]</th> </li> </ul>
+                    <th>[[value.name]]</th>
+                    <th>[[value.target]]</th>
+                    <th>[[value.abi]]</th>
                     <th><button ng-click="deleteDevice(value.name)" class="btn btn-primary">Delete device</button></th>
                 </div> 
             </tr>
