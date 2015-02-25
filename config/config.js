@@ -78,11 +78,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	//creates a new Android device with the info given by the user
 	$scope.createDevice = function () {
-		//reset the options
-		$scope.deviceName = "";
-		$scope.targetOptions = "";
-		$scope.abiOptions = "";
-
 		//construct the data
 		var data =  {
 			name: $scope.deviceName,
@@ -95,6 +90,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 				$scope.dataResult = data;
+
+				//reset the options
+				$scope.deviceName = "";
+				$scope.targetOptions = "";
+				$scope.abiOptions = "";
+
 				//now update the device list
 				$scope.retrieveDevices();
 			});
