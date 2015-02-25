@@ -32,25 +32,26 @@
     <div class="well well-sm">
         <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
         <br>
-        Click on any row to select the corresponding device
-        <br><br>
 
-        <table class="table" ng-if="deviceResults != ''">
-            <tr>
-                <th>Name</th>
-                <th>Target</th>
-                <th>ABI</th>
-                <th></th>
-            </tr>
-            <tr ng-repeat="(key, value) in deviceResults">
-                <div ng-model="deviceList">
-                    <th ng-click="selectDevice(key)">[[value.name]]</th>
-                    <th ng-click="selectDevice(key)">[[value.target]]</th>
-                    <th ng-click="selectDevice(key)">[[value.abi]]</th>
-                    <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
-                </div> 
-            </tr>
-        </table>
+        <div ng-if="deviceResults != ''">
+            Click on any row to select the corresponding device
+            <table class="table" >
+                <tr>
+                    <th>Name</th>
+                    <th>Target</th>
+                    <th>ABI</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="(key, value) in deviceResults">
+                    <div ng-model="deviceList">
+                        <th ng-click="selectDevice(key)">[[value.name]]</th>
+                        <th ng-click="selectDevice(key)">[[value.target]]</th>
+                        <th ng-click="selectDevice(key)">[[value.abi]]</th>
+                        <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
+                    </div> 
+                </tr>
+            </table>
+        </div>
 
         <br>
         
