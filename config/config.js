@@ -29,6 +29,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		};
 	});
 
+	//save all data into the config 
 	$scope.save = function () {
 		$scope.saving = true;
 		$scope.pluginConfig('android', $scope.config, function () {
@@ -36,14 +37,17 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});
 	};
 
+	//gives options for Eclipse projects
 	$scope.toEclipse = function () {
 		$scope.ide = "Eclipse";
 	}
 
+	//gives options for Android Studio projects
 	$scope.toAndroidStudio = function () {
 		$scope.ide = "AndroidStudio";
 	}
 
+	//returns a list of all available devices to run projects on
 	$scope.retrieveDevices = function () {
 		$scope.save();
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
@@ -57,12 +61,14 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});*/
 	}
 
+	//remembers the name of the device selectged
 	$scope.selectDevice = function (index) {
 		$scope.deviceSelected = $scope.deviceResults[index].name;
 		$scope.config.device = $scope.deviceResults[index].name;
 		$scope.save();
 	}
 	
+	//retrieves a list of available Android targets and their ABIs
 	$scope.retrieveTargets = function () {
 		$scope.save();
 		$http.get('/ext/android/targets').success(function(data, status, headers, config) {
@@ -70,6 +76,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});
 	}
 
+	//creates a new Android device with the info given by the user
 	$scope.createDevice = function () {
 		//construct the data
 		var data =  {
@@ -90,7 +97,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 	}
 
+	//deletes a specified Android device
 	$scope.deleteDevice = function (device) {
+		if (device == $scope.deviceSelected) {
+			$scope.deviceSelected = "";
+		}
+
 		var data =  {
 			name: device
 		};
@@ -104,11 +116,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});
 	}
 
+	//toggles whether the Eclipse test project is a library
 	$scope.changeIsLibrary = function () {
 		$scope.config.isLibrary = !$scope.isLibrary; //because of how ng-click is working the actual value is set to the opposite one intended
 		$scope.save();
 	}
 
+	//saves the input of what is the Eclipse testing folder name
 	$scope.changeTestFolderName = function () {
 		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();

@@ -74,7 +74,11 @@
                 <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
             </tr>
         </table>
-        <h5 ng-if="targetOptions.api != ''"> API Level: <span class="label label-warning"> <b> [[targetOptions.api]] </b> </span> </h5>
+
+        <div ng-if="targetOptions.api">
+            <h5 > API Level: <span class="label label-warning"> <b> [[targetOptions.api]] </b> </span> </h5>
+        </div>
+        
         <br><br>
         <button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
         <br>
