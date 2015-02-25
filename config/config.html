@@ -2,8 +2,11 @@
     <h2>Android Config Page</h2>
     <br>
     <h4>Select your IDE</h4>
-    <button ng-click="toEclipse()" class="btn btn-primary">Eclipse</button>
-    <button ng-click="toAndroidStudio()" class="btn btn-primary">Android Studio</button>
+    <ul class="nav nav-tabs nav-justified">
+        <button ng-click="toEclipse()" class="btn btn-primary">Eclipse</button>
+        <button ng-click="toAndroidStudio()" class="btn btn-primary">Android Studio</button>
+    </ul>
+
     <br><br>
 
     <!-- IDE-specific settings -->
@@ -25,7 +28,6 @@
     <!-- General device settings -->
     <h4> Device Settings </h4>
     <div class="well well-sm">
-        <br><br>
         <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
         <br><br>
 
