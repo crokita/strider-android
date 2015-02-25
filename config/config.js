@@ -134,6 +134,10 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.changeTestFolderName = function () {
 		$scope.config.testFolderName = $scope.testFolderName;
 		$scope.save();
+
+		setTimeout(function () {
+			alert("yo");
+		}, 1000);
 	}
 
 }]);
