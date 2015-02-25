@@ -2,12 +2,13 @@
     <h2>Android Config Page</h2>
     <br>
     <h4>Select your IDE</h4>
-    <ul class="nav nav-tabs nav-justified">
+
+    <div class="btn-group" role="group">
         <button ng-click="toEclipse()" class="btn btn-primary">Eclipse</button>
         <button ng-click="toAndroidStudio()" class="btn btn-primary">Android Studio</button>
-    </ul>
+    </div>
 
-    <br><br>
+    <br>
 
     <!-- IDE-specific settings -->
     <div ng-if="ide == 'Eclipse'"> 
