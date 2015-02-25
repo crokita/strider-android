@@ -54,14 +54,14 @@ module.exports = {
 			//prepare to add the device
 			SDK.addDevice(req.body, function (result) {
                 console.log(result);
-				res.json(result); //TODO: add anything here?
+				res.send(result); //TODO: add anything here?
 			});
         });
 
         app.put('/devices', function(req, res) { 
             SDK.deleteDevice(req.body, function (result) {
                 console.log(result);
-                res.json(result); //TODO: add anything here?
+                res.send(result); //TODO: add anything here?
             });
         });
     },

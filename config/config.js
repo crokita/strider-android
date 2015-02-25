@@ -108,8 +108,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.displayOnPage = function (data) {
 
 		//remove the quotes
-		data = data.substr(1, data.length - 2);
-		data = data.replace("\n", "<br>");
+		//data = data.substr(1, data.length - 2);
+		//data = data.replace("\n", "<br>");
 		$scope.dataResult = data;
 	}
 
