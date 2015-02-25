@@ -52,14 +52,16 @@ module.exports = {
 		
 		app.post('/devices', function(req, res) {
 			//prepare to add the device
-			SDK.addDevice(req.body, function () {
-				res.json(""); //TODO: add anything here?
+			SDK.addDevice(req.body, function (result) {
+                console.log(result);
+				res.json(result); //TODO: add anything here?
 			});
         });
 
         app.put('/devices', function(req, res) { 
-            SDK.deleteDevice(req.body, function () {
-                res.json(""); //TODO: add anything here?
+            SDK.deleteDevice(req.body, function (result) {
+                console.log(result);
+                res.json(result); //TODO: add anything here?
             });
         });
     },

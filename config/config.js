@@ -12,6 +12,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.deviceSelected = "";
 	$scope.isLibrary = false;
 	$scope.testFolderName = "";
+	$scope.dataResult = "";
 	//user configurations for devices
 	$scope.deviceName = "";
 	$scope.targetOptions = "";
@@ -37,7 +38,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.retrieveDevices = function () {
 		$scope.save();
 		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
-			//console.log(data);
 			$scope.deviceResults = data;
 		});
 		/*
@@ -71,7 +71,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//only make the request if name and target and abi are defined
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
-				alert("Device added");
+				$scope.dataResult = data;
 				//now update the device list
 				$scope.retrieveDevices();
 			});
@@ -79,16 +79,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		else {
 			alert("Please fill out all fields before creating a device.");
 		}
-	}
-
-	$scope.changeIsLibrary = function () {
-		$scope.config.isLibrary = !$scope.isLibrary; //because of how ng-click is working the actual value is set to the opposite one intended
-		$scope.save();
-	}
-
-	$scope.changeTestFolderName = function () {
-		$scope.config.testFolderName = $scope.testFolderName;
-		$scope.save();
 	}
 
 	$scope.deleteDevice = function (device) {
@@ -99,9 +89,19 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//use the put method because Express does not allow a body for a delete request
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
 		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
-			alert(device + " deleted");
+			$scope.dataResult = data;
 			$scope.retrieveDevices();
 		});
+	}
+
+	$scope.changeIsLibrary = function () {
+		$scope.config.isLibrary = !$scope.isLibrary; //because of how ng-click is working the actual value is set to the opposite one intended
+		$scope.save();
+	}
+
+	$scope.changeTestFolderName = function () {
+		$scope.config.testFolderName = $scope.testFolderName;
+		$scope.save();
 	}
 
 }]);

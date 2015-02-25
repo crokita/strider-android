@@ -54,7 +54,7 @@ module.exports = {
 		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi);
 
 		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback();
+	        return callback(stdout);
 	    });
 	},
 
@@ -87,7 +87,7 @@ module.exports = {
 		var finalCommand = deleteDeviceCommand.concat(deviceName);
 
 		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback();
+	        return callback(result);
 	    });
 	}
 }
