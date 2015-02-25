@@ -13,11 +13,11 @@
 
     <!-- IDE-specific settings -->
     <div ng-if="ide == 'Eclipse'" class="well"> 
-        If you have an Eclipse project such that you are testing a library with the tests in a separate folder then check this box.
+        If you are testing a library then check this box --> 
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
         <br><br>
         <p> 
-            In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will base its decision on the first one that contains 'test' in the name.
+            In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will pick the first one that contains 'test' in the name.
         </p>
         <br>
         Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> </input>
