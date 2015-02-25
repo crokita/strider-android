@@ -21,7 +21,7 @@
   "strider": {
     "type": "job",
     "id": "android",
-    "title": "Android Plugin",
+    "title": "Android",
     "worker": "worker.js",
     "webapp": "webapp.js",
     "icon": "icon.png",
