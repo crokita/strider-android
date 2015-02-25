@@ -7,6 +7,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.saving = false;
 
 	//information grabbed from android sdk or from the user concerning project settings
+	$scope.ide = "";
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
 	$scope.deviceSelected = "";
@@ -18,7 +19,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.targetOptions = "";
 	$scope.abiOptions = "";
 
-	$scope.$watch('configs[branch.name].android.config', function (value) {
+	/*$scope.$watch('configs[branch.name].android.config', function (value) {
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
@@ -26,7 +27,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-	});
+	});*/
 
 	$scope.save = function () {
 		$scope.saving = true;
@@ -34,6 +35,14 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			$scope.saving = false;
 		});
 	};
+
+	$scope.toEclipse = function () {
+		$scope.ide = "Eclipse";
+	}
+
+	$scope.toAndroidStudio = function () {
+		$scope.ide = "AndroidStudio";
+	}
 
 	$scope.retrieveDevices = function () {
 		$scope.save();
