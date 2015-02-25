@@ -1,6 +1,6 @@
 <div id="template" class="well">
     <h2>Android Config Page</h2>
-    <br><br>
+    <br>
     <h4>Select your IDE</h4>
     <button ng-click="toEclipse()" class="btn btn-primary">Eclipse</button>
     <button ng-click="toAndroidStudio()" class="btn btn-primary">Android Studio</button>
@@ -25,61 +25,56 @@
     <!-- General device settings -->
     <br><br>
     <div class="well well-sm">
-        Testing
-        <div class="panel-body">
-            Basic panel example
-        </div>
+        <br><br>
+        <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
+        <br><br>
+
+
+        <!-- make it a dropdown menu? -->
+        <table class="table" ng-if="deviceResults != ''">
+            <tr>
+                <th>Name</th>
+                <th>Target</th>
+                <th>ABI</th>
+                <th>Remove</th>
+            </tr>
+            <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
+                <div ng-model="deviceList">
+                    <th>[[value.name]]</th>
+                    <th>[[value.target]]</th>
+                    <th>[[value.abi]]</th>
+                    <th><button ng-click="deleteDevice(value.name)" class="btn btn-primary">Delete device</button></th>
+                </div> 
+            </tr>
+        </table>
+
+        <br>
+        <!--<b> Current target device: [[config.device]] </b>-->
+        <b> Current target device: [[deviceSelected]] </b>
+
+        <div ng-if="deviceSelected != ''"> <b> (READY FOR TESTING) </b> </div>
+        <br><br>
+
+        <h3> Add a new virtual device here: </h3>
+        <br>
+        <button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
+        <br>
+
+        <table class="table">
+            <tr>
+                <th>Name: <input type="text" ng-model="deviceName"> </th>
+                <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
+                <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
+            </tr>
+        </table>
+        API Level: [[targetOptions.api]]
+        <br>
+        <button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
+        <br>
+
+        <br>
+        Output:
+        <div class="alert alert-info" role="alert"> <pre>[[dataResult]] </pre> </div>
     </div>
-
-    <br><br>
-    <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
-    <br><br>
-
-
-	<!-- make it a dropdown menu? -->
-    <table class="table" ng-if="deviceResults != ''">
-        <tr>
-            <th>Name</th>
-            <th>Target</th>
-            <th>ABI</th>
-            <th>Remove</th>
-		</tr>
-        <tr ng-repeat="(key, value) in deviceResults" ng-click="selectDevice(key)">
-            <div ng-model="deviceList">
-                <th>[[value.name]]</th>
-                <th>[[value.target]]</th>
-                <th>[[value.abi]]</th>
-                <th><button ng-click="deleteDevice(value.name)" class="btn btn-primary">Delete device</button></th>
-            </div> 
-        </tr>
-    </table>
-
-    <br>
-    <!--<b> Current target device: [[config.device]] </b>-->
-    <b> Current target device: [[deviceSelected]] </b>
-
-    <div ng-if="deviceSelected != ''"> <b> (READY FOR TESTING) </b> </div>
-	<br><br>
-
-	<h3> Add a new virtual device here: </h3>
-    <br>
-	<button ng-click="retrieveTargets()" class="btn btn-primary">Grab Targets</button>
-	<br>
-
-	<table class="table">
-        <tr>
-            <th>Name: <input type="text" ng-model="deviceName"> </th>
-            <th>Target: <select ng-options="target.name for target in targetResults" ng-model="targetOptions"> </th>
-            <th>ABI: <select ng-options="abi for abi in targetOptions.abis" ng-model="abiOptions"> </th>
-        </tr>
-    </table>
-	API Level: [[targetOptions.api]]
-	<br>
-	<button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
-	<br>
-
-    <br>
-    Output:
-    <pre>[[dataResult]]</pre>
 
 </div>
