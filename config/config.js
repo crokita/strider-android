@@ -85,6 +85,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			abi: $scope.abiOptions
 		};
 
+		console.log(data.abi);
 		//only make the request if name and target and abi are defined
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {

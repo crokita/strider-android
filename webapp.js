@@ -59,7 +59,7 @@ module.exports = {
 
         app.put('/devices', function(req, res) { 
             SDK.deleteDevice(req.body, function (result) {
-                res.send(result);c
+                res.send(result);
             });
         });
     },
