@@ -14,7 +14,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//reset data that shouldn't persist
 		$scope.deviceResults = "";
 		$scope.targetResults = "";
-
+		console.log($scope.config);
 		//DO NOT reset these variables
 		/*
 		$scope.ide = "";
