@@ -14,7 +14,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//reset data that shouldn't persist
 		$scope.deviceResults = "";
 		$scope.targetResults = "";
-		console.log($scope.config);
 		//DO NOT reset these variables
 		/*
 		$scope.ide = "";
@@ -51,7 +50,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
-		console.log("I'm the watch");
+		
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
@@ -59,6 +58,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
+		console.log($scope.config);
 	});
 
 	//save all data into the config 
