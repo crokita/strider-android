@@ -9,11 +9,9 @@ var emulatorDir			= 	'/tools/emulator';
 
 module.exports = {
 	getDeviceList: function (sdkLocation) {
-		console.log(sdkLocation);
 		var location = validator.toString(sdkLocation); //sanitize input
-		console.log(sdkLocation);
 
-		if (location == undefined) {
+		if (location) {
 			location = defaultSDKLocation;
 		} 
 		return allow + location + androidDir + "; " + location + androidDir + " list avd";
