@@ -158,6 +158,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		timeoutVar = setTimeout(function () {
 			$scope.config.testFolderName = $scope.testFolderName;
 			console.log($scope.config.testFolderName);
+			console.log($scope.testFolderName);
 			$scope.save();
 		}, 1000);
 	}
@@ -169,6 +170,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		timeoutVar = setTimeout(function () {
 			$scope.config.sdkLocation = $scope.sdkLocation;
+			console.log($scope.config.sdkLocation);
 			$scope.save();
 		}, 1000);
 	}
