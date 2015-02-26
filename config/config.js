@@ -36,12 +36,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-		//console.log(value);
+		console.log(value);
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
 		$scope.isLibrary = $scope.config.isLibrary;
 		if ($scope.eclipseModel != {}) {
+			console.log($scope.eclipseModel);
 			$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
 		}
 		$scope.sdkLocation = $scope.config.sdkLocation;
