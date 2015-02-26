@@ -36,7 +36,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-
+		console.log(value);
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
