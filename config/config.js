@@ -156,6 +156,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		clearTimeout(timeoutVar);
 
 		timeoutVar = setTimeout(function () {
+			console.log("HEY");
 			$scope.config.testFolderName = $scope.testFolderName;
 			$scope.save();
 		}, 1000);
