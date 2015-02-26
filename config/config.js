@@ -22,7 +22,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.abiOptions = "";
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
-		console.log(value);
+		console.log("called!");
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
