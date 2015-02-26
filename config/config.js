@@ -39,7 +39,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
-		$scope.deviceSelected = $scope.config.deviceSelected;
+		$scope.deviceSelected = $scope.config.device;
 		$scope.isLibrary = $scope.config.isLibrary;
 		$scope.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
