@@ -41,7 +41,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
 		$scope.isLibrary = $scope.config.isLibrary;
-		$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
+		//$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
 	});
 
@@ -70,7 +70,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//returns a list of all available devices to run projects on
 	$scope.retrieveDevices = function () {
 		$scope.save();
-		$http.get('/ext/android/devices').success(function(data, status, headers, config) {
+		var urlParams = "";
+		if ($scope.config.sdkLocation != "") {
+			urlParams = '?sdk=' + $scope.config.sdkLocation;
+		} 
+
+		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
 			$scope.deviceResults = data;
 		});
 		/*
