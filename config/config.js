@@ -8,6 +8,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.saving = false;
 
 	//information grabbed from android sdk or from the user concerning project settings
+	console.log("When am I called?");
 	/*$scope.ide = "";
 	$scope.deviceResults = "";
 	$scope.targetResults = "";
