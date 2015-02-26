@@ -20,13 +20,13 @@
             In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will pick the first one that contains 'test' in the name.
         </p>
         <br>
-        Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> </input>
+        <!--Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> </input>-->
         <br>
     </div>
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
         Nothing here yet...
     </div>
-
+Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> 
     <!-- SDK Directory -->
     <p>
         If you do not have an environmental variable set up for your Android SDK home directory then you may specify it here.
