@@ -37,7 +37,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-		console.log($scope.config.testFolderName);
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
@@ -74,7 +73,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		var urlParams = "";
 		if ($scope.config.sdkLocation != "") {
 			urlParams = '?sdk=' + $scope.config.sdkLocation;
-		} 
+		}
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
 			$scope.deviceResults = data;
@@ -97,7 +96,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//retrieves a list of available Android targets and their ABIs
 	$scope.retrieveTargets = function () {
 		$scope.save();
-		$http.get('/ext/android/targets').success(function(data, status, headers, config) {
+		var urlParams = "";
+		if ($scope.config.sdkLocation != "") {
+			urlParams = '?sdk=' + $scope.config.sdkLocation;
+		}
+		$http.get('/ext/android/targets' + urlParams).success(function(data, status, headers, config) {
 			$scope.targetResults = data;
 		});
 	}

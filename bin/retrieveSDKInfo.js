@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var cmd = require('./commands');
 
 var permitAndroid		= 	'chmod 755 ${HOME}/android-sdk-linux/tools/android; ';
 var androidDir 			= 	'${HOME}/android-sdk-linux/tools/android';
@@ -35,14 +36,16 @@ USE VVV
 find $directory -type f -name \*.apk to return the apk file (in the bin directory of the specified project)
 */
 module.exports = {
-	getDeviceList: function (callback) {
-		exec(deviceListCommand, function (err, stdout, stderr) {
+	getDeviceList: function (sdkLocation, callback) {
+		var command = cmd.getDeviceList(sdkLocation);
+
+		exec(command, function (err, stdout, stderr) {
 			var result = parseDeviceList(stdout);
 	        return callback(result);
 	    });
 	},
 	
-	getTargetList: function (callback) {
+	getTargetList: function (sdkLocation, callback) {
 		exec(targetListCommand, function (err, stdout, stderr) {
 			var result = parseTargetList(stdout);
 	        return callback(result);

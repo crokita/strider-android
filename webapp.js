@@ -30,7 +30,6 @@ module.exports = {
     /*
     if project specific,    try api/:pluginid
     global,                 try /ext/pluginid/myroute
-
     */
     // Define global routes
     //   all routes namespaced within /ext/:pluginid
@@ -39,14 +38,15 @@ module.exports = {
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
-            console.log(req.param('sdk'));
-            SDK.getDeviceList( function (result) {
+            var sdkLocation = req.param('sdk');
+            SDK.getDeviceList(sdkLocation,  function (result) {
                 res.json(result);
             });  
         });
 		
 		app.get('/targets', function(req, res) {
-            SDK.getTargetList( function (result) {
+            var sdkLocation = req.param('sdk');
+            SDK.getTargetList(sdkLocation,  function (result) {
                 res.json(result);
             });  
         });
