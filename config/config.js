@@ -42,10 +42,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
 		$scope.isLibrary = $scope.config.isLibrary;
-		/*if ($scope.eclipseModel != {}) {
-			console.log($scope.eclipseModel);
-			$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
-		}*/
+		$scope.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
 	});
 
@@ -159,7 +156,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		clearTimeout(timeoutVar);
 
 		timeoutVar = setTimeout(function () {
-			$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
+			$scope.config.testFolderName = $scope.testFolderName;
 			$scope.save();
 		}, 1000);
 	}
