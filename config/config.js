@@ -37,6 +37,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			cleanup: 'Hi from `cleanup`'
 		};
 		console.log(value);
+		console.log($scope.eclipseModel);
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;

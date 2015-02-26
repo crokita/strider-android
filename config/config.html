@@ -13,8 +13,8 @@
 
     <!-- IDE-specific settings -->
     <div ng-init="eclipseModel = {}" ng-if="ide == 'Eclipse'" class="well"> 
-    <!-- WARNING: ng-if creates a new child scope! https://github.com/angular/angular.js/issues/4046
-        If you are testing a library then check this box --> 
+    <!-- WARNING: ng-if creates a new child scope! https://github.com/angular/angular.js/issues/4046 --> 
+        If you are testing a library then check this box
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
         <br><br>
         <p> 
@@ -23,7 +23,6 @@
         <br>
         Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-change="changeTestFolderName()"> </input>
         <br>
-        {{eclipseModel}}
     </div>
 
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
