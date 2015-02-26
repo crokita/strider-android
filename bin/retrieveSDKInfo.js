@@ -38,7 +38,7 @@ find $directory -type f -name \*.apk to return the apk file (in the bin director
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var command = cmd.getDeviceList(sdkLocation);
-
+		console.log(command);
 		exec(command, function (err, stdout, stderr) {
 			var result = parseDeviceList(stdout);
 	        return callback(result);
