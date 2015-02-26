@@ -12,7 +12,7 @@
     <br>
 
     <!-- IDE-specific settings -->
-    <div ng-init="testFolderName = {}" ng-if="ide == 'Eclipse'" class="well"> 
+    <div ng-if="ide == 'Eclipse'" class="well"> 
     <!-- WARNING: ng-if creates a new child scope! https://github.com/angular/angular.js/issues/4046 --> 
         If you are testing a library then check this box
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
@@ -21,9 +21,9 @@
             In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will pick the first one that contains 'test' in the name.
         </p>
         <br>
-        Test Folder Name: <input type="text" ng-model="testFolderName" ng-change="changeTestFolderName()"> </input>
+        Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-change="changeTestFolderName()"> </input>
         <br>
-        {{testFolderName}}
+
     </div>
     
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
