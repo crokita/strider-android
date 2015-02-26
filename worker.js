@@ -33,7 +33,15 @@ module.exports = {
 			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
-				SDK.startEmulator(config.device, config.isLibrary, config.testFolderName, function (result) {
+				var configData = {
+					device: config.device,
+					isLibrary: config.isLibrary,
+					testFolderName: config.testFolderName,
+					sdkLocation: config.sdkLocation,
+					ide: config.ide
+				};
+
+				SDK.startEmulator(configData, function (result) {
 					console.log(result);
 					return done(null, true);
 				});

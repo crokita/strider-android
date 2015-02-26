@@ -20,3 +20,6 @@ For Android Studio:
 *  make sure you have an ANDROID_HOME environment variable
 
 TODO: give option for the user to specify where the Android SDK is instead of setting up environment variables
+
+Given this answer: http://stackoverflow.com/a/16683625
+*  If you imported an IntelliJ project to Android Studio then this plugin will not work for Android Studio at the time being

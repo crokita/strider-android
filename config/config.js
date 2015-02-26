@@ -14,6 +14,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.deviceSelected = "";
 	$scope.isLibrary = false;
 	$scope.testFolderName = "";
+	$scope.sdkLocation = "";
 	$scope.dataResult = "";
 	//user configurations for devices
 	$scope.deviceName = "";
@@ -21,6 +22,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.abiOptions = "";
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
+		console.log(value);
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
@@ -41,11 +43,15 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//gives options for Eclipse projects
 	$scope.toEclipse = function () {
 		$scope.ide = "Eclipse";
+		$scope.config.ide = $scope.ide;
+		$scope.save();
 	}
 
 	//gives options for Android Studio projects
 	$scope.toAndroidStudio = function () {
 		$scope.ide = "AndroidStudio";
+		$scope.config.ide = $scope.ide;
+		$scope.save();
 	}
 
 	//returns a list of all available devices to run projects on
@@ -114,7 +120,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		var data =  {
 			name: device
-		};
+		}
 
 		//use the put method because Express does not allow a body for a delete request
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
@@ -138,6 +144,17 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		timeoutVar = setTimeout(function () {
 			$scope.config.testFolderName = $scope.testFolderName;
+			$scope.save();
+		}, 1000);
+	}
+
+		//saves the input of where the Android SDK is located
+	$scope.changeSdkLocation = function () {
+		//whenever a change is made, reset the automatic save timer
+		clearTimeout(timeoutVar);
+
+		timeoutVar = setTimeout(function () {
+			$scope.config.sdkLocation = $scope.sdkLocation;
 			$scope.save();
 		}, 1000);
 	}

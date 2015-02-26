@@ -8,7 +8,7 @@
         <li role="presentation" ng-click="toEclipse()"><a href="#">Eclipse</a></li>
         <li role="presentation" ng-click="toAndroidStudio()"><a href="#">Android Studio</a></li>
     </ul>
-
+    
     <br>
 
     <!-- IDE-specific settings -->
@@ -26,6 +26,17 @@
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
         Nothing here yet...
     </div>
+
+    <!-- SDK Directory -->
+    <p>
+        If you do not have an environmental variable set up for your Android SDK home directory then you may specify it here.
+        Include a full directory from your root to the folder name of the SDK
+        <br>
+        This will only work on Linux-based machines
+        <br>
+        Example input (if the folder for the sdk is in the root directory): android-sdk-linux
+    </p>
+    SDK Directory: <input type="text" ng-model="sdkLocation" ng-change="changeSdkLocation()"> </input>
 
     <!-- General device settings -->
     <h4> Device Settings </h4>

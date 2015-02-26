@@ -14,7 +14,9 @@ var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait
 							androidDir + ' update project --subprojects -p .; ' + 'cd ';
 var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -name \*.apk | xargs adb install';
 
-var startEmulatorStudio = 	'chmod +x gradlew; '
+//unfinished. theres multiple apks
+var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
+
 //TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
 //							'cd sdl_android_tests; ant clean debug; cd bin/; ';
@@ -60,7 +62,14 @@ module.exports = {
 	    });
 	},
 
-	startEmulator: function (deviceName, isLibrary, testFolderName, callback) {
+	startEmulator: function (configData, callback) {
+		//get the settings from configData
+		var deviceName = config.deviceName;
+		var isLibrary = config.isLibrary;
+		var testFolderName = config.testFolderName;
+		var sdkLocation = config.sdkLocation;
+		var ide = config.ide;
+
 		if (testFolderName == '') {
 			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
 			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
@@ -82,6 +91,7 @@ module.exports = {
 		exec(finalCommand, function (err, stdout, stderr) {
 	        return callback(stdout);
 	    });
+
 	},
 
 	deleteDevice: function (data, callback) {
@@ -156,5 +166,9 @@ var parseTargetList = function (input) {
 	else {
 		//don't return anything
 	}
+
+}
+
+var testProject = function () {
 
 }
