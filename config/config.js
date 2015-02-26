@@ -36,7 +36,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-		console.log(value);
+		//console.log(value);
 		//set the model variables to what's in the config
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
@@ -161,13 +161,14 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}, 1000);
 	}
 
-		//saves the input of where the Android SDK is located
+	//saves the input of where the Android SDK is located
 	$scope.changeSdkLocation = function () {
 		//whenever a change is made, reset the automatic save timer
 		clearTimeout(timeoutVar);
 
 		timeoutVar = setTimeout(function () {
 			$scope.config.sdkLocation = $scope.sdkLocation;
+			console.log($scope.config.sdkLocation);
 			$scope.save();
 		}, 1000);
 	}
