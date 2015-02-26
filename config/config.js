@@ -8,19 +8,24 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.saving = false;
 
 	//information grabbed from android sdk or from the user concerning project settings
-	console.log("When am I called?");
-	/*$scope.ide = "";
-	$scope.deviceResults = "";
-	$scope.targetResults = "";
-	$scope.deviceSelected = "";
-	$scope.isLibrary = false;
-	$scope.testFolderName = "";
-	$scope.sdkLocation = "";
-	$scope.dataResult = "";
-	//user configurations for devices
-	$scope.deviceName = "";
-	$scope.targetOptions = "";
-	$scope.abiOptions = "";*/
+	$scope.initializeData();
+
+	$scope.initializeData = function () {
+		console.log("I'm called");
+		$scope.ide = "";
+		$scope.deviceResults = "";
+		$scope.targetResults = "";
+		$scope.deviceSelected = "";
+		$scope.isLibrary = false;
+		$scope.testFolderName = "";
+		$scope.sdkLocation = "";
+		$scope.dataResult = "";
+		//user configurations for devices
+		$scope.deviceName = "";
+		$scope.targetOptions = "";
+		$scope.abiOptions = "";
+	}
+
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
 		console.log(value);
