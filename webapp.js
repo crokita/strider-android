@@ -39,6 +39,7 @@ module.exports = {
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
+            console.log(req.param('sdk'));
             SDK.getDeviceList( function (result) {
                 res.json(result);
             });  
