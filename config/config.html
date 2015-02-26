@@ -12,7 +12,7 @@
     <br>
 
     <!-- IDE-specific settings -->
-    <div ng-model="eclipseModel" ng-if="ide == 'Eclipse'" class="well"> 
+    <div ng-init="eclipseModel = {}" ng-if="ide == 'Eclipse'" class="well"> 
     <!-- WARNING: ng-if creates a new child scope! https://github.com/angular/angular.js/issues/4046
         If you are testing a library then check this box --> 
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()"> 
