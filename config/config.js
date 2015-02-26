@@ -10,47 +10,25 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//information grabbed from android sdk or from the user concerning project settings
 
 	$scope.initializeData = function () {
-		console.log("I'm the initializer");
 		//reset data that shouldn't persist
 		$scope.deviceResults = "";
 		$scope.targetResults = "";
-		//DO NOT reset these variables
-		/*
-		$scope.ide = "";
-		$scope.deviceSelected = "";
-		$scope.isLibrary = false;
-		$scope.testFolderName = "";
-		$scope.sdkLocation = "";
-		*/
-/*
 		$scope.dataResult = "";
 		//user configurations for devices
 		$scope.deviceName = "";
 		$scope.targetOptions = "";
 		$scope.abiOptions = "";
-
-		//grab the config variables
-		if ($scope.config.ide != null) {
-			$scope.ide = $scope.config.ide;
-		}
-		if ($scope.config.deviceSelected != null) {
-			$scope.deviceSelected = $scope.config.deviceSelected;
-		}
-		if ($scope.config.isLibrary != null) {
-			$scope.isLibrary = $scope.config.isLibrary;
-		}
-		if ($scope.config.testFolderName != null) {
-			$scope.testFolderName = $scope.config.testFolderName;
-		}
-		if ($scope.config.sdkLocation != null) {
-			$scope.sdkLocation = $scope.config.sdkLocation;
-		}
-		*/
+		
+		//config-dependent variables
+		$scope.ide = "";
+		$scope.deviceSelected = "";
+		$scope.isLibrary = false;
+		$scope.testFolderName = "";
+		$scope.sdkLocation = "";
 	}
 
 
 	$scope.$watch('configs[branch.name].android.config', function (value) {
-		
 		$scope.config = value || {
 			environment: 'Hi from `environment`',
 			prepare: 'Hi from `prepare`',
@@ -58,7 +36,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			deploy: 'Hi from `deploy`',
 			cleanup: 'Hi from `cleanup`'
 		};
-		console.log($scope.config);
+
+		//set the model variables to what's in the config
+		$scope.ide = $scope.config.ide;
+		$scope.deviceSelected = $scope.config.deviceSelected;
+		$scope.isLibrary = $scope.config.isLibrary;
+		$scope.testFolderName = $scope.config.testFolderName;
+		$scope.sdkLocation = $scope.config.sdkLocation;
 	});
 
 	//save all data into the config 
