@@ -8,7 +8,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.saving = false;
 
 	//information grabbed from android sdk or from the user concerning project settings
-	$scope.initializeData();
+	initializeData();
 
 	$scope.initializeData = function () {
 		console.log("I'm called");
