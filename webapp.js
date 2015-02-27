@@ -38,16 +38,14 @@ module.exports = {
     //      0 - anonymous, 1 - authed, 2 - admin / collaborator
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
-            var sdkLocation = req.params['sdk'];
-            console.log(sdkLocation);
-            console.log(req.params);
+            var sdkLocation = req.param('sdk');
             SDK.getDeviceList(sdkLocation,  function (result) {
                 res.json(result);
             });  
         });
 		
 		app.get('/targets', function(req, res) {
-            var sdkLocation = req.params['sdk'];
+            var sdkLocation = req.param('sdk');
             SDK.getTargetList(sdkLocation,  function (result) {
                 res.json(result);
             });  
