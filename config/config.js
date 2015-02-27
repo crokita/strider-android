@@ -113,14 +113,20 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		var data =  {
 			name: $scope.deviceName,
 			target: $scope.targetOptions.id,
-			abi: $scope.abiOptions
+			abi: $scope.abiOptions,
+			sdkLocation: $scope.config.sdkLocation
 		};
 
 		//only make the request if name and target and abi are defined
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
-				$scope.dataResult = data;
-
+				if (data.result != null) {
+					$scope.dataResult = data.result;
+				}
+				else {
+					$scope.dataResult = data.error;
+				}
+				
 				//reset the options
 				$scope.deviceName = "";
 				$scope.targetOptions = "";

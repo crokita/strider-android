@@ -1,6 +1,6 @@
 //all the dirty work goes here
 //used for easily creating commands
-var exec = require('child_process').exec;
+var child = require('child_process');
 var fs = require('fs');
 
 var androidDir 			= 	'/tools/android';
@@ -10,7 +10,7 @@ module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
-			exec('android list avd', function (err, stdout, stderr) {
+			child.exec('android list avd', function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
@@ -21,7 +21,7 @@ module.exports = {
 				return callback(error, null);
 			}
 
-			exec('./android list avd', function (err, stdout, stderr) {
+			child.exec('./android list avd', function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
 		}
@@ -30,7 +30,7 @@ module.exports = {
 	getTargetList: function (sdkLocation, callback) {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
-			exec('android list targets', function (err, stdout, stderr) {
+			child.exec('android list targets', function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
@@ -41,7 +41,32 @@ module.exports = {
 				return callback(error, null);
 			}
 
-			exec('./android list targets', function (err, stdout, stderr) {
+			child.exec('./android list targets', function (err, stdout, stderr) {
+		        return callback(err, stdout);
+		    });
+		}
+	},
+
+	addDevice: function (data, callback) {
+		var name = data.name;
+		var target = target;
+		var abi = data.abi.replace("default/", "");
+		var sdkLocation = data.sdkLocation;
+		
+		var location = sdkLocation;
+		if (!location) { //assume android tool is in the path
+			child.execFile('echo | android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
+		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
+		    });
+		}
+		else {
+			//go to the directory of the SDK
+			var error = goToAndroid(location);
+			if (error != null) {
+				return callback(error, null);
+			}
+
+			child.execFile('echo | android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
 		}

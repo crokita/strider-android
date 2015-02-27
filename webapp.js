@@ -61,8 +61,12 @@ module.exports = {
 		
 		app.post('/devices', function(req, res) {
 			//prepare to add the device
-			SDK.addDevice(req.body, function (result) {
-				res.send(result);
+			SDK.addDevice(req.body, function (err, result) {
+                var data = {
+                    error: err,
+                    result: result
+                }
+				res.send(data);
 			});
         });
 
