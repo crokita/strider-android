@@ -76,7 +76,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
-			$scope.dataResult = data.error;
+			if (data.error != null) {
+				$scope.dataResult = data.error;
+			}
 			$scope.deviceResults = data.result;
 		});
 		/*
@@ -102,7 +104,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			urlParams = '?sdk=' + $scope.config.sdkLocation;
 		}
 		$http.get('/ext/android/targets' + urlParams).success(function(data, status, headers, config) {
-			$scope.dataResult = data.error;
+			if (data.error != null) {
+				$scope.dataResult = data.error;
+			}
 			$scope.targetResults = data.result;
 		});
 	}
