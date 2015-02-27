@@ -56,7 +56,7 @@ module.exports = {
 		var location = sdkLocation;
 		console.log(data);
 		if (!location) { //assume android tool is in the path
-			child.execFile('echo | android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
+			child.execFile('android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
@@ -67,7 +67,7 @@ module.exports = {
 				return callback(error, null);
 			}
 
-			child.execFile('echo | ./android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
+			child.execFile('./android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
 		}
