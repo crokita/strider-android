@@ -30,7 +30,13 @@ var goToAndroid = function (location, callback) {
 	process.chdir(process.env.HOME);
 	process.chdir(location);
 	console.log(process.cwd());
-	exec('chmod 755 tools/android; cd tools', function (err, stdout, stderr) {
+	exec('pwd', function (err, stdout, stderr) {
+		console.log(stdout);
         return callback();
     });
+
+	/*exec('chmod 755 tools/android; cd tools', function (err, stdout, stderr) {
+        return callback();
+    });*/
+
 }
