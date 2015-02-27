@@ -29,8 +29,8 @@ module.exports = {
 var goToAndroid = function (location, callback) {
 	process.chdir(process.env.HOME);
 	process.chdir(location);
-	console.log(process.cwd());
-	exec('pwd', function (err, stdout, stderr) {
+
+	exec('cd tools; ls', function (err, stdout, stderr) {
 		console.log(stdout);
         return callback();
     });
