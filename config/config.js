@@ -102,7 +102,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			urlParams = '?sdk=' + $scope.config.sdkLocation;
 		}
 		$http.get('/ext/android/targets' + urlParams).success(function(data, status, headers, config) {
-			$scope.targetResults = data;
+			$scope.dataResult = data.error;
+			$scope.targetResults = data.result;
 		});
 	}
 

@@ -42,7 +42,6 @@ module.exports = {
 			}
 
 			exec('./android list targets', function (err, stdout, stderr) {
-				console.log(stdout);
 		        return callback(err, stdout);
 		    });
 		}
