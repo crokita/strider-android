@@ -11,7 +11,7 @@ module.exports = {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
 			exec('android list avd', function (err, stdout, stderr) {
-		        return callback(null, stdout);
+		        return callback(err, stdout);
 		    });
 		}
 		else {
@@ -31,7 +31,7 @@ module.exports = {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
 			exec('android list targets', function (err, stdout, stderr) {
-		        return callback(null, stdout);
+		        return callback(err, stdout);
 		    });
 		}
 		else {
