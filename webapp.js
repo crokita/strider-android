@@ -40,7 +40,7 @@ module.exports = {
         app.get('/devices', function(req, res) {
             var sdkLocation = req.params['sdk'];
             console.log(sdkLocation);
-            console.log(req.params['sdk']);
+            console.log(req.params);
             SDK.getDeviceList(sdkLocation,  function (result) {
                 res.json(result);
             });  
