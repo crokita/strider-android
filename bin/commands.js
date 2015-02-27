@@ -48,15 +48,15 @@ module.exports = {
 	},
 
 	addDevice: function (data, callback) {
-		var name = data.name;
+		var name = "\"" + data.name + "\"";
 		var target = target;
 		var abi = data.abi.replace("default/", "");
 		var sdkLocation = data.sdkLocation;
 		
 		var location = sdkLocation;
-		console.log(data);
+
 		if (!location) { //assume android tool is in the path
-			child.execFile('android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
+			child.exec('echo | android create avd -n ' + name + ' -t ' + target + ' -b ' + abi], function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
@@ -66,14 +66,12 @@ module.exports = {
 			if (error != null) {
 				return callback(error, null);
 			}
-			child.execFile('ls', ['-l', '-a'], function (err, stdout, stderr) {
+
+			
+			child.exec('echo | android create avd -n ' + name + ' -t ' + target + ' -b ' + abi], function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
-			/*
-			child.execFile('echo | ./android create avd', ['-n', name, '-t', target, '-b', abi], function (err, stdout, stderr) {
-		        return callback(err, stdout);
-		    });
-*/
+
 		}
 	}
 
