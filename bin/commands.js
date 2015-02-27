@@ -15,7 +15,7 @@ module.exports = {
 
 		//go to the directory of the SDK
 		goToAndroid(location, function () {
-			exec('android list avd', function (err, stdout, stderr) {
+			exec('./android list avd', function (err, stdout, stderr) {
 				console.log(err);
 				console.log(stdout);
 		        return callback(stdout);
@@ -30,13 +30,7 @@ var goToAndroid = function (location, callback) {
 	process.chdir(process.env.HOME);
 	process.chdir(location);
 
-	exec('cd tools; ls', function (err, stdout, stderr) {
-		console.log(stdout);
+	exec('chmod 755 tools/android; cd tools', function (err, stdout, stderr) {
         return callback();
     });
-
-	/*exec('chmod 755 tools/android; cd tools', function (err, stdout, stderr) {
-        return callback();
-    });*/
-
 }
