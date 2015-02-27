@@ -40,9 +40,13 @@ find $directory -type f -name \*.apk to return the apk file (in the bin director
 */
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
-		var command = cmd.getDeviceList(sdkLocation, function (output) {
-			var result = parseDeviceList(output);
-	        return callback(result);
+		var command = cmd.getDeviceList(sdkLocation, function (err, output) {
+			var result = null;
+			if (output != null) {
+				result = parseDeviceList(output);
+			}
+			
+	        return callback(err, result);
 	    });
 	},
 	

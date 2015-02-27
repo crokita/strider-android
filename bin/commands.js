@@ -15,23 +15,31 @@ module.exports = {
 		} 
 
 		//go to the directory of the SDK
-		goToAndroid(location);
+		var error = goToAndroid(location);
+		if (error != null) {
+			return callback(error, null);
+		}
 
 		exec('./android list avd', function (err, stdout, stderr) {
-	        return callback(stdout);
+	        return callback(null, stdout);
 	    });
 	}
 
 }
 
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
+//returns null if successful. returns a string error if not
 var goToAndroid = function (location) {
 	process.chdir(process.env.HOME);
-	process.chdir(location, function (k) {
-		console.log(k);
-	});
+
+	try {
+	  	process.chdir(location);
+	}
+	catch (err) {
+		return "The location specified does not exist";
+	}
 
 	process.chdir("tools");
 	fs.chmodSync('android', '755');
-	return;
+	return null;
 }

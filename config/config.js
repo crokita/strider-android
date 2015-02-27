@@ -76,7 +76,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
-			$scope.deviceResults = data;
+			$scope.dataResult = data.error; //print error to console
+			$scope.deviceResults = data.result;
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
