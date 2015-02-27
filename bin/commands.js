@@ -36,7 +36,7 @@ var goToAndroid = function (location) {
 	  	process.chdir(location);
 	}
 	catch (err) {
-		return "The location specified does not exist";
+		return "The SDK directory specified does not exist";
 	}
 
 	process.chdir("tools");
