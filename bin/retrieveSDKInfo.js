@@ -51,9 +51,13 @@ module.exports = {
 	},
 	
 	getTargetList: function (sdkLocation, callback) {
-		exec(targetListCommand, function (err, stdout, stderr) {
-			var result = parseTargetList(stdout);
-	        return callback(result);
+		var command = cmd.getTargetList(sdkLocation, function (err, output) {
+			var result = null;
+			if (output != null) {
+				result = parseTargetList(output);
+			}
+			
+	        return callback(err, result);
 	    });
 	},
 	
