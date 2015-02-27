@@ -66,11 +66,10 @@ module.exports = {
 			if (error != null) {
 				return callback(error, null);
 			}
-			
+			console.log("Prepare to call");
 			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
-
 		}
 	}
 
@@ -91,4 +90,9 @@ var goToAndroid = function (location) {
 	process.chdir("tools");
 	fs.chmodSync('android', '755');
 	return null;
+}
+
+var sanitize = function (string) {
+	//removes everything except alphanumerics, hyphens and spaces
+	return string.match(/[a-zA-Z\d\- *]/g).join("");
 }
