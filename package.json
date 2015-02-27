@@ -17,9 +17,7 @@
   ],
   "author": "Chris Rokita",
   "license": "ISC",
-  "dependencies": {
-    "validator": "^3.32.0"
-  },
+  "dependencies": {},
   "strider": {
     "type": "job",
     "id": "android",

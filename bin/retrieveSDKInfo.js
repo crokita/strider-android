@@ -17,6 +17,9 @@ var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -nam
 
 //unfinished. theres multiple apks
 var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
+//TODO: USE process.chdir FOR CD'ING. PREVENT INJECTIONS PLS
+//process.env.HOME for ROOT directory
+
 
 //TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
@@ -37,10 +40,8 @@ find $directory -type f -name \*.apk to return the apk file (in the bin director
 */
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
-		var command = cmd.getDeviceList(sdkLocation);
-		console.log(command);
-		exec(command, function (err, stdout, stderr) {
-			var result = parseDeviceList(stdout);
+		var command = cmd.getDeviceList(sdkLocation, function (output) {
+			var result = parseDeviceList(output);
 	        return callback(result);
 	    });
 	},
