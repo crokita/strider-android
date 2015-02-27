@@ -66,9 +66,8 @@ module.exports = {
 			if (error != null) {
 				return callback(error, null);
 			}
-
 			
-			child.exec('echo | android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
+			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
 
