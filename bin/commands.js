@@ -28,7 +28,12 @@ module.exports = {
 var goToAndroid = function (location) {
 	process.chdir(process.env.HOME);
 	var eh = process.chdir(location);
-	console.log(eh);
+	if (eh === undefined) {
+		console.log("No error!");
+	}
+	else {
+		console.log("Error!");
+	}
 	process.chdir("tools");
 	fs.chmodSync('android', '755');
 	return;
