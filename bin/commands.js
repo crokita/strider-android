@@ -1,5 +1,6 @@
 //all the dirty work goes here
 //used for easily creating commands
+var exec = require('child_process').exec;
 
 var defaultSDKLocation  =   'android-sdk-linux';
 var androidDir 			= 	'/tools/android';
@@ -26,7 +27,7 @@ module.exports = {
 var goToAndroid = function (location, callback) {
 	process.chdir(process.env.HOME);
 	process.chdir(location);
-	console.log(process.cwd);
+	console.log(process.cwd());
 	exec('chmod 755 tools/android; cd tools', function (err, stdout, stderr) {
         return callback();
     });
