@@ -62,20 +62,10 @@ module.exports = {
 	},
 	
 	addDevice: function (data, callback) {
-		//concatenate all the options given from data
-		/*
-		var includeName = ' -n ' + data.name;
-		var includeTarget = ' -t ' + data.target;
-		var includeAbi = ' -b ' + data.abi;
-		var sdkLocation = data.sdkLocation;
-
-		includeAbi = includeAbi.replace("default/", ""); //remove the "default/" appended to the abi selection
-		var finalCommand = createDeviceCommand.concat(includeName + includeTarget + includeAbi);
-
-		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback(stdout);
+		var command = cmd.addDevice(data, function (err, output) {			
+	        return callback(err, output);
 	    });
-*/
+
 	},
 
 	startEmulator: function (configData, callback) {
