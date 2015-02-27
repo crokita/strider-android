@@ -76,7 +76,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
-			$scope.dataResult = data.error; //print error to console
+			if (data.error != null) {
+				alert(data.error);
+			}
 			$scope.deviceResults = data.result;
 		});
 		/*
