@@ -11,7 +11,7 @@ module.exports = {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
 			exec('android list avd', function (err, stdout, stderr) {
-		        return callback(err, stdout);
+		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
 		else {
@@ -22,7 +22,7 @@ module.exports = {
 			}
 
 			exec('./android list avd', function (err, stdout, stderr) {
-		        return callback(null, stdout);
+		        return callback(err, stdout);
 		    });
 		}
 	},
@@ -31,7 +31,7 @@ module.exports = {
 		var location = sdkLocation;
 		if (!location) { //assume android tool is in the path
 			exec('android list targets', function (err, stdout, stderr) {
-		        return callback(err, stdout);
+		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
 		}
 		else {
@@ -42,7 +42,8 @@ module.exports = {
 			}
 
 			exec('./android list targets', function (err, stdout, stderr) {
-		        return callback(null, stdout);
+				console.log(stdout);
+		        return callback(err, stdout);
 		    });
 		}
 	}
