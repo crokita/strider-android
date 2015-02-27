@@ -25,7 +25,7 @@ module.exports = {
 		        return callback(null, stdout);
 		    });
 		}
-	}
+	},
 
 	getTargetList: function (sdkLocation, callback) {
 		var location = sdkLocation;
