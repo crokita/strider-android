@@ -1,3 +1,4 @@
+//this is an intermediate module which may modify the data after commands.js creates the result
 var exec = require('child_process').exec;
 var cmd = require('./commands');
 
