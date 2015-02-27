@@ -50,7 +50,7 @@ module.exports = {
 		
 		app.get('/targets', function(req, res) {
             var sdkLocation = req.param('sdk');
-            SDK.getTargetList(sdkLocation,  function (result) {
+            SDK.getTargetList(sdkLocation,  function (err, result) {
                 var data = {
                     error: err,
                     result: result
