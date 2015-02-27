@@ -27,13 +27,10 @@ module.exports = {
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
 var goToAndroid = function (location) {
 	process.chdir(process.env.HOME);
-	var eh = process.chdir(location);
-	if (eh === undefined) {
-		console.log("No error!");
-	}
-	else {
-		console.log("Error!");
-	}
+	process.chdir(location, function (k) {
+		console.log(k);
+	});
+
 	process.chdir("tools");
 	fs.chmodSync('android', '755');
 	return;
