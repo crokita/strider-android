@@ -51,7 +51,7 @@ module.exports = {
 	startEmulator: function (config, callback) {
 		console.log(config);
 
-		var deviceName = "\"" + sanitize(config.deviceName) + "\"";
+		var deviceName = "\"" + sanitize(config.device) + "\"";
 		var isLibrary = sanitize(config.isLibrary);
 		var testFolderName = sanitize(config.testFolderName);
 		var sdkLocation = sanitize(config.sdkLocation);
