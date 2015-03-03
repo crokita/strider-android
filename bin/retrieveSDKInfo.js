@@ -1,23 +1,5 @@
 //this is an intermediate module which may modify the data after commands.js creates the result
-var exec = require('child_process').exec;
 var cmd = require('./commands');
-
-var permitAndroid		= 	'chmod 755 ${HOME}/android-sdk-linux/tools/android; ';
-var androidDir 			= 	'${HOME}/android-sdk-linux/tools/android';
-var emulatorDir			= 	'${HOME}/android-sdk-linux/tools/emulator';
-
-var deviceListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list avd;';
-var targetListCommand 	= 	permitAndroid + '${HOME}/android-sdk-linux/tools/android list targets;';
-var createDeviceCommand = 	permitAndroid + 'echo | ${HOME}/android-sdk-linux/tools/android create avd';
-var deleteDeviceCommand = 	permitAndroid + '${HOME}/android-sdk-linux/tools/android delete avd -n '
-
-var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
-var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
-							androidDir + ' update project --subprojects -p .; ' + 'cd ';
-var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -name \*.apk | xargs adb install';
-
-//unfinished. theres multiple apks
-var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
 
 //TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
@@ -67,34 +49,9 @@ module.exports = {
 
 	startEmulator: function (configData, callback) {
 		//get the settings from configData
-		var deviceName = config.deviceName;
-		var isLibrary = config.isLibrary;
-		var testFolderName = config.testFolderName;
-		var sdkLocation = config.sdkLocation;
-		var ide = config.ide;
-
-		if (testFolderName == '') {
-			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
-			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
-	        	testFolderName = stdout;
-	    	});
-		}
-
-		var finalCommand = startEmulator1 + deviceName + startEmulator2 + testFolderName + startEmulator3;
-
-		/*if (isLibrary) {
-			finalCommand = finalCommand.concat(isLibraryAppend);
-		}
-		else {
-			finalCommand = finalCommand.concat(isNotLibraryAppend);
-		}*/
-
-		console.log(finalCommand);
-
-		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback(stdout);
-	    });
-
+		var command = cmd.startEmulator(configData, function (err, output) {
+			return callback(err, output);
+		});
 	},
 
 	deleteDevice: function (data, callback) {

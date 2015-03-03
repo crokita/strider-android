@@ -37,8 +37,8 @@ module.exports = {
 					device: config.device,
 					isLibrary: config.isLibrary,
 					testFolderName: config.testFolderName,
-					sdkLocation: config.sdkLocation,
-					ide: config.ide
+					ide: config.ide,
+					sdkLocation: config.sdkLocation
 				};
 
 				SDK.startEmulator(configData, function (result) {
