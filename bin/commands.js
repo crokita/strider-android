@@ -56,6 +56,12 @@ module.exports = {
 		var ide = sanitizeString(config.ide);
 		var sdkLocation = config.sdkLocation;
 
+		if (testFolderName == '') {
+			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
+			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
+	        	testFolderName = stdout; //TODO: error handling for this function
+	    	});
+		}
 //var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 //var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
 //							androidDir + ' update project --subprojects -p .; ' + 'cd ';
@@ -63,17 +69,21 @@ module.exports = {
 
 //unfinished. theres multiple apks
 //var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
-		var eclipseInPath = "";
-		var eclipseNotInPath = "";
+		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
+								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
+								+ "android update project --subprojects -p .; "
+								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
+								+ "find $directory -type f -name \*.apk | xargs adb install";
+
+		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
+								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
+								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
+								+ "find $directory -type f -name \*.apk | xargs adb install";
+								
 		var androidStudioInPath = "";
 		var androidStudioNotInPath = "";
 
-		if (testFolderName == '') {
-			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
-			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
-	        	testFolderName = stdout; //TODO: error handling for this function
-	    	});
-		}
+		
 
 		if (ide == "Eclipse") {
 			executeAndroid(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
