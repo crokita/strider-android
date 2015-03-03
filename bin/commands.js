@@ -67,8 +67,9 @@ module.exports = {
 			if (error != null) {
 				return callback(error, null);
 			}
+			console.log("made it this far?");
+			console.log("Final command:  " + 'echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi);
 			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
-				console.log(stdout);
 		        return callback(err, stdout);
 		    });
 		}
