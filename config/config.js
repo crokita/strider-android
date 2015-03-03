@@ -148,7 +148,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 
 		var data =  {
-			name: device
+			name: device,
+			sdkLocation: $scope.config.sdkLocation
 		}
 
 		//use the put method because Express does not allow a body for a delete request

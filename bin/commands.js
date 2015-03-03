@@ -39,7 +39,6 @@ module.exports = {
 	deleteDevice: function (data, callback) {
 		var deviceName = "\"" + sanitize(data.name) + "\"";
 		var sdkLocation = data.sdkLocation;
-		console.log(sdkLocation);
 
 		var commandInPath = "android delete avd -n " + deviceName;
 		var commandNotInPath = "./android delete avd -n " + deviceName;
