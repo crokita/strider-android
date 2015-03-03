@@ -154,7 +154,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//use the put method because Express does not allow a body for a delete request
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
 		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
-			$scope.dataResult = data;
+			if (data.result != null) {
+				$scope.dataResult = data.result;
+			}
+			else {
+				$scope.dataResult = data.error;
+			}
+
 			//now update the device list
 			$scope.retrieveDevices();
 		});

@@ -18,9 +18,6 @@ var startEmulator3 		=	'; ant clean debug; cd bin/; find $directory -type f -nam
 
 //unfinished. theres multiple apks
 var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
-//TODO: USE process.chdir FOR CD'ING. PREVENT INJECTIONS PLS
-//process.env.HOME for ROOT directory
-
 
 //TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
 //var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
@@ -66,7 +63,6 @@ module.exports = {
 		var command = cmd.addDevice(data, function (err, output) {			
 	        return callback(err, output);
 	    });
-
 	},
 
 	startEmulator: function (configData, callback) {
@@ -102,11 +98,8 @@ module.exports = {
 	},
 
 	deleteDevice: function (data, callback) {
-		var deviceName = data.name;
-		var finalCommand = deleteDeviceCommand.concat(deviceName);
-
-		exec(finalCommand, function (err, stdout, stderr) {
-	        return callback(stdout);
+		var command = cmd.deleteDevice(data, function (err, output) {			
+	        return callback(err, output);
 	    });
 	}
 }
