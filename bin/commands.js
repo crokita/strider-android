@@ -79,11 +79,10 @@ module.exports = {
 								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
 								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
 								+ "find $directory -type f -name \*.apk | xargs adb install";
-								
+
 		var androidStudioInPath = "";
 		var androidStudioNotInPath = "";
 
-		
 
 		if (ide == "Eclipse") {
 			executeAndroid(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
@@ -114,6 +113,9 @@ var executeAndroid = function (sdkLocation, commandInPath, commandNotInPath, cal
 		if (error != null) {
 			return callback(error, null);
 		}
+
+		console.log(commandNotInPath);
+		
 		child.exec(commandNotInPath, function (err, stdout, stderr) {
 	        return callback(err, stdout);
 	    });
