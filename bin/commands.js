@@ -15,7 +15,7 @@ module.exports = {
 
 	getTargetList: function (sdkLocation, callback) {
 		var commandInPath = "android list targets";
-		var commandNotInPath = "./android list avd";
+		var commandNotInPath = "./android list targets";
 
 		executeAndroid(sdkLocation, commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
