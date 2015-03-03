@@ -131,5 +131,6 @@ var goToAndroid = function (location) {
 }
 
 var sanitize = function (string) {
+	console.log(string);
 	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
 }
