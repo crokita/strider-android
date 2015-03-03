@@ -53,7 +53,7 @@ module.exports = {
 		var target = sanitize(data.target);
 		var abi = sanitize(data.abi.replace("default/", ""));
 		var sdkLocation = data.sdkLocation;
-		
+		console.log("Final name: " + name);
 		var location = sdkLocation;
 
 		if (!location) { //assume android tool is in the path
@@ -70,6 +70,9 @@ module.exports = {
 			console.log("made it this far?");
 			console.log("Final command:  " + 'echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi);
 			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
+				console.log(err);
+				console.log(stdout);
+				console.log(stderr);
 		        return callback(err, stdout);
 		    });
 		}
@@ -98,3 +101,9 @@ var sanitize = function (string) {
 	//a-zA-Z\d\-_+-= * is the allowable characters for an input. remove all else
 	return string.match(/[a-zA-Z\d\-_+-= *]/g).join("");
 }
+/*
+// Allowed characters are: a-z A-Z 0-9 . _ -
+var sanitizeEmulatorName = function (string) {
+	//a-zA-Z\d\-_+-= * is the allowable characters for an input. remove all else
+	return string.match(/[a-zA-Z\d\-_+-= *]/g).join("");
+}*/
