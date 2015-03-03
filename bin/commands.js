@@ -31,7 +31,6 @@ module.exports = {
 		var location = sdkLocation;
 
 		if (!location) { //assume android tool is in the path
-			console.log("what happens here?");
 			child.exec('android list targets', function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
@@ -69,6 +68,7 @@ module.exports = {
 				return callback(error, null);
 			}
 			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
+				console.log(stdout);
 		        return callback(err, stdout);
 		    });
 		}
