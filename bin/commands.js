@@ -49,14 +49,18 @@ module.exports = {
 	},
 
 	startEmulator: function (config, callback) {
-		console.log(config);
-
 		var deviceName = "\"" + sanitize(config.device) + "\"";
+		console.log("werk");
 		var isLibrary = sanitize(config.isLibrary);
+		console.log("werk2");
 		var testFolderName = sanitize(config.testFolderName);
+		console.log("werk3");
 		var sdkLocation = sanitize(config.sdkLocation);
+		console.log("werk4");
 		var ide = sanitize(config.ide);
+		console.log("werk5");
 		var sdkLocation = config.sdkLocation;
+		console.log("werk6");
 
 //var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 //var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
@@ -131,6 +135,5 @@ var goToAndroid = function (location) {
 }
 
 var sanitize = function (string) {
-	console.log(string);
 	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
 }
