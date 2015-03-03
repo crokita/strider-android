@@ -48,9 +48,9 @@ module.exports = {
 	},
 
 	addDevice: function (data, callback) {
-		var name = "\"" + data.name + "\"";
-		var target = target;
-		var abi = data.abi.replace("default/", "");
+		var name = "\"" + sanitize(data.name) + "\"";
+		var target = sanitize(data.target);
+		var abi = sanitize(data.abi.replace("default/", ""));
 		var sdkLocation = data.sdkLocation;
 		
 		var location = sdkLocation;
@@ -66,7 +66,6 @@ module.exports = {
 			if (error != null) {
 				return callback(error, null);
 			}
-			console.log("Prepare to call");
 			child.exec('echo | ./android create avd -n ' + name + ' -t ' + target + ' -b ' + abi, function (err, stdout, stderr) {
 		        return callback(err, stdout);
 		    });
@@ -93,6 +92,6 @@ var goToAndroid = function (location) {
 }
 
 var sanitize = function (string) {
-	//removes everything except alphanumerics, hyphens and spaces
-	return string.match(/[a-zA-Z\d\- *]/g).join("");
+	//a-zA-Z\d\-_+-= * is the allowable characters for an input. remove all else
+	return string.match(/[a-zA-Z\d\-_+-= *]/g).join("");
 }
