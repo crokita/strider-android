@@ -29,8 +29,9 @@ module.exports = {
 
 	getTargetList: function (sdkLocation, callback) {
 		var location = sdkLocation;
-		console.log(location);
+
 		if (!location) { //assume android tool is in the path
+			console.log("what happens here?");
 			child.exec('android list targets', function (err, stdout, stderr) {
 		        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 		    });
