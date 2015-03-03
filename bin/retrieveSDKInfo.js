@@ -47,18 +47,19 @@ module.exports = {
 	    });
 	},
 
+	deleteDevice: function (data, callback) {
+		var command = cmd.deleteDevice(data, function (err, output) {			
+	        return callback(err, output);
+	    });
+	},
+
 	startEmulator: function (configData, callback) {
 		//get the settings from configData
 		var command = cmd.startEmulator(configData, function (err, output) {
 			return callback(err, output);
 		});
-	},
-
-	deleteDevice: function (data, callback) {
-		var command = cmd.deleteDevice(data, function (err, output) {			
-	        return callback(err, output);
-	    });
 	}
+
 }
 
 //this function takes the list of android devices that are usuable and converts each name, target, abi to an object and returns a list
