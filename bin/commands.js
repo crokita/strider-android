@@ -74,10 +74,11 @@ module.exports = {
 	},
 
 	deleteDevice: function (data, callback) {
-		var deviceName = sanitize(data.name);
+		var deviceName = "\"" + sanitize(data.name) + "\"";
 		var sdkLocation = data.sdkLocation;
 
 		var location = sdkLocation;
+		console.log("Device Name: " + deviceName);
 
 		if (!location) { //assume android tool is in the path
 			child.exec('android delete avd -n ' + deviceName, function (err, stdout, stderr) {
