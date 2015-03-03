@@ -23,9 +23,9 @@ module.exports = {
 	},
 
 	addDevice: function (data, callback) {
-		var name = "\"" + sanitize(data.name) + "\"";
-		var target = sanitize(data.target);
-		var abi = sanitize(data.abi.replace("default/", ""));
+		var name = "\"" + sanitizeString(data.name) + "\"";
+		var target = sanitizeString(data.target);
+		var abi = sanitizeString(data.abi.replace("default/", ""));
 		var sdkLocation = data.sdkLocation;
 
 		var commandInPath = "echo | android create avd -n " + name + " -t " + target + " -b " + abi;
@@ -37,7 +37,7 @@ module.exports = {
 	},
 
 	deleteDevice: function (data, callback) {
-		var deviceName = "\"" + sanitize(data.name) + "\"";
+		var deviceName = "\"" + sanitizeString(data.name) + "\"";
 		var sdkLocation = data.sdkLocation;
 
 		var commandInPath = "android delete avd -n " + deviceName;
@@ -49,18 +49,12 @@ module.exports = {
 	},
 
 	startEmulator: function (config, callback) {
-		var deviceName = "\"" + sanitize(config.device) + "\"";
-		console.log("werk");
-		var isLibrary = sanitize(config.isLibrary);
-		console.log("werk2");
-		var testFolderName = sanitize(config.testFolderName);
-		console.log("werk3");
-		var sdkLocation = sanitize(config.sdkLocation);
-		console.log("werk4");
-		var ide = sanitize(config.ide);
-		console.log("werk5");
+		var deviceName = "\"" + sanitizeString(config.device) + "\"";
+		var isLibrary = sanitizeBoolean(config.isLibrary);
+		var testFolderName = sanitizeString(config.testFolderName);
+		var sdkLocation = sanitizeString(config.sdkLocation);
+		var ide = sanitizeString(config.ide);
 		var sdkLocation = config.sdkLocation;
-		console.log("werk6");
 
 //var startEmulator1		= 	permitAndroid + emulatorDir + ' -avd ';
 //var startEmulator2  	= 	' -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; cd ${HOME}/.strider/data/*/.; ' +
@@ -134,6 +128,11 @@ var goToAndroid = function (location) {
 	return null;
 }
 
-var sanitize = function (string) {
+var sanitizeString = function (string) {
 	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
+}
+
+//return false if it is anything but "true" or true
+var sanitizeBoolean = function (bool) {
+	return ("" + bool == "true");
 }
