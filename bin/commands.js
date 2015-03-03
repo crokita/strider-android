@@ -98,12 +98,5 @@ var goToAndroid = function (location) {
 }
 
 var sanitize = function (string) {
-	//a-zA-Z\d\-_+-= * is the allowable characters for an input. remove all else
-	return string.match(/[a-zA-Z\d\-_+-= *]/g).join("");
+	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
 }
-/*
-// Allowed characters are: a-z A-Z 0-9 . _ -
-var sanitizeEmulatorName = function (string) {
-	//a-zA-Z\d\-_+-= * is the allowable characters for an input. remove all else
-	return string.match(/[a-zA-Z\d\-_+-= *]/g).join("");
-}*/
