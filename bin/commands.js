@@ -82,7 +82,7 @@ module.exports = {
 
 		var androidStudioInPath = 		"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 		var androidStudioNotInPath = 	"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
-										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties";
+										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties"
 										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 
 
