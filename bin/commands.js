@@ -69,6 +69,13 @@ module.exports = {
 
 //unfinished. theres multiple apks
 //var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
+//use ./gradlew --refresh-dependencies?
+
+//./android update sdk --no-ui to fix dependency issues
+//find a way to show errors/process of build in the strider test page!
+//		./android list sdk --all lists all the things
+//	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
+
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
@@ -80,8 +87,11 @@ module.exports = {
 								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
 								+ "find $directory -type f -name \*.apk | xargs adb install";
 
-		var androidStudioInPath = 		"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
-		var androidStudioNotInPath = 	"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
+//you need an emulator running before continuing (FFFFFFFFFF)
+		var androidStudioInPath = 		"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
+										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
+		var androidStudioNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
+										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
 										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
 										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 
