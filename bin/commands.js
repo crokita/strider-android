@@ -80,8 +80,10 @@ module.exports = {
 								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
 								+ "find $directory -type f -name \*.apk | xargs adb install";
 
-		var androidStudioInPath = "";
-		var androidStudioNotInPath = "";
+		var androidStudioInPath = 		"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
+		var androidStudioNotInPath = 	"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
+										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties";
+										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 
 
 		if (ide == "Eclipse") {
@@ -115,7 +117,7 @@ var executeAndroid = function (sdkLocation, commandInPath, commandNotInPath, cal
 		}
 
 		console.log(commandNotInPath);
-		
+
 		child.exec(commandNotInPath, function (err, stdout, stderr) {
 	        return callback(err, stdout);
 	    });
