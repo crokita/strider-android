@@ -82,7 +82,7 @@ module.exports = {
 
 		var androidStudioInPath = 		"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 		var androidStudioNotInPath = 	"cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
-										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties"
+										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
 										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 
 
@@ -95,6 +95,9 @@ module.exports = {
 			executeAndroid(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
 				callback(err, output);
 			});
+		}
+		else {
+			callback("No IDE or invalid IDE specified", null);
 		}
 		
 	}
