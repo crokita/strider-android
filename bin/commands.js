@@ -87,14 +87,13 @@ module.exports = {
 								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
 								+ "find $directory -type f -name \*.apk | xargs adb install";
 
-//you need an emulator running before continuing (FFFFFFFFFF)
 		var androidStudioInPath = 		"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
 										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
 		var androidStudioNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
 										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
 										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
-										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
-
+										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; "
+										+ "find $directory -type f -name \*test\*.apk | xargs adb install";
 
 		if (ide == "Eclipse") {
 			executeAndroid(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
