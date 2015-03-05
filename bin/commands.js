@@ -150,16 +150,16 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 
 		if (ide == "Eclipse") {
 			executeAndroid(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
-				callback(err, output);
+				return callback(err, output);
 			});
 		}
 		else if (ide == "AndroidStudio") {
 			executeAndroid(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
-				callback(err, output);
+				return callback(err, output);
 			});
 		}
 		else {
-			callback("No IDE or invalid IDE specified", null);
+			return callback("No IDE or invalid IDE specified", null);
 		}
 		
 	},

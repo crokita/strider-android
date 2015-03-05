@@ -53,6 +53,7 @@ module.exports = {
 	startEmulator: function (configData, callback) {
 		//get the settings from configData
 		var command = cmd.startEmulator(configData, function (err, output) {
+			console.log("about time");
 			//if the project uses the Eclipse IDE there is a chance that the emulator will still not be ready to install the apk
 			//handle that part in installApkEclipse and continue once the apk is installed
 			if (!err) {
