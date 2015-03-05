@@ -75,20 +75,73 @@ module.exports = {
 //find a way to show errors/process of build in the strider test page!
 //		./android list sdk --all lists all the things
 //	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
+/*
+equivalent of below:
+adb push Application-debug.apk /data/local/tmp/com.example.android.activityinstrumentation
+adb shell
+pm install /data/local/tmp/com.example.android.activityinstrumentation
+adb push Application-debug-test-unaligned.apk /data/local/tmp/com.example.android.activityinstrumentation.test
+adb shell
+pm install /data/local/tmp/com.example.android.activityinstrumentation.test
+//if you get a Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE]: for the test, uninstall and reinstall the packages (pm in adb shell, and adb otherwise)
+//adb shell wipe data (probably not a good idea) or just uninstall/reinstall the packages from before (or delete all in tmp directory?)
+Uploading file
+	local path: /Users/chrisrokita/AndroidStudioProjects/ActivityInstrumentation/Application/build/outputs/apk/Application-debug.apk
+	remote path: /data/local/tmp/com.example.android.activityinstrumentation
+Installing com.example.android.activityinstrumentation
+DEVICE SHELL COMMAND: pm install -r "/data/local/tmp/com.example.android.activityinstrumentation"
+pkg: /data/local/tmp/com.example.android.activityinstrumentation
+Success
 
+
+Uploading file
+	local path: /Users/chrisrokita/AndroidStudioProjects/ActivityInstrumentation/Application/build/outputs/apk/Application-debug-test-unaligned.apk
+	remote path: /data/local/tmp/com.example.android.activityinstrumentation.test
+Installing com.example.android.activityinstrumentation.test
+DEVICE SHELL COMMAND: pm install -r "/data/local/tmp/com.example.android.activityinstrumentation.test"
+pkg: /data/local/tmp/com.example.android.activityinstrumentation.test
+Success
+
+
+Running tests
+Test running started
+junit.framework.AssertionFailedError: expected:<5> but was:<2>
+at com.example.android.activityinstrumentation.SampleTests.testSpinnerValuePersistedBetweenLaunches(SampleTests.java:120)
+at java.lang.reflect.Method.invokeNative(Native Method)
+at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
+at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
+at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:192)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:169)
+at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:154)
+at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:545)
+at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1551)
+
+Finish
+
+
+use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1 to get the package + activity
+*/
+// ONLY USE -data-wipe OPTION IF YOUR LOCAL FOLDER HAS AN I/O ERROR
+//Error: Could not access the Package Manager.  Is the system running?  <-- ping the install command until this goes away 
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
 								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
-								+ "find $directory -type f -name \*.apk | xargs adb install";
+								//+ "find $directory -type f -name \*.apk | xargs adb install";
 
 		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
-								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
-								+ "find $directory -type f -name \*.apk | xargs adb install";
+								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; ";
+								//+ "find $directory -type f -name \*.apk | xargs adb install";
 
+//pm uninstall com.example.android.activityinstrumentation
+//./gradlew assembleDebugTest
+//./gradlew installDebugTest
+
+//NOTE: YOU NEED BOTH THE DEBUG AND THE DEBUG-TEST APK TO RUN UNIT TESTS
 		var androidStudioInPath = 		"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
 										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
+
 		var androidStudioNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
 										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
 										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
@@ -109,6 +162,13 @@ module.exports = {
 			callback("No IDE or invalid IDE specified", null);
 		}
 		
+	},
+
+	installApkEclipse: function (callback) {
+		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
+			console.log(stdout);
+	        return callback(err, stdout);
+	    });
 	}
 
 }
