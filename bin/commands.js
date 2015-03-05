@@ -126,12 +126,12 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ";
-								//+ "find $directory -type f -name \*.apk | xargs adb install";
+								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ./installApk.sh"
+								///+ "find $directory -type f -name \*.apk | xargs adb install";
 
 		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
-								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; ";
+								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; ./installApk.sh";
 								//+ "find $directory -type f -name \*.apk | xargs adb install";
 
 //pm uninstall com.example.android.activityinstrumentation
@@ -162,13 +162,6 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 			return callback("No IDE or invalid IDE specified", null);
 		}
 		
-	},
-
-	installApkEclipse: function (callback) {
-		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
-			console.log(stdout);
-	        return callback(err, stdout);
-	    });
 	}
 
 }
