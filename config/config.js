@@ -2,7 +2,8 @@ var app = window.app;
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
-var timeoutVar; //this is used for a timeout function whenever a user is typing and changes need to be saved
+var timeoutVarTestFolder; //this is used for a timeout function whenever a user is typing and changes need to be saved
+var timeoutVarSdkLocation; //this is used for a timeout function whenever a user is typing and changes need to be saved
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.saving = false;
@@ -177,9 +178,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//saves the input of what is the Eclipse testing folder name
 	$scope.changeTestFolderName = function () {
 		//whenever a change is made, reset the automatic save timer
-		clearTimeout(timeoutVar);
+		clearTimeout(timeoutVarTestFolder);
 		$scope.eclipseModel.savingFolderName = true;
-		timeoutVar = setTimeout(function () {
+		timeoutVarTestFolder = setTimeout(function () {
 			$scope.eclipseModel.savingFolderName = false;
 			$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
 			$scope.save();
@@ -189,9 +190,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//saves the input of where the Android SDK is located
 	$scope.changeSdkLocation = function () {
 		//whenever a change is made, reset the automatic save timer
-		clearTimeout(timeoutVar);
+		clearTimeout(timeoutVarSdkLocation);
 		$scope.savingSdkLocation = true;
-		timeoutVar = setTimeout(function () {
+		timeoutVarSdkLocation = setTimeout(function () {
 			$scope.savingSdkLocation = false;
 			$scope.config.sdkLocation = $scope.sdkLocation;
 			$scope.save();
