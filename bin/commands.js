@@ -126,7 +126,7 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
+								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ";
 								//+ "find $directory -type f -name \*.apk | xargs adb install";
 
 		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
