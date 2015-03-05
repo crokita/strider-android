@@ -178,6 +178,7 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 	installApk: function (callback) {
 		//search for an apk
 		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
+
 			console.log("Output: " + stdout);
 			if (stdout == "") { //no apk found
 				return callback("No APK file found", null);
@@ -185,7 +186,7 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 			else if (stdout == "Error: Could not access the Package Manager.  Is the system running?") {
 				//emulator not ready to install the apk. try again
 				console.log("Redo");
-				this.installApk(function (err. output) {
+				this.installApk(function (err, output) {
 					return callback(err, output);
 				});
 			} 
