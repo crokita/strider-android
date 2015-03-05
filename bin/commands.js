@@ -175,10 +175,12 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 		
 	},
 
-	installApk: function (callback) {
+	installApk: function (config, callback) {
+		var testFolderName = sanitizeString(config.testFolderName);
+		var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
+		console.log(finalCommand);
 		//search for an apk
-		console.log("In installApk");
-		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
+		child.exec(finalCommand, function (err, stdout, stderr) {
 
 			console.log("Output: " + stdout);
 			if (stdout == "") { //no apk found

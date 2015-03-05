@@ -58,13 +58,11 @@ module.exports = {
 		var command = cmd.startEmulator(configData, function (err, output) {
 			console.log(output);
 			if (!err) {
-				console.log("no error");
-				cmd.installApk(function (err, output) {
+				cmd.installApk(configData, function (err, output) {
 					return callback(err, output);
 				});
 			}
 			else {
-				console.log("error");
 				return callback(err, output);
 			}
 			
