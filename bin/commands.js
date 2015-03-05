@@ -126,12 +126,24 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ./installApk.sh"
+								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
+								//execute the do until command for installing the apk
+								+ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
+								+ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
+								+ "do \n"
+								+ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
+								+ "done";
 								///+ "find $directory -type f -name \*.apk | xargs adb install";
 
 		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
-								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; ./installApk.sh";
+								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
+								//execute the do until command for installing the apk
+								+ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
+								+ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
+								+ "do \n"
+								+ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
+								+ "done";
 								//+ "find $directory -type f -name \*.apk | xargs adb install";
 
 //pm uninstall com.example.android.activityinstrumentation
