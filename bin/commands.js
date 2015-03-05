@@ -177,6 +177,7 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 
 	installApk: function (callback) {
 		//search for an apk
+		console.log("In installApk");
 		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
 
 			console.log("Output: " + stdout);
