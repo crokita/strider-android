@@ -22,12 +22,10 @@
             In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is below. If you don't input anything then strider-android will pick the first one that contains 'test' in the name.
         </p>
         <br>
-        Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-change="changeTestFolderName()"> 
-            <div ng-if="eclipseModel.savingFolderName == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
-                <i class="fa fa-cog fa-spin"></i>
-            </div>
-        </input>
-        
+        Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-change="changeTestFolderName()"> </input>
+        <div ng-if="eclipseModel.savingFolderName == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
+            <i class="fa fa-cog fa-spin"></i>
+        </div>
         <br>
 
     </div>
@@ -45,6 +43,9 @@
         Example input (if the folder for the sdk is in the root directory): android-sdk-linux
     </p>
     SDK Directory: <input type="text" ng-model="sdkLocation" ng-change="changeSdkLocation()"> </input>
+    <div ng-if="savingSdkLocation == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
+        <i class="fa fa-cog fa-spin"></i>
+    </div>
 
     <!-- General device settings -->
     <h4> Device Settings </h4>

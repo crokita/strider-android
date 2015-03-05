@@ -20,7 +20,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.abiOptions = "";
 		$scope.eclipseModel = {}; //for eclipse configurations
 		$scope.eclipseModel.savingFolderName = false; //for the spinner testFolderName
-
+		$scope.savingSdkLocation = false; //for the spinner sdkLocation
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -190,8 +190,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.changeSdkLocation = function () {
 		//whenever a change is made, reset the automatic save timer
 		clearTimeout(timeoutVar);
-
+		$scope.savingSdkLocation = true;
 		timeoutVar = setTimeout(function () {
+			$scope.savingSdkLocation = false;
 			$scope.config.sdkLocation = $scope.sdkLocation;
 			$scope.save();
 		}, 1000);
