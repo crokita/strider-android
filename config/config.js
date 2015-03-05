@@ -19,7 +19,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.targetOptions = "";
 		$scope.abiOptions = "";
 		$scope.eclipseModel = {}; //for eclipse configurations
-		
+		$scope.eclipseModel.savingFolderName = false; //for the spinner testFolderName
+
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -177,8 +178,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.changeTestFolderName = function () {
 		//whenever a change is made, reset the automatic save timer
 		clearTimeout(timeoutVar);
-
+		$scope.eclipseModel.savingFolderName = true;
 		timeoutVar = setTimeout(function () {
+			$scope.eclipseModel.savingFolderName = false;
 			$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
 			$scope.save();
 		}, 1000);
