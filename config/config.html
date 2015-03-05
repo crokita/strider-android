@@ -24,7 +24,7 @@
         <br>
         Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-change="changeTestFolderName()"> </input>
         <div ng-if="eclipseModel.savingFolderName == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
-            <i class="fa fa-cog fa-spin"></i>
+            Saving...<i class="fa fa-cog fa-spin"></i>
         </div>
         <br>
 
@@ -44,7 +44,7 @@
     </p>
     SDK Directory: <input type="text" ng-model="sdkLocation" ng-change="changeSdkLocation()"> </input>
     <div ng-if="savingSdkLocation == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
-        <i class="fa fa-cog fa-spin"></i>
+        Saving...<i class="fa fa-cog fa-spin"></i>
     </div>
 
     <!-- General device settings -->
