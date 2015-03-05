@@ -123,28 +123,27 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 */
 // ONLY USE -data-wipe OPTION IF YOUR LOCAL FOLDER HAS AN I/O ERROR
 //Error: Could not access the Package Manager.  Is the system running?  <-- ping the install command until this goes away 
+//if the apk isnt there in the first place bad things will happen. what do?
 		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
 								+ "android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
-								//execute the do until command for installing the apk
-								+ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
-								+ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
-								+ "do \n"
-								+ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
-								+ "done";
+								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ";
 								///+ "find $directory -type f -name \*.apk | xargs adb install";
 
 		var eclipseNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
 								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
 								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
 								//execute the do until command for installing the apk
-								+ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
-								+ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
-								+ "do \n"
-								+ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
-								+ "done";
 								//+ "find $directory -type f -name \*.apk | xargs adb install";
+
+/*
++ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
++ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
++ "do \n"
++ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
++ "done";
+*/							
+
 
 //pm uninstall com.example.android.activityinstrumentation
 //./gradlew assembleDebugTest
@@ -174,8 +173,28 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 			return callback("No IDE or invalid IDE specified", null);
 		}
 		
-	}
+	},
 
+	installApk: function (callback) {
+		//search for an apk
+		child.exec("find $directory -type f -name \*.apk | xargs adb install", function (err, stdout, stderr) {
+			console.log("Output: " + stdout);
+			if (stdout == "") { //no apk found
+				return callback("No APK file found", null);
+			}
+			else if (stdout == "Error: Could not access the Package Manager.  Is the system running?") {
+				//emulator not ready to install the apk. try again
+				console.log("Redo");
+				this.installApk(function (err. output) {
+					return callback(err, output);
+				});
+			} 
+			else {
+				return callback(err, stdout);
+			}
+	        
+	    });
+	}
 }
 
 //this function DOES NOT check for malicious commands; that must be checked by the calling functions!

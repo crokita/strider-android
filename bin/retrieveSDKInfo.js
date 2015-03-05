@@ -56,7 +56,16 @@ module.exports = {
 	startEmulator: function (configData, callback) {
 		//get the settings from configData
 		var command = cmd.startEmulator(configData, function (err, output) {
-			return callback(err, output);
+			console.log(output);
+			if (!err) {
+				cmd.installApk(function (err, output) {
+					return callback(err, output);
+				});
+			}
+			else {
+				return callback(err, output);
+			}
+			
 		});
 	}
 
