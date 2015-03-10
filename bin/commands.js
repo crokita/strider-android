@@ -78,6 +78,7 @@ module.exports = {
 		var sdkInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
 		var sdkNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
 		
+		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 		child.exec("cd ${HOME}/android-sdk-linux/tools/emulator -avd android_emulator -no-ui & " + adb + " wait-for-device;", function (err, stdout, stderr) {
 			console.log("STARTED");
