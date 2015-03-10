@@ -55,6 +55,7 @@ module.exports = {
 
 	startEmulator: function (configData, callback) {
 		cmd.startEmulator(configData, function (err, output) {
+			console.log("HEYYYY");
 			return callback(err, output);
 		});
 	},
