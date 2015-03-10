@@ -5,19 +5,23 @@ var fs = require('fs');
 
 var sdkTools =  {
 	"aapt": {
-		"tool": "build-tools/21.1.2/aapt",
+		"toolFull": "build-tools/21.1.2/aapt",
+		"tool": "aapt",
 		"location": "build-tools/21.1.2"
 	},
 	"adb": {
-		"tool": "platform-tools/adb",
+		"toolFull": "platform-tools/adb",
+		"tool": "adb",
 		"location": "platform-tools"
 	},
 	"android": {
-		"tool": "tools/android",
+		"toolFull": "tools/android",
+		"tool": "android",
 		"location": "tools"
 	},
 	"emulator": {
-		"tool": "tools/emulator",
+		"toolFull": "tools/emulator",
+		"tool": "emulator",
 		"location": "tools"
 	}
 };
@@ -89,10 +93,10 @@ module.exports = {
 
 		//set up the absolute locations of the android tools for reference
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		var aapt = absoluteSdk + sdkTools["aapt"]["tool"];
-		var adb = absoluteSdk + sdkTools["adb"]["tool"];
-		var android = absoluteSdk + sdkTools["android"]["tool"];
-		var emulator = absoluteSdk + sdkTools["emulator"]["tool"];
+		var aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		var android = absoluteSdk + sdkTools["android"]["toolFull"];
+		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
 		process.chdir(process.env.HOME);
 		process.chdir(".strider/data/*"); //go to the root project directory
