@@ -175,7 +175,7 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 		child.exec(commandInPath, function (err, stdout, stderr) {
 			
 			process.chdir(process.env.HOME);
-			process.chdir((initialDir);
+			process.chdir(initialDir);
 	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 	    });
 	}
