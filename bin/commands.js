@@ -88,7 +88,7 @@ module.exports = {
 		var ide = sanitizeString(config.ide);
 
 		//set up the absolute locations of the android tools for reference
-		var absoluteSdk = process.env.HOME + "/" sdkLocation + "/";
+		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var aapt = absoluteSdk + sdkTools["aapt"]["tool"];
 		var adb = absoluteSdk + sdkTools["adb"]["tool"];
 		var android = absoluteSdk + sdkTools["android"]["tool"];
