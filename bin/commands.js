@@ -77,9 +77,8 @@ module.exports = {
 
 		var sdkInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
 		var sdkNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
-		console.log("about to start the emulator");
+		
 		executeAndroid(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, function (err, output) {
-			console.log("Emulator booted");
 			return callback(err, output);
 		});
 
@@ -172,11 +171,11 @@ module.exports = {
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
 //will return back to the original directory upon completion
 var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
-	var initialDir = process.cwd();
+	//var initialDir = process.cwd();
 	var location = sdkLocation;
 	if (!location) { //assume android tool is in the path if no location is specified
 		child.exec(commandInPath, function (err, stdout, stderr) {
-			process.chdir(initialDir);
+			//process.chdir(initialDir);
 	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 	    });
 	}
@@ -184,7 +183,7 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 		//go to the directory of the SDK
 		var error = goToAndroid(location, toolObj);
 		if (error != null) {
-			process.chdir(initialDir);
+			//process.chdir(initialDir);
 			return callback(error, null);
 		}
 
