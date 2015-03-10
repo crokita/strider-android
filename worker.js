@@ -43,16 +43,23 @@ module.exports = {
 
 				SDK.startEmulator(configData, function (result) {
 					console.log(result);
-					return done(null, true);
+					done(null, true);
 				});
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
-				// Send `false` to indicate that we didn't actually run
-				// anything. This is so we can warn users when no plugins
-				// actually do anything during a test run, and avoid false
-				// positives.
-				done(null, true);
+				var configData = {
+					device: config.device,
+					isLibrary: config.isLibrary,
+					testFolderName: config.testFolderName,
+					ide: config.ide,
+					sdkLocation: config.sdkLocation
+				};
+
+				SDK.installRunApk(configData, function (result) {
+					console.log(result);
+					done(null, true);
+				});
 			},
 			deploy: 'echo "' + config.deploy + '"',
 			cleanup: 'echo "' + config.cleanup + '"'

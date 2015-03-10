@@ -20,7 +20,7 @@ find $directory -type f -name \*.apk to return the apk file (in the bin director
 */
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
-		var command = cmd.getDeviceList(sdkLocation, function (err, output) {
+		cmd.getDeviceList(sdkLocation, function (err, output) {
 			var result = null;
 			if (output != null) {
 				result = parseDeviceList(output);
@@ -31,7 +31,7 @@ module.exports = {
 	},
 	
 	getTargetList: function (sdkLocation, callback) {
-		var command = cmd.getTargetList(sdkLocation, function (err, output) {
+		cmd.getTargetList(sdkLocation, function (err, output) {
 			var result = null;
 			if (output != null) {
 				result = parseTargetList(output);
@@ -42,30 +42,27 @@ module.exports = {
 	},
 	
 	addDevice: function (data, callback) {
-		var command = cmd.addDevice(data, function (err, output) {			
+		cmd.addDevice(data, function (err, output) {			
 	        return callback(err, output);
 	    });
 	},
 
 	deleteDevice: function (data, callback) {
-		var command = cmd.deleteDevice(data, function (err, output) {			
+		cmd.deleteDevice(data, function (err, output) {			
 	        return callback(err, output);
 	    });
 	},
 
 	startEmulator: function (configData, callback) {
-		//get the settings from configData
-		var command = cmd.startEmulator(configData, function (err, output) {
+		cmd.startEmulator(configData, function (err, output) {
+			return callback(err, output);
+		});
+	},
+
+	installApk: function (configData, callback) {
+		cmd.installApk(configData, function (err, output) {
 			console.log(output);
-			if (!err) {
-				cmd.installApk(configData, function (err, output) {
-					return callback(err, output);
-				});
-			}
-			else {
-				return callback(err, output);
-			}
-			
+			return callback(err, output);
 		});
 	}
 
