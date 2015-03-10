@@ -118,12 +118,12 @@ module.exports = {
 										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
 
 		if (ide == "Eclipse") {
-			executeAndroid(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
+			executeAny(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else if (ide == "AndroidStudio") {
-			executeAndroid(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
+			executeAny(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
 				return callback(err, output);
 			});
 		}
@@ -164,8 +164,6 @@ module.exports = {
 	}
 }
 
-
-
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
 //will return back to the original directory upon completion
 var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
@@ -173,8 +171,6 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 	var location = sdkLocation;
 	if (!location) { //assume android tool is in the path if no location is specified
 		child.exec(commandInPath, function (err, stdout, stderr) {
-			
-			process.chdir(process.env.HOME);
 			process.chdir(initialDir);
 	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 	    });
@@ -189,6 +185,22 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 
 		child.exec(commandNotInPath, function (err, stdout, stderr) {
 			process.chdir(initialDir);
+	        return callback(err, stdout);
+	    });
+	}
+}
+
+//this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
+//unlike the function above, use this to execute any piece of code
+var executeAny = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
+	var location = sdkLocation;
+	if (!location) { //assume android tool is in the path if no location is specified
+		child.exec(commandInPath, function (err, stdout, stderr) {
+	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
+	    });
+	}
+	else {
+		child.exec(commandNotInPath, function (err, stdout, stderr) {
 	        return callback(err, stdout);
 	    });
 	}
