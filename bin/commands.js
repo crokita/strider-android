@@ -80,8 +80,7 @@ module.exports = {
 		
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		console.log("Fire command: cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-ui & " + adb + " wait-for-device;");
-		child.exec("cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-ui & " + adb + " wait-for-device;", function (err, stdout, stderr) {
+		child.exec("cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-ui &", function (err, stdout, stderr) {
 			console.log("STARTED");
 	        return callback(err, stdout);
 	    });
