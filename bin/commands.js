@@ -127,6 +127,8 @@ module.exports = {
 			});
 		}
 		else if (ide == "AndroidStudio") {
+			console.log(androidStudioInPath);
+			console.log(androidStudioNotInPath);
 			executeAny(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
 				return callback(err, output);
 			});

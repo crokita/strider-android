@@ -56,7 +56,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 
-				SDK.installRunApk(configData, function (result) {
+				SDK.installApk(configData, function (result) {
 					console.log(result);
 					done(null, true);
 				});
