@@ -189,7 +189,7 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 		}
 
 		child.exec(commandNotInPath, function (err, stdout, stderr) {
-			process.chdir(initialDir);
+			//process.chdir(initialDir);
 	        return callback(err, stdout);
 	    });
 	}
