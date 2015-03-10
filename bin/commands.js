@@ -73,46 +73,6 @@ module.exports = {
 
 	startEmulator: function (config, callback) {
 		var deviceName = "\"" + sanitizeString(config.device) + "\"";
-		var isLibrary = sanitizeBoolean(config.isLibrary);
-		var testFolderName = sanitizeString(config.testFolderName);
-		var sdkLocation = sanitizeString(config.sdkLocation);
-		var ide = sanitizeString(config.ide);
-		var sdkLocation = config.sdkLocation;
-
-		if (testFolderName == '') {
-			//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
-			exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*test.*" -type d', function (err, stdout, stderr) {
-	        	testFolderName = stdout; //TODO: error handling for this function
-	    	});
-		}
-
-		var eclipseInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
-								+ "adb wait-for-device; cd ${HOME}/.strider/data/*/.; "
-								+ "android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; ";
-								///+ "find $directory -type f -name \*.apk | xargs adb install";
-
-		var eclipseNotInPath = 	"cd ${HOME}/android-sdk-linux/tools; ./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & "
-								+ "adb wait-for-device; ./android update project --subprojects -p ${HOME}/.strider/data/*/.; "
-								+ "cd ${HOME}/.strider/data/*/" + testFolderName + "; ant clean debug; cd bin/; "
-
-		var androidStudioInPath = 		"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
-										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; ls";
-
-		var androidStudioNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device; "
-										+ "cd ${HOME}/.strider/data/*/.; chmod +x gradlew; "
-										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
-										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/; "
-										+ "find $directory -type f -name \*test\*.apk | xargs adb install";
-
-		child.exec(eclipseNotInPath, function (err, output) {
-			return callback(err, output);
-		});
-		
-	},
-/*
-	startEmulator: function (config, callback) {
-		var deviceName = "\"" + sanitizeString(config.device) + "\"";
 		var sdkLocation = sanitizeString(config.sdkLocation);
 
 		var sdkInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
@@ -126,7 +86,7 @@ module.exports = {
 		});
 
 	},
-*/
+
 	installApk: function (config, callback) {
 		var deviceName = "\"" + sanitizeString(config.device) + "\"";
 		var isLibrary = sanitizeBoolean(config.isLibrary);
