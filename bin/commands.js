@@ -82,6 +82,7 @@ module.exports = {
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 
 		executeAndroid(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, function (err, output) {
+			console.log("Emulator booted");
 			return callback(err, output);
 		});
 
