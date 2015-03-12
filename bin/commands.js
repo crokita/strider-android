@@ -83,10 +83,11 @@ module.exports = {
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 
-		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath);
+		var adbInPath = "adb wait-for-device";
+		var adbNotInPath = "./adb wait-for-device";
 
-		var waitForDevice = child.spawn(adb, ["wait-for-device"]);
-		workers.push(waitForDevice);
+		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath);
+		executeSpawn(sdkLocation, sdkTools["adb"], adbInPath, adbNotInPath);
 
 		waitForDevice.on('close', function (code) {
 			//wait-for-device is done.
@@ -213,15 +214,13 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPath) {
 	var location = sdkLocation;
 	var commandSpawned;
-	
-	console.log(commandInPath);
-	console.log(commandNotInPath);
 
 	if (!location) { //assume android tool is in the path if no location is specified
 		commandSpawned = child.spawn(commandInPath);
 	    workers.push(commandSpawned);
 	}
 	else {
+		var error = goToAndroid(location, toolObj);
 		commandSpawned = child.spawn(commandNotInPath);
 	    workers.push(commandSpawned);
 	}
