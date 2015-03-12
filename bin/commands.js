@@ -33,16 +33,9 @@ module.exports = {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
 
-
-		child.exec("cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;", function (err, stdout, stderr) {
-			//process.chdir(initialDir);
-			console.log("STARTED");
-	        return callback(err, stdout);
-	    });
-
-		/*executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
+		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
-		});*/
+		});
 	},
 
 	getTargetList: function (sdkLocation, callback) {
