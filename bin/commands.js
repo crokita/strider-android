@@ -86,15 +86,18 @@ module.exports = {
 		var adbInPath = "adb wait-for-device";
 		var adbNotInPath = "./adb wait-for-device";
 
-		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath);
-		executeSpawn(sdkLocation, sdkTools["adb"], adbInPath, adbNotInPath);
+		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, null);
+		executeSpawn(sdkLocation, sdkTools["adb"], adbInPath, adbNotInPath, function (code) {
+			return callback(null, code);
+		});
 
+/* what do
 		waitForDevice.on('close', function (code) {
 			//wait-for-device is done.
 			console.log("Exit code:" + code);
 			return callback(null, code);
 		});
-
+*/
 	},
 
 	installApk: function (config, callback) {
@@ -211,7 +214,8 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
 //unlike the function above, use this to execute any piece of code in a new process and return
-var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPath) {
+//if a callback is defined this becomes asynchronous
+var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
 	var location = sdkLocation;
 	var commandSpawned;
 
@@ -233,7 +237,15 @@ var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPa
 	commandSpawned.stderr.on('data', function (data) {
 		console.log("STDERR: " + data);
 	});
-	return;
+
+	if (callback == null) {
+		return;
+	}
+	else {
+		commandSpawned.on('close', function (code) {
+			return callback(code);
+		});
+	}
 }
 
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
