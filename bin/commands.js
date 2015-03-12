@@ -284,9 +284,9 @@ var sanitizeBoolean = function (bool) {
 //all workers in workers array should be killed if this function is called
 function killWorkers() {
 	console.log("KILL THEM ALL");
-  workers.forEach(function(worker) {
-    worker.kill();
-  });
+	workers.forEach(function(worker) {
+		worker.kill();
+	});
 }
 
 //unfinished. theres multiple apks
