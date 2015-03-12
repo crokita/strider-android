@@ -34,7 +34,7 @@ module.exports = {
 		var commandNotInPath = "./android list avd";
 
 
-		child.exec(commandNotInPath, {cwd: "${HOME}/android-sdk-linux/tools"}, function (err, stdout, stderr) {
+		child.exec("cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;", function (err, stdout, stderr) {
 			//process.chdir(initialDir);
 	        return callback(err, stdout);
 	    });
