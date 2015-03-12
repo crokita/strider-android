@@ -85,7 +85,7 @@ module.exports = {
 
 		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath);
 
-		var waitForDevice = childProcess.spawn("adb", ["wait-for-device"]);
+		var waitForDevice = child.spawn("adb", ["wait-for-device"]);
 		waitForDevice.on('close', function (code) {
 			//wait-for-device is done.
 			console.log("Exit code:" + code);
