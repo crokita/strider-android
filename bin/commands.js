@@ -91,13 +91,6 @@ module.exports = {
 			return callback(null, code);
 		});
 
-/* what do
-		waitForDevice.on('close', function (code) {
-			//wait-for-device is done.
-			console.log("Exit code:" + code);
-			return callback(null, code);
-		});
-*/
 	},
 
 	installApk: function (config, callback) {
