@@ -82,15 +82,27 @@ module.exports = {
 		
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
 		var adbInPath = "adb wait-for-device";
 		var adbNotInPath = "./adb wait-for-device";
 
+		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "no-audio", "no-window", "-no-boot-anim"]);
+		workers.push(emulatorCommand);
+		var adbCommand = child.spawn(adb, ["wait-for-device"]);
+		workers.push(adbCommand);
+
+		commandSpawned.on('close', function (code) {
+			return callback(code);
+		});
+
+
+/*
 		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, null);
 		executeSpawn(sdkLocation, sdkTools["adb"], adbInPath, adbNotInPath, function (code) {
 			return callback(null, code);
 		});
-
+*/
 	},
 
 	installApk: function (config, callback) {
