@@ -92,7 +92,7 @@ module.exports = {
 		var adbCommand = child.spawn(adb, ["wait-for-device"]);
 		workers.push(adbCommand);
 
-		commandSpawned.on('close', function (code) {
+		adbCommand.on('close', function (code) {
 			return callback(code);
 		});
 
