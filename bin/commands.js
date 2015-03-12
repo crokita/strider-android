@@ -2,6 +2,7 @@
 //used for easily creating commands
 var child = require('child_process');
 var fs = require('fs');
+var workers = []; //the array of processes started by node
 
 var sdkTools =  {
 	"aapt": {
@@ -25,6 +26,7 @@ var sdkTools =  {
 		"location": "tools"
 	}
 };
+
 
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
@@ -81,9 +83,13 @@ module.exports = {
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 
-		executeAndroid(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, function (err, output) {
-			console.log("Emulator booted");
-			return callback(err, output);
+		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath);
+
+		var waitForDevice = childProcess.spawn("adb", ["wait-for-device"]);
+		waitForDevice.on('close', function (code) {
+			//wait-for-device is done.
+			console.log("Exit code:" + code);
+			return callback(null, code);
 		});
 
 	},
@@ -125,20 +131,22 @@ module.exports = {
 										+ "find $directory -type f -name \*test-unaligned.apk | xargs " + adb + " install"; //install test apk
 										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
 
+//FIX THIS IT WILL BREAK
+/*
 		if (ide == "Eclipse") {
-			executeAny(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
+			executeSpawn(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else if (ide == "AndroidStudio") {
-			executeAny(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
+			executeSpawn(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else {
 			return callback("No IDE or invalid IDE specified", null);
 		}
-
+*/
 
 		//var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
 
@@ -173,7 +181,7 @@ module.exports = {
 }
 
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
-//will return back to the original directory upon completion
+// //will return back to the original directory upon completion
 var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
 	//var initialDir = process.cwd();
 	var location = sdkLocation;
@@ -199,19 +207,28 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 }
 
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
-//unlike the function above, use this to execute any piece of code
-var executeAny = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
+//unlike the function above, use this to execute any piece of code in a new process and return
+var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPath) {
 	var location = sdkLocation;
+	var commandSpawned;
 	if (!location) { //assume android tool is in the path if no location is specified
-		child.exec(commandInPath, function (err, stdout, stderr) {
-	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
-	    });
+		commandSpawned = child.spawn(commandInPath);
+	    workers.push(commandSpawned);
 	}
 	else {
-		child.exec(commandNotInPath, function (err, stdout, stderr) {
-	        return callback(err, stdout);
-	    });
+		commandSpawned = child.spawn(commandNotInPath);
+	    workers.push(commandSpawned);
 	}
+
+	//keep track of the output
+	commandSpawned.stdout.on('data', function (data) {
+		console.log("STDOUT: " + data);
+	});
+
+	commandSpawned.stderr.on('data', function (data) {
+		console.log("STDERR: " + data);
+	});
+	return;
 }
 
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
@@ -241,6 +258,10 @@ var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
 }
 
+//kill the workers if something unexpected happens (emulator and adb wait-for-device)
+process.on("uncaughtException", killWorkers);
+process.on("SIGINT", killWorkers);
+process.on("SIGTERM", killWorkers);
 
 //unfinished. theres multiple apks
 //var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 

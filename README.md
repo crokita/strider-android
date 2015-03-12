@@ -18,9 +18,7 @@ Select the name of the testing folder (it will attempt to find it for you if not
 
 For Android Studio:
 *  make sure your local.properties file is NOT added in your VCS
-*  make sure you have an ANDROID_HOME environment variable
 
-TODO: give option for the user to specify where the Android SDK is instead of setting up environment variables
 TODO: test this plugin for real android devices instead of just emulators
 
 Given this answer: http://stackoverflow.com/a/16683625
