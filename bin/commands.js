@@ -263,6 +263,13 @@ process.on("uncaughtException", killWorkers);
 process.on("SIGINT", killWorkers);
 process.on("SIGTERM", killWorkers);
 
+//all workers in workers array should be killed if this function is called
+var killWorkers = function() {
+  workers.forEach(function(worker) {
+    worker.kill();
+  });
+}
+
 //unfinished. theres multiple apks
 //var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
 //use ./gradlew --refresh-dependencies?
