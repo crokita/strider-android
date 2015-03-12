@@ -192,10 +192,11 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 	//var initialDir = process.cwd();
 	var location = sdkLocation;
 	if (!location) { //assume android tool is in the path if no location is specified
-		child.exec(commandInPath, function (err, stdout, stderr) {
+		var commandExec = child.exec(commandInPath, function (err, stdout, stderr) {
 			//process.chdir(initialDir);
 	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 	    });
+	    workers.push(commandExec);
 	}
 	else {
 		//go to the directory of the SDK
