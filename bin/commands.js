@@ -277,9 +277,9 @@ var sanitizeBoolean = function (bool) {
 }
 
 //kill the workers if something unexpected happens (emulator and adb wait-for-device)
-process.on("uncaughtException", killWorkers);
-process.on("SIGINT", killWorkers);
-process.on("SIGTERM", killWorkers);
+//process.on("uncaughtException", killWorkers);
+//process.on("SIGINT", killWorkers);
+//process.on("SIGTERM", killWorkers);
 
 //all workers in workers array should be killed if this function is called
 function killWorkers() {

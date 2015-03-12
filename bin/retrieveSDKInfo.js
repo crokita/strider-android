@@ -19,6 +19,7 @@ USE VVV
 find $directory -type f -name \*.apk to return the apk file (in the bin directory of the specified project)
 */
 module.exports = {
+	/*
 	getDeviceList: function (sdkLocation, callback) {
 		cmd.getDeviceList(sdkLocation, function (err, output) {
 			var result = null;
@@ -61,13 +62,13 @@ module.exports = {
 	},
 
 	installApk: function (configData, callback) {
-		/*cmd.installApk(configData, function (err, output) {
+		cmd.installApk(configData, function (err, output) {
 			console.log(output);
 			return callback(err, output);
-		});*/
+		});
 		return callback(null, null);
 	}
-
+*/
 }
 
 //this function takes the list of android devices that are usuable and converts each name, target, abi to an object and returns a list
