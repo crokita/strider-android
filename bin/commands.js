@@ -36,6 +36,7 @@ module.exports = {
 
 		child.exec("cd ${HOME}/android-sdk-linux/tools; ./emulator -avd android_emulator -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;", function (err, stdout, stderr) {
 			//process.chdir(initialDir);
+			console.log("STARTED");
 	        return callback(err, stdout);
 	    });
 
