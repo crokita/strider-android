@@ -264,7 +264,7 @@ process.on("SIGINT", killWorkers);
 process.on("SIGTERM", killWorkers);
 
 //all workers in workers array should be killed if this function is called
-var killWorkers = function() {
+function killWorkers() {
   workers.forEach(function(worker) {
     worker.kill();
   });
