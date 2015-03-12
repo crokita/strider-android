@@ -19,7 +19,7 @@ USE VVV
 find $directory -type f -name \*.apk to return the apk file (in the bin directory of the specified project)
 */
 module.exports = {
-	/*
+	
 	getDeviceList: function (sdkLocation, callback) {
 		cmd.getDeviceList(sdkLocation, function (err, output) {
 			var result = null;
@@ -29,7 +29,7 @@ module.exports = {
 			
 	        return callback(err, result);
 	    });
-	},
+	}/*,
 	
 	getTargetList: function (sdkLocation, callback) {
 		cmd.getTargetList(sdkLocation, function (err, output) {

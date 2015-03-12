@@ -33,9 +33,15 @@ module.exports = {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
 
-		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
+
+		child.exec(commandNotInPath, {cwd: "${HOME}/android-sdk-linux/tools"}, function (err, stdout, stderr) {
+			//process.chdir(initialDir);
+	        return callback(err, stdout);
+	    });
+
+		/*executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
-		});
+		});*/
 	},
 
 	getTargetList: function (sdkLocation, callback) {
