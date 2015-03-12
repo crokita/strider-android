@@ -29,7 +29,7 @@ module.exports = {
 			
 	        return callback(err, result);
 	    });
-	}/*,
+	},
 	
 	getTargetList: function (sdkLocation, callback) {
 		cmd.getTargetList(sdkLocation, function (err, output) {
@@ -62,13 +62,13 @@ module.exports = {
 	},
 
 	installApk: function (configData, callback) {
-		cmd.installApk(configData, function (err, output) {
+		/*cmd.installApk(configData, function (err, output) {
 			console.log(output);
 			return callback(err, output);
-		});
+		});*/
 		return callback(null, null);
 	}
-*/
+
 }
 
 //this function takes the list of android devices that are usuable and converts each name, target, abi to an object and returns a list
