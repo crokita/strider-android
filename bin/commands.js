@@ -87,7 +87,7 @@ module.exports = {
 		var adbInPath = "adb wait-for-device";
 		var adbNotInPath = "./adb wait-for-device";
 
-		var emulatorCommand = child.spawn(emulator, ["-avd", sanitizeString(config.device), "-no-skin", "no-audio", "no-window", "-no-boot-anim"]);
+		var emulatorCommand = child.spawn(emulator, ["-avd", sanitizeString(config.device), "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
 		workers.push(emulatorCommand);
 		var adbCommand = child.spawn(adb, ["wait-for-device"]);
 		workers.push(adbCommand);
