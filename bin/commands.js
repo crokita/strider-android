@@ -127,7 +127,7 @@ module.exports = {
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
-		var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p"]);
+		var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
 		updateProjectCommand.stdout.on('data', function (data) {
 			console.log("STDOUT: " + data);
 		});
@@ -135,6 +135,8 @@ module.exports = {
 			console.log("STDERR: " + data);
 		});
 		updateProjectCommand.on('close', function (code) { //emulator booted
+			console.log("CURRENT DIR: " + process.cwd());
+			console.log(testFolderName);
 			process.chdir(testFolderName);
 			var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 			antCleanCommand.stdout.on('data', function (data) {
