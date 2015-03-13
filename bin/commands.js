@@ -342,14 +342,12 @@ function installAndroidStudioApk (config, callback) {
 	fs.chmod("gradlew", 755, function () {
 		if (!sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-				console.log("START PART 2");
 				installAndroidStudioApk2(config, function (err, output) {
 					return callback(err, output);
 				});
 			});
 		}
 		else {
-			console.log("START PART 2");
 			installAndroidStudioApk2(config, function (err, output) {
 				return callback(err, output);
 			});
@@ -384,7 +382,7 @@ function installAndroidStudioApk2 (config, callback) {
 		android = absoluteSdk + sdkTools["android"]["toolFull"];
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
-
+	console.log("CURRENT DIR: " + process.cwd());
 	var assembleCommand = child.spawn("gradlew", ["assembleDebug"]);
 	assembleCommand.stdout.on('data', function (data) {
 		console.log(data);
