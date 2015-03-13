@@ -109,59 +109,21 @@ module.exports = {
 	},
 
 	installApk: function (config, callback) {
-		var deviceName = "\"" + sanitizeString(config.device) + "\"";
-		var isLibrary = sanitizeBoolean(config.isLibrary);
-		var testFolderName = sanitizeString(config.testFolderName);
-		var sdkLocation = sanitizeString(config.sdkLocation);
 		var ide = sanitizeString(config.ide);
 
-		//set up the absolute locations of the android tools for reference
-		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		var aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		var android = absoluteSdk + sdkTools["android"]["toolFull"];
-		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-
-		process.chdir(process.env.HOME);
-		process.chdir(".strider"); //go to the root project directory
-		process.chdir("data"); 
-		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-
-		var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
-		updateProjectCommand.stdout.on('data', function (data) {
-			console.log("STDOUT: " + data);
-		});
-		updateProjectCommand.stderr.on('data', function (data) {
-			console.log("STDERR: " + data);
-		});
-		updateProjectCommand.on('close', function (code) { //emulator booted
-			console.log("CURRENT DIR: " + process.cwd());
-			console.log(testFolderName);
-			process.chdir(testFolderName);
-			var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
-			antCleanCommand.stdout.on('data', function (data) {
-				console.log("STDOUT: " + data);
+		if (ide == "Eclipse") {
+			installEclipseApk(config, function (err, output) {
+				return callback(err, output);
 			});
-			antCleanCommand.stderr.on('data', function (data) {
-				console.log("STDERR: " + data);
+		}
+		else if (ide == "AndroidStudio") {
+			installAndroidStudioApk(config, function (err, output) {
+				return callback(err, output);
 			});
-			antCleanCommand.on('close', function (code) { //emulator booted
-				process.chdir("bin");
-				child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
-					var installCommand = child.spawn(adb, ["install", stdout]);
-
-					installCommand.stdout.on('data', function (data) {
-						console.log("STDOUT: " + data);
-					});
-					installCommand.stderr.on('data', function (data) {
-						console.log("STDERR: " + data);
-					});
-					installCommand.on('close', function (code) { //emulator booted
-  						return callback(null, code);
-					});
-				});
-			});
-		});
+		}
+		else {
+			return callback("No IDE or invalid IDE specified", null);
+		}
 /*
 
 
@@ -274,6 +236,193 @@ var goToAndroid = function (location, toolObj) {
 	fs.chmodSync(toolObj["tool"], '755');
 
 	return null;
+}
+
+function installEclipseApk (config, callback) {
+	var deviceName = "\"" + sanitizeString(config.device) + "\"";
+	var isLibrary = sanitizeBoolean(config.isLibrary);
+	var testFolderName = sanitizeString(config.testFolderName);
+	var sdkLocation = sanitizeString(config.sdkLocation);
+	var ide = sanitizeString(config.ide);
+
+	var absoluteSdk;
+	var aapt;
+	var adb;
+	var android;
+	var emulator;
+
+	if (!sdkLocation) { //assume tools is in the path if no location is specified
+		aapt = "aapt";
+		adb = "adb";
+		android = "android";
+		emulator = "emulator";
+	}
+	else {
+		//set up the absolute locations of the android tools for reference
+		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		android = absoluteSdk + sdkTools["android"]["toolFull"];
+		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+	}
+
+	process.chdir(process.env.HOME);
+	process.chdir(".strider"); //go to the root project directory
+	process.chdir("data"); 
+	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+
+	var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
+	updateProjectCommand.stdout.on('data', function (data) {
+		console.log(data);
+	});
+	updateProjectCommand.stderr.on('data', function (data) {
+		console.log(data);
+	});
+	updateProjectCommand.on('close', function (code) { //emulator booted
+		process.chdir(testFolderName);
+		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
+		antCleanCommand.stdout.on('data', function (data) {
+			console.log(data);
+		});
+		antCleanCommand.stderr.on('data', function (data) {
+			console.log(data);
+		});
+		antCleanCommand.on('close', function (code) { //emulator booted
+			process.chdir("bin");
+			child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
+				var installCommand = child.spawn(adb, ["install", stdout]);
+
+				installCommand.stdout.on('data', function (data) {
+					console.log(data);
+				});
+				installCommand.stderr.on('data', function (data) {
+					console.log(data);
+				});
+				installCommand.on('close', function (code) { //emulator booted
+					return callback(null, code);
+				});
+			});
+		});
+	});
+}
+
+function installAndroidStudioApk (config, callback) {
+	var deviceName = "\"" + sanitizeString(config.device) + "\"";
+	var isLibrary = sanitizeBoolean(config.isLibrary);
+	var testFolderName = sanitizeString(config.testFolderName);
+	var sdkLocation = sanitizeString(config.sdkLocation);
+	var ide = sanitizeString(config.ide);
+
+	var absoluteSdk;
+	var aapt;
+	var adb;
+	var android;
+	var emulator;
+
+	if (!sdkLocation) { //assume tools is in the path if no location is specified
+		aapt = "aapt";
+		adb = "adb";
+		android = "android";
+		emulator = "emulator";
+	}
+	else {
+		//set up the absolute locations of the android tools for reference
+		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		android = absoluteSdk + sdkTools["android"]["toolFull"];
+		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+	}
+
+	process.chdir(process.env.HOME);
+	process.chdir(".strider"); //go to the root project directory
+	process.chdir("data"); 
+	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+
+	fs.chmod("gradlew", 755, function () {
+		if (!sdkLocation) {
+			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+				installAndroidStudioApk2(config, function (err, output) {
+					return callback(err, output);
+				});
+			});
+		}
+		else {
+			installAndroidStudioApk2(config, function (err, output) {
+				return callback(err, output);
+			});
+		}
+	});
+}
+
+function installAndroidStudioApk2 (config, callback) {
+	var deviceName = "\"" + sanitizeString(config.device) + "\"";
+	var isLibrary = sanitizeBoolean(config.isLibrary);
+	var testFolderName = sanitizeString(config.testFolderName);
+	var sdkLocation = sanitizeString(config.sdkLocation);
+	var ide = sanitizeString(config.ide);
+
+	var absoluteSdk;
+	var aapt;
+	var adb;
+	var android;
+	var emulator;
+
+	if (!sdkLocation) { //assume tools is in the path if no location is specified
+		aapt = "aapt";
+		adb = "adb";
+		android = "android";
+		emulator = "emulator";
+	}
+	else {
+		//set up the absolute locations of the android tools for reference
+		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		android = absoluteSdk + sdkTools["android"]["toolFull"];
+		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+	}
+
+	var assembleCommand = child.spawn("gradlew", ["assembleDebug"]);
+	assembleCommand.stdout.on('data', function (data) {
+		console.log(data);
+	});
+	assembleCommand.stderr.on('data', function (data) {
+		console.log(data);
+	});
+	assembleCommand.on('close', function (code) { //emulator booted
+		process.chdir("Application"); 
+		process.chdir("build"); 
+		process.chdir("outputs"); 
+		process.chdir("apk"); 
+
+		//install the test apk
+		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+			var installCommand = child.spawn(adb, ["install", stdout]);
+			installCommand.stdout.on('data', function (data) {
+				console.log(data);
+			});
+			installCommand.stderr.on('data', function (data) {
+				console.log(data);
+			});
+			installCommand.on('close', function (code) { //emulator booted
+				//install the debug apk
+				child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+					var installCommand = child.spawn(adb, ["install", stdout]);
+					installCommand.stdout.on('data', function (data) {
+						console.log(data);
+					});
+					installCommand.stderr.on('data', function (data) {
+						console.log(data);
+					});
+					installCommand.on('close', function (code) { //emulator booted
+						return callback(null, code);
+					});
+				});
+			});
+		});
+	});
+
 }
 
 var sanitizeString = function (string) {
