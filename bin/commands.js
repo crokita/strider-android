@@ -87,18 +87,18 @@ module.exports = {
 		var adbInPath = "adb wait-for-device";
 		var adbNotInPath = "./adb wait-for-device";
 
-		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "no-audio", "no-window", "-no-boot-anim"]);
-		workers.push(emulatorCommand);
+		//var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "no-audio", "no-window", "-no-boot-anim"]);
+		//workers.push(emulatorCommand);
 		var adbCommand = child.spawn(adb, ["wait-for-device"]);
 		workers.push(adbCommand);
 
-		emulatorCommand.stdout.on('data', function (data) {
+		/*emulatorCommand.stdout.on('data', function (data) {
 			console.log("STDOUT: " + data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
 			console.log("STDERR: " + data);
-		});
+		});*/
 
 		adbCommand.stdout.on('data', function (data) {
 			console.log("STDOUT: " + data);
@@ -109,6 +109,7 @@ module.exports = {
 		});
 		
 		adbCommand.on('close', function (code) {
+			console.log("Shut down");
 			return callback(code);
 		});
 
