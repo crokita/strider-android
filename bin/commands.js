@@ -342,12 +342,14 @@ function installAndroidStudioApk (config, callback) {
 	fs.chmod("gradlew", 755, function () {
 		if (!sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+				console.log("START PART 2");
 				installAndroidStudioApk2(config, function (err, output) {
 					return callback(err, output);
 				});
 			});
 		}
 		else {
+			console.log("START PART 2");
 			installAndroidStudioApk2(config, function (err, output) {
 				return callback(err, output);
 			});
@@ -395,7 +397,7 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
-
+console.log("START PART 3");
 		//install the test apk
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 			var installCommand = child.spawn(adb, ["install", stdout]);
