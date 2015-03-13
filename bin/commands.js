@@ -74,7 +74,8 @@ module.exports = {
 	},
 
 	startEmulator: function (config, callback) {
-		var deviceName = "\"" + sanitizeString(config.device) + "\"";
+		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
+		var deviceName = sanitizeString(config.device);
 		var sdkLocation = sanitizeString(config.sdkLocation);
 
 		var sdkInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
@@ -87,10 +88,10 @@ module.exports = {
 		var adbInPath = "adb wait-for-device";
 		var adbNotInPath = "./adb wait-for-device";
 
-		var emulatorCommand = child.spawn(emulator, ["-avd", sanitizeString(config.device), "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
-		workers.push(emulatorCommand);
+		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
+		//workers.push(emulatorCommand);
 		var adbCommand = child.spawn(adb, ["wait-for-device"]);
-		workers.push(adbCommand);
+		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
 			console.log("STDOUT: " + data);
@@ -108,17 +109,10 @@ module.exports = {
 			console.log("STDERR: " + data);
 		});
 		
-		adbCommand.on('close', function (code) {
+		adbCommand.on('close', function (code) { //emulator booted
 			return callback(code);
 		});
 
-
-/*
-		executeSpawn(sdkLocation, sdkTools["emulator"], sdkInPath, sdkNotInPath, null);
-		executeSpawn(sdkLocation, sdkTools["adb"], adbInPath, adbNotInPath, function (code) {
-			return callback(null, code);
-		});
-*/
 	},
 
 	installApk: function (config, callback) {
@@ -158,8 +152,6 @@ module.exports = {
 										+ "find $directory -type f -name \*test-unaligned.apk | xargs " + adb + " install"; //install test apk
 										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
 
-//FIX THIS IT WILL BREAK
-/*
 		if (ide == "Eclipse") {
 			executeSpawn(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
 				return callback(err, output);
@@ -173,7 +165,6 @@ module.exports = {
 		else {
 			return callback("No IDE or invalid IDE specified", null);
 		}
-*/
 
 		//var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
 

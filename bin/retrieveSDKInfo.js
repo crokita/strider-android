@@ -56,16 +56,15 @@ module.exports = {
 
 	startEmulator: function (configData, callback) {
 		cmd.startEmulator(configData, function (err, output) {
-			console.log(output);
 			return callback(err, output);
 		});
 	},
 
 	installApk: function (configData, callback) {
-		/*cmd.installApk(configData, function (err, output) {
+		cmd.installApk(configData, function (err, output) {
 			console.log(output);
 			return callback(err, output);
-		});*/
+		});
 		return callback(null, null);
 	}
 
