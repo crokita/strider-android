@@ -383,7 +383,7 @@ function installAndroidStudioApk2 (config, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 	console.log("CURRENT DIR: " + process.cwd());
-	var assembleCommand = child.spawn("gradlew", ["assembleDebug"]);
+	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 	assembleCommand.stdout.on('data', function (data) {
 		console.log(data);
 	});
