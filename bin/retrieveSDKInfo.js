@@ -65,7 +65,6 @@ module.exports = {
 			console.log(output);
 			return callback(err, output);
 		});
-		return callback(null, null);
 	}
 
 }
