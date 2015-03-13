@@ -90,7 +90,8 @@ module.exports = {
 		//var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "no-audio", "no-window", "-no-boot-anim"]);
 		//workers.push(emulatorCommand);
 		console.log(adb);
-		var adbCommand = child.spawn(adb, ["wait-for-device"]);
+		//var adbCommand = child.spawn(adb, ["wait-for-device"]);
+		var adbCommand = child.spawn("ls", ["-a"]);
 		workers.push(adbCommand);
 
 		/*emulatorCommand.stdout.on('data', function (data) {
