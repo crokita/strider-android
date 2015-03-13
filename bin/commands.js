@@ -78,15 +78,9 @@ module.exports = {
 		var deviceName = sanitizeString(config.device);
 		var sdkLocation = sanitizeString(config.sdkLocation);
 
-		var sdkInPath = 	"emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
-		var sdkNotInPath = 	"./emulator -avd " + deviceName + " -no-skin -no-audio -no-window -no-boot-anim & adb wait-for-device;"
-		
 		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-
-		var adbInPath = "adb wait-for-device";
-		var adbNotInPath = "./adb wait-for-device";
 
 		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
 		//workers.push(emulatorCommand);
@@ -112,7 +106,6 @@ module.exports = {
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback(code);
 		});
-
 	},
 
 	installApk: function (config, callback) {
@@ -131,6 +124,42 @@ module.exports = {
 
 		process.chdir(process.env.HOME);
 		process.chdir(".strider/data/*"); //go to the root project directory
+
+		var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p"]);
+		updateProjectCommand.stdout.on('data', function (data) {
+			console.log("STDOUT: " + data);
+		});
+		updateProjectCommand.stderr.on('data', function (data) {
+			console.log("STDERR: " + data);
+		});
+		updateProjectCommand.on('close', function (code) { //emulator booted
+			process.chdir(testFolderName);
+			var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
+			antCleanCommand.stdout.on('data', function (data) {
+				console.log("STDOUT: " + data);
+			});
+			antCleanCommand.stderr.on('data', function (data) {
+				console.log("STDERR: " + data);
+			});
+			antCleanCommand.on('close', function (code) { //emulator booted
+				process.chdir("bin");
+				child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
+					var installCommand = child.spawn(adb, ["install", stdout]);
+
+					installCommand.stdout.on('data', function (data) {
+						console.log("STDOUT: " + data);
+					});
+					installCommand.stderr.on('data', function (data) {
+						console.log("STDERR: " + data);
+					});
+					installCommand.on('close', function (code) { //emulator booted
+  						return callback(null, code);
+					});
+				});
+			});
+		});
+/*
+
 
 		var eclipseInPath = 	"android update project --subprojects -p .; "
 								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
@@ -153,18 +182,17 @@ module.exports = {
 										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
 
 		if (ide == "Eclipse") {
-			executeSpawn(sdkLocation, eclipseInPath, eclipseNotInPath, function (err, output) {
-				return callback(err, output);
-			});
+			
 		}
 		else if (ide == "AndroidStudio") {
-			executeSpawn(sdkLocation, androidStudioInPath, androidStudioNotInPath, function (err, output) {
-				return callback(err, output);
-			});
+			
 		}
 		else {
 			return callback("No IDE or invalid IDE specified", null);
 		}
+*/
+
+
 
 		//var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
 
@@ -225,41 +253,6 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 	}
 }
 
-//this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
-//unlike the function above, use this to execute any piece of code in a new process and return
-//if a callback is defined this becomes asynchronous
-var executeSpawn = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
-	var location = sdkLocation;
-	var commandSpawned;
-
-	if (!location) { //assume android tool is in the path if no location is specified
-		commandSpawned = child.spawn(commandInPath);
-	    workers.push(commandSpawned);
-	}
-	else {
-		var error = goToAndroid(location, toolObj);
-		commandSpawned = child.spawn(commandNotInPath);
-	    workers.push(commandSpawned);
-	}
-
-	//keep track of the output
-	commandSpawned.stdout.on('data', function (data) {
-		console.log("STDOUT: " + data);
-	});
-
-	commandSpawned.stderr.on('data', function (data) {
-		console.log("STDERR: " + data);
-	});
-
-	if (callback == null) {
-		return;
-	}
-	else {
-		commandSpawned.on('close', function (code) {
-			return callback(code);
-		});
-	}
-}
 
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
 //returns null if successful. returns a string error if not
