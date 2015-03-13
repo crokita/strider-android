@@ -123,7 +123,9 @@ module.exports = {
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
 		process.chdir(process.env.HOME);
-		process.chdir(".strider/data/*"); //go to the root project directory
+		process.chdir(".strider"); //go to the root project directory
+		process.chdir("data"); 
+		process.chdir("*"); 
 
 		var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p"]);
 		updateProjectCommand.stdout.on('data', function (data) {
