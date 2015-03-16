@@ -384,7 +384,7 @@ function installAndroidStudioApk2 (config, callback) {
 	}
 
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-	var decoder = new StringDecoder('utf8');
+	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	assembleCommand.stdout.on('data', function (data) {
 		console.log(decoder.write(data));
@@ -397,10 +397,12 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
-
+		//check directory
+		console.log(process.cwd());
 		//install the test apk
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-			var installCommand = child.spawn(adb, ["install", stdout]);
+			console.log(adb + " install -r " + stdout);
+			var installCommand = child.spawn(adb, ["install", "-r", stdout]);
 			installCommand.stdout.on('data', function (data) {
 				console.log(decoder.write(data));
 			});
@@ -410,7 +412,7 @@ function installAndroidStudioApk2 (config, callback) {
 			installCommand.on('close', function (code) { //emulator booted
 				//install the debug apk
 				child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-					var installCommand = child.spawn(adb, ["install", stdout]);
+					var installCommand = child.spawn(adb, ["install", "-r", stdout]);
 					installCommand.stdout.on('data', function (data) {
 						console.log(decoder.write(data));
 					});
