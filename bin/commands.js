@@ -401,7 +401,7 @@ function installAndroidStudioApk2 (config, callback) {
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 
 
-			child.exec(adb + " install -r Application-debug-test-unaligned.apk", function (err, stdout, stderr) {
+			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 				console.log(stdout);
 					return callback(null, code);
 			});
