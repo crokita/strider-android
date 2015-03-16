@@ -407,7 +407,7 @@ function installAndroidStudioApk2 (config, callback) {
 			});
 		*/
 			
-			var installCommand = child.spawn(adb + " install", ["-r", stdout]);
+			var installCommand = child.spawn(adb, ["install", stdout]);
 			installCommand.stdout.on('data', function (data) {
 				console.log(decoder.write(data));
 			});
