@@ -62,7 +62,6 @@ module.exports = {
 
 	installApk: function (configData, callback) {
 		cmd.installApk(configData, function (err, output) {
-			console.log(output);
 			return callback(err, output);
 		});
 	}
@@ -75,7 +74,7 @@ var parseDeviceList = function (input) {
 	var list = input.split("\n");
 	//remove the first line
 	list.splice(0,1);
-	console.log(list);
+
 	//check whether the list is empty
 	if (list.length == 1) {
 		return null;
