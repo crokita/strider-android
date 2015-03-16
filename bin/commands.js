@@ -2,6 +2,8 @@
 //used for easily creating commands
 var child = require('child_process');
 var fs = require('fs');
+var StringDecoder = require('string_decoder').StringDecoder;
+
 var workers = []; //the array of processes started by node
 
 var sdkTools =  {
@@ -384,11 +386,13 @@ function installAndroidStudioApk2 (config, callback) {
 	}
 
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+	var decoder = new StringDecoder('utf8');
+
 	assembleCommand.stdout.on('data', function (data) {
-		console.log(data);
+		console.log(decoder.write(data));
 	});
 	assembleCommand.stderr.on('data', function (data) {
-		console.log(data);
+		console.log(decoder.write(data));
 	});
 	assembleCommand.on('close', function (code) { //emulator booted
 		process.chdir("Application"); 
