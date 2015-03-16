@@ -2,8 +2,6 @@
 //used for easily creating commands
 var child = require('child_process');
 var fs = require('fs');
-var StreamSplitter = require("stream-splitter"); //use in conjunction with child.spawn methods
-
 var workers = []; //the array of processes started by node
 
 var sdkTools =  {
@@ -386,16 +384,13 @@ function installAndroidStudioApk2 (config, callback) {
 	}
 
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-	var assembleSplitter = assembleCommand.stdout.pipe(StreamSplitter("\n"));
-	assembleSplitter.encoding = "utf8"; //make the output human readable
-
-	assembleSplitter.on('token', function (data) {
+	assembleCommand.stdout.on('data', function (data) {
 		console.log(data);
 	});
-	assembleSplitter.on('error', function (data) {
+	assembleCommand.stderr.on('data', function (data) {
 		console.log(data);
 	});
-	assembleSplitter.on('done', function (code) { //emulator booted
+	assembleCommand.on('close', function (code) { //emulator booted
 		process.chdir("Application"); 
 		process.chdir("build"); 
 		process.chdir("outputs"); 
