@@ -387,6 +387,7 @@ function installAndroidStudioApk2 (config, callback) {
 
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 	var assembleSplitter = assembleCommand.stdout.pipe(StreamSplitter("\n"));
+	assembleSplitter.encoding = "utf8"; //make the output human readable
 
 	assembleSplitter.on('token', function (data) {
 		console.log(data);
