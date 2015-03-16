@@ -147,6 +147,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.deleteDevice = function (device) {
 		if (device == $scope.deviceSelected) {
 			$scope.deviceSelected = "";
+			$scope.config.device = $scope.deviceSelected;
 		}
 
 		var data =  {
