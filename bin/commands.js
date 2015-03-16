@@ -4,8 +4,6 @@ var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 
-var workers = []; //the array of processes started by node
-
 var sdkTools =  {
 	"aapt": {
 		"toolFull": "build-tools/21.1.2/aapt",
@@ -342,7 +340,7 @@ function installAndroidStudioApk (config, callback) {
 	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
 	fs.chmod("gradlew", 755, function () {
-		if (!sdkLocation) {
+		if (sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				installAndroidStudioApk2(config, function (err, output) {
 					return callback(err, output);
@@ -399,7 +397,7 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
-console.log("START PART 3");
+
 		//install the test apk
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 			var installCommand = child.spawn(adb, ["install", stdout]);
@@ -438,18 +436,6 @@ var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
 }
 
-//kill the workers if something unexpected happens (emulator and adb wait-for-device)
-//process.on("uncaughtException", killWorkers);
-//process.on("SIGINT", killWorkers);
-//process.on("SIGTERM", killWorkers);
-
-//all workers in workers array should be killed if this function is called
-function killWorkers() {
-	console.log("KILL THEM ALL");
-	workers.forEach(function(worker) {
-		worker.kill();
-	});
-}
 
 //unfinished. theres multiple apks
 //var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
