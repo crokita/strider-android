@@ -399,7 +399,21 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("apk"); 
 		//install the test apk
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-			console.log(adb + " install -r " + stdout);
+
+
+			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
+				var installCommand = child.spawn(adb, ["install", "-r", stdout]);
+				installCommand.stdout.on('data', function (data) {
+					console.log(decoder.write(data));
+				});
+				installCommand.stderr.on('data', function (data) {
+					console.log(decoder.write(data));
+				});
+				installCommand.on('close', function (code) { //emulator booted
+					return callback(null, code);
+				});
+			});
+			/*
 			var installCommand = child.spawn("adb", ["install", stdout]);
 			installCommand.stdout.on('data', function (data) {
 				console.log(decoder.write(data));
@@ -422,6 +436,7 @@ function installAndroidStudioApk2 (config, callback) {
 					});
 				});
 			});
+			*/
 		});
 	});
 
