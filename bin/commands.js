@@ -397,12 +397,10 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
-		//check directory
-		console.log(process.cwd());
 		//install the test apk
 		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 			console.log(adb + " install -r " + stdout);
-			var installCommand = child.spawn(adb, ["install", "-r", stdout]);
+			var installCommand = child.spawn("adb", ["install", stdout]);
 			installCommand.stdout.on('data', function (data) {
 				console.log(decoder.write(data));
 			});
