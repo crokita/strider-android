@@ -402,6 +402,7 @@ function installAndroidStudioApk2 (config, callback) {
 
 
 			child.exec("adb install -r Application-debug-test-unaligned.apk", function (err, stdout, stderr) {
+				console.log(stdout);
 					return callback(null, code);
 			});
 			/*
