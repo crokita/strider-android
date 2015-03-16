@@ -75,7 +75,8 @@ var parseDeviceList = function (input) {
 	var list = input.split("\n");
 	//remove the first line
 	list.splice(0,1);
-
+	console.log(list);
+	
 	for (var index = 0; index < list.length; index += 6) {
 		var deviceObj = {
 			name: list[index].replace("Name:", "").trim(),
