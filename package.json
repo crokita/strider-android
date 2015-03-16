@@ -17,7 +17,9 @@
   ],
   "author": "Chris Rokita",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "stream-splitter": "^0.3.2"
+  },
   "strider": {
     "type": "job",
     "id": "android",
