@@ -417,6 +417,7 @@ function installAndroidStudioApk2 (config, callback) {
 							packageName = stdout;
 							child.exec(getActivityCmd, function (err, stdout, stderr) {
 								activityName = stdout;
+								/*
 								var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
 								console.log(finallyRunTestCmd);
 
@@ -424,8 +425,9 @@ function installAndroidStudioApk2 (config, callback) {
 									console.log(stdout);
 									return callback(null, stdout);
 								});
-								/*
-								var runTestsCmd = child.spawn(adb, ["shell", "am", "start", "-n", packageName+"/"+activityName]);
+							*/
+								
+								var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 								runTestsCmd.stdout.on('data', function (data) {
 									console.log(decoder.write(data));
 								});
@@ -435,7 +437,7 @@ function installAndroidStudioApk2 (config, callback) {
 								runTestsCmd.on('close', function (code) { //emulator booted
 									return callback(null, code);
 								});
-								*/
+								
 							});
 						});
 					});
