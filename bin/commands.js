@@ -403,8 +403,8 @@ function installAndroidStudioApk2 (config, callback) {
 			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 				console.log(stdout);
 				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-					var apkName = stdout; //make sure theres no newline characters in apkName
-					apkName = apkName.replace(/\n/g, "");
+					var apkName = stdout; 
+					apkName = apkName.replace(/\n/g, ""); //make sure theres no newline characters
 					child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 						//source for the aapt solution (dljava):
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
@@ -417,6 +417,8 @@ function installAndroidStudioApk2 (config, callback) {
 						console.log(getPackageCmd);
 						child.exec(getPackageCmd, function (err, stdout, stderr) {
 							packageName = stdout;
+							packageName = packageName.replace(/\n/g, ""); //make sure theres no newline characters
+
 							//packageName = packageName.slice(2);
 							console.log("PACKAGE: " + packageName);
 							
