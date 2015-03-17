@@ -419,10 +419,10 @@ function installAndroidStudioApk2 (config, callback) {
 								activityName = stdout;
 								var runTestsCmd = child.spawn(adb, ["shell", "am", "start", "-n", packageName+"/"+activityName]);
 								runTestsCmd.stdout.on('data', function (data) {
-									console.log(data);
+									console.log(decoder.write(data));
 								});
 								runTestsCmd.stderr.on('data', function (data) {
-									console.log(data);
+									console.log(decoder.write(data));
 								});
 								runTestsCmd.on('close', function (code) { //emulator booted
 									return callback(null, code);
