@@ -415,12 +415,14 @@ function installAndroidStudioApk2 (config, callback) {
 
 						child.exec(getPackageCmd, function (err, stdout, stderr) {
 							packageName = stdout;
+							packageName = packageName.slice(2);
 							child.exec(getActivityCmd, function (err, stdout, stderr) {
 								activityName = stdout;
-								/*
+								activityName = activityName.slice(2);
+							
 								var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
 								console.log(finallyRunTestCmd);
-
+/*
 								child.exec(finallyRunTestCmd, function (err, stdout, stderr) {
 									console.log(stdout);
 									return callback(null, stdout);
