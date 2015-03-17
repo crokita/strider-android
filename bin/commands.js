@@ -435,7 +435,7 @@ function installAndroidStudioApk2 (config, callback) {
 								runTestsCmd.on('close', function (code) { //emulator booted
 									return callback(null, code);
 								});
-								/*
+								*/
 							});
 						});
 					});
