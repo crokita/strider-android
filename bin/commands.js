@@ -406,7 +406,7 @@ function installAndroidStudioApk2 (config, callback) {
 					child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 						//source for the aapt solution (dljava):
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-						console.log(stdout);
+						console.log("TEST APK: " + stdout);
 
 						var getPackageCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
 						var getActivityCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
@@ -415,10 +415,12 @@ function installAndroidStudioApk2 (config, callback) {
 
 						child.exec(getPackageCmd, function (err, stdout, stderr) {
 							packageName = stdout;
-							packageName = packageName.slice(2);
+							//packageName = packageName.slice(2);
+							console.log("PACKAGE: " + packageName);
 							child.exec(getActivityCmd, function (err, stdout, stderr) {
 								activityName = stdout;
-								activityName = activityName.slice(2);
+								console.log("ACTIVITY: " + activityName);
+								//activityName = activityName.slice(2);
 							
 								var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
 								console.log(finallyRunTestCmd);
