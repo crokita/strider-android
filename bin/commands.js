@@ -403,13 +403,14 @@ function installAndroidStudioApk2 (config, callback) {
 			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 				console.log(stdout);
 				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+					var apkName = stdout;
 					child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 						//source for the aapt solution (dljava):
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-						console.log("TEST APK: " + stdout);
+						console.log("TEST APK: " + apkName);
 
-						var getPackageCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
-						var getActivityCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
+						var getPackageCmd = 	aapt + " dump badging " + apkName + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
+						var getActivityCmd = 	aapt + " dump badging " + apkName + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
 						var packageName;	
 						var activityName;
 
