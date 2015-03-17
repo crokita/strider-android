@@ -409,40 +409,34 @@ function installAndroidStudioApk2 (config, callback) {
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 						console.log("TEST APK: " + apkName);
 
-						var getPackageCmd = 	aapt + " dump badging " + apkName + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
-						var getActivityCmd = 	aapt + " dump badging " + apkName + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
+						var getPackageCmd =   aapt + " dump badging " + apkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
 						var packageName;	
-						var activityName;
+
+						var activityName = "android.test.InstrumentationTestRunner";
 
 						child.exec(getPackageCmd, function (err, stdout, stderr) {
 							packageName = stdout;
 							//packageName = packageName.slice(2);
 							console.log("PACKAGE: " + packageName);
-							child.exec(getActivityCmd, function (err, stdout, stderr) {
-								activityName = stdout;
-								console.log("ACTIVITY: " + activityName);
-								//activityName = activityName.slice(2);
 							
-								var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
-								console.log(finallyRunTestCmd);
+							var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
+							console.log(finallyRunTestCmd);
 /*
-								child.exec(finallyRunTestCmd, function (err, stdout, stderr) {
-									console.log(stdout);
-									return callback(null, stdout);
-								});
-							*/
-								
-								var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-								runTestsCmd.stdout.on('data', function (data) {
-									console.log(decoder.write(data));
-								});
-								runTestsCmd.stderr.on('data', function (data) {
-									console.log(decoder.write(data));
-								});
-								runTestsCmd.on('close', function (code) { //emulator booted
-									return callback(null, code);
-								});
-								
+							child.exec(finallyRunTestCmd, function (err, stdout, stderr) {
+								console.log(stdout);
+								return callback(null, stdout);
+							});
+						*/
+							
+							var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+							runTestsCmd.stdout.on('data', function (data) {
+								console.log(decoder.write(data));
+							});
+							runTestsCmd.stderr.on('data', function (data) {
+								console.log(decoder.write(data));
+							});
+							runTestsCmd.on('close', function (code) { //emulator booted
+								return callback(null, code);
 							});
 						});
 					});
