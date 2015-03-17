@@ -4,6 +4,7 @@ var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 
+
 var sdkTools =  {
 	"aapt": {
 		"toolFull": "build-tools/21.1.2/aapt",
@@ -398,21 +399,39 @@ function installAndroidStudioApk2 (config, callback) {
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
 		//install the test apk
-		child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-			console.log(stdout);
-			child.exec(adb + " install " + stdout, function (err, stdout, stderr) {
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
 				console.log(stdout);
-				child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-					console.log(stdout);
-					child.exec(adb + " install " + stdout, function (err, stdout, stderr) {
+				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+					child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
+						//source for the aapt solution (dljava):
+						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 						console.log(stdout);
-						return callback(null, code);
+						
+						var getPackageCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
+						var getActivityCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
+						var packageName;	
+						var activityName;
+
+						child.exec(getPackageCmd, function (err, stdout, stderr) {
+							packageName = stdout;
+							child.exec(getActivityCmd, function (err, stdout, stderr) {
+								activityName = stdout;
+								var runTestsCmd = child.spawn(adb, ["shell", "am", "start", "-n", packageName+"/"+activityName]);
+								runTestsCmd.stdout.on('data', function (data) {
+									console.log(data);
+								});
+								runTestsCmd.stderr.on('data', function (data) {
+									console.log(data);
+								});
+								runTestsCmd.on('close', function (code) { //emulator booted
+									return callback(null, code);
+								});
+							});
+						});
 					});
-
 				});
-
 			});
-			
 		});
 	});
 
@@ -522,7 +541,6 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 //you need to use AAPT android tool in order to get the apk information on what package to find for testing
 //I recommend just putting these in a separate script and then calling those scripts. this is getting ridiculous
 
-//the sauce for the aapt solution: http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 
 //get path vars:
 //process.env.PATH
