@@ -413,7 +413,7 @@ function installAndroidStudioApk2 (config, callback) {
 						var packageName;	
 
 						var activityName = "android.test.InstrumentationTestRunner";
-
+						console.log(getPackageCmd);
 						child.exec(getPackageCmd, function (err, stdout, stderr) {
 							packageName = stdout;
 							//packageName = packageName.slice(2);
