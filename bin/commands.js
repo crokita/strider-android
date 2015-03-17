@@ -407,7 +407,7 @@ function installAndroidStudioApk2 (config, callback) {
 						//source for the aapt solution (dljava):
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 						console.log(stdout);
-						
+
 						var getPackageCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
 						var getActivityCmd = 	aapt + " dump badging " + stdout + "|awk -F\" \" '/launchable-activity/ {print $2}'|awk -F\"'\" '/name=/ {print $2}'";
 						var packageName;	
@@ -417,6 +417,14 @@ function installAndroidStudioApk2 (config, callback) {
 							packageName = stdout;
 							child.exec(getActivityCmd, function (err, stdout, stderr) {
 								activityName = stdout;
+								var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
+								console.log(finallyRunTestCmd);
+
+								child.exec(finallyRunTestCmd, function (err, stdout, stderr) {
+									console.log(stdout);
+									return callback(null, stdout);
+								});
+								/*
 								var runTestsCmd = child.spawn(adb, ["shell", "am", "start", "-n", packageName+"/"+activityName]);
 								runTestsCmd.stdout.on('data', function (data) {
 									console.log(decoder.write(data));
@@ -427,6 +435,7 @@ function installAndroidStudioApk2 (config, callback) {
 								runTestsCmd.on('close', function (code) { //emulator booted
 									return callback(null, code);
 								});
+								/*
 							});
 						});
 					});
