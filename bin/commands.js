@@ -409,7 +409,7 @@ function installAndroidStudioApk2 (config, callback) {
 						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 						console.log("TEST APK: " + apkName);
 
-						var getPackageCmd =   aapt + " dump badging " + apkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+						var getPackageCmd =   aapt + " dump badging " + apkName + "|awk -F\" \" \'\/package\/ {print $2}\'|awk -F\"\'\" \'\/name=\/ {print $2}\'";
 						var packageName;	
 
 						var activityName = "android.test.InstrumentationTestRunner";
