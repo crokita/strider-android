@@ -1,5 +1,5 @@
 var SDK = require("./bin/retrieveSDKInfo");
-/*
+
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -41,10 +41,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
-				job["phases"]["prepare"]["commands"] = ["yo"];
 
-				console.log(job["phases"]);
-				console.log(job["phases"]["prepare"]["commands"]);
 
 
 				SDK.startEmulator(configData, context, function (err, result) {
@@ -79,35 +76,3 @@ module.exports = {
 		exists: true
 	}
 };
-*/
-
-module.exports = {
-  init: function (config, context, done) {
-    var config = config || {};
-    
-    done(null, {
-      environment: shellCommand("echo HEY"),
-      prepare: shellCommand("echo HEY"),
-      test: shellCommand("echo HEY"),
-      deploy: shellCommand("echo HEY"),
-      cleanup: shellCommand("echo HEY")
-    });
-  }
-};
-
-function shellCommand(command) {
-  if (!command) {
-    return;
-  }
-  
-  var normalizedCommand = command.replace(/#[^\n]*/g, '').trim();
-  
-  if (!normalizedCommand.length) {
-    return;
-  }
-  
-  return {
-    command: 'bash',
-    args: ['-e', '-x', '-c', normalizedCommand]
-  };
-}
