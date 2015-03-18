@@ -42,11 +42,10 @@ module.exports = {
 				};
 				context.log("Test!");	
 				console.log(context.out("test"));
-				console.log(context.log("test"));
-				console.log(context.comment("test"));
-				console.log(context.cmd("test"));
-				console.log(context.data("test"));
-
+				context.comment("test");
+				context.cmd("test");
+				context.data("test");
+				context.comment('testttttttt');
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
