@@ -41,7 +41,8 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
-				console.log(job);
+				job["phases"]["prepare"]["commands"] = ["yo"];
+
 				console.log(job["phases"]);
 				console.log(job["phases"]["prepare"]["commands"]);
 
