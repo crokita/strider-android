@@ -3,7 +3,7 @@
 var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
-var Q = require('q');
+var async = require('async');
 
 
 var sdkTools =  {
@@ -385,6 +385,41 @@ function installAndroidStudioApk2 (config, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
+	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
+
+	async.waterfall([
+		function (next) {
+			//create the APKs
+			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+			assembleCommand.stdout.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			assembleCommand.stderr.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			assembleCommand.on('close', function (code) {
+				next();
+			});
+		},
+		function (next) {
+			console.log("Testing execution order");
+			next(null, "Done!");
+
+/*
+			process.chdir("Application"); 
+			process.chdir("build"); 
+			process.chdir("outputs"); 
+			process.chdir("apk"); 
+			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				deferred.resolve(stdout);
+			});
+*/
+		}
+	], function (err, result) {
+		console.log(result);
+		callback(err, result);
+	});
+
 	studioTests.assembleDebug()
 	.then(studioTests.getDebugApk())
 	.catch(function (error) {
@@ -461,48 +496,6 @@ var sanitizeString = function (string) {
 //return false if it is anything but "true" or true
 var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
-}
-
-
-//Functions which assist in running the unit tests
-var eclipseTests = {
-
-}
-
-var studioTests = {
-	assembleDebug: function () { 
-		var deferred = Q.defer();
-		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
-		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-		assembleCommand.stdout.on('data', function (data) {
-			console.log(decoder.write(data));
-		});
-		assembleCommand.stderr.on('data', function (data) {
-			console.log(decoder.write(data));
-		});
-		assembleCommand.on('close', function (code) {
-			deferred.resolve(); //command finished
-		});
-		return deferred.promise;
-	},
-
-	getDebugApk: function () { 
-		/*
-		var deferred = Q.defer();
-		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
-		process.chdir("Application"); 
-		process.chdir("build"); 
-		process.chdir("outputs"); 
-		process.chdir("apk"); 
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			deferred.resolve(stdout);
-		});
-		return deferred.promise;
-		*/
-		console.log("I should be called ONLY after gradlew assembleDebug finishes!");
-	}
 }
 
 //TODO: should it uninstall the apks from the device on completion?
