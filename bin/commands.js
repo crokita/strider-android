@@ -385,8 +385,6 @@ function installAndroidStudioApk2 (config, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
-	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
 	studioTests.assembleDebug()
 	.then(studioTests.getDebugApk())
 	.catch(function (error) {
@@ -474,7 +472,9 @@ var eclipseTests = {
 var studioTests = {
 	assembleDebug: function () { 
 		var deferred = Q.defer();
+		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 		console.log("hey listen");
+		
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 		assembleCommand.stdout.on('data', function (data) {
 			console.log(decoder.write(data));
@@ -490,6 +490,7 @@ var studioTests = {
 
 	getDebugApk: function () { 
 		var deferred = Q.defer();
+		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 		console.log("hey listen2");
 
 		process.chdir("Application"); 
