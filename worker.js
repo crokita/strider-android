@@ -40,8 +40,10 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
+				context.comment("Testing out the comment system!");
+				context.comment("Okay");		
 
-				SDK.startEmulator(configData, context, function (result) {
+				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
 					done(null, true);
 				});
@@ -56,7 +58,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 
-				SDK.installApk(configData, function (result) {
+				SDK.installApk(configData, function (err, result) {
 					console.log(result);
 					done(null, true);
 				});

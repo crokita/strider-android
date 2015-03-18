@@ -90,19 +90,19 @@ module.exports = {
 		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
-			context.comment(data);
+			console.log("STDOUT: " + data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
-			context.comment(data);
+			console.log("STDERR: " + data);
 		});
 
 		adbCommand.stdout.on('data', function (data) {
-			context.comment(data);
+			console.log("STDOUT: " + data);
 		});
 
 		adbCommand.stderr.on('data', function (data) {
-			context.comment(data);
+			console.log("STDERR: " + data);
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
