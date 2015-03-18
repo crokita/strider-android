@@ -41,7 +41,11 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
-				console.log(context);
+				console.log(context.out("test"));
+				console.log(context.log("test"));
+				console.log(context.comment("test"));
+				console.log(context.cmd("test"));
+				console.log(context.data("test"));
 
 
 				SDK.startEmulator(configData, context, function (err, result) {
