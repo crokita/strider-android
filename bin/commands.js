@@ -412,7 +412,9 @@ function installAndroidStudioApk2 (config, callback) {
 			process.chdir("apk"); 
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 				console.log(stdout);
+				deferred.resolve();
 			});
+			return deferred.promise;
 		}
 	])
 	.catch(function (error) {
