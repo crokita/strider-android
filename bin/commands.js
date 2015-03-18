@@ -387,29 +387,34 @@ function installAndroidStudioApk2 (config, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
-	Q.fcall(function () {
-		//ASSEMBLE THE PROJECT INTO APKS
-		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-		assembleCommand.stdout.on('data', function (data) {
-			console.log(decoder.write(data));
-		});
-		assembleCommand.stderr.on('data', function (data) {
-			console.log(decoder.write(data));
-		});
-		assembleCommand.on('close', function (code) {
-			return; //command finished
-		}); //emulator booted
-	})
-	.then(function () {
-		//INSTALL THE TEST APK
-		process.chdir("Application"); 
-		process.chdir("build"); 
-		process.chdir("outputs"); 
-		process.chdir("apk"); 
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			console.log(stdout);
-		});
-	})
+	Q.all([
+		function () {
+			//ASSEMBLE THE PROJECT INTO APKS
+			var deferred = Q.defer();
+			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+			assembleCommand.stdout.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			assembleCommand.stderr.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			assembleCommand.on('close', function (code) {
+				deferred.resolve(); //command finished
+			});
+			return deferred.promise;
+		}),
+		function () {
+			//INSTALL THE TEST APK
+			var deferred = Q.defer();
+			process.chdir("Application"); 
+			process.chdir("build"); 
+			process.chdir("outputs"); 
+			process.chdir("apk"); 
+			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				console.log(stdout);
+			});
+		})
+	]
 	.catch(function (error) {
 		console.log("caught!");
 		return (error, null);
