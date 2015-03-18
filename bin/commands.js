@@ -391,6 +391,7 @@ function installAndroidStudioApk2 (config, callback) {
 		function () {
 			//ASSEMBLE THE PROJECT INTO APKS
 			var deferred = Q.defer();
+			console.log("hey listen");
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 			assembleCommand.stdout.on('data', function (data) {
 				console.log(decoder.write(data));
@@ -406,6 +407,7 @@ function installAndroidStudioApk2 (config, callback) {
 		function () {
 			//INSTALL THE TEST APK
 			var deferred = Q.defer();
+			console.log("hey listen2");
 			process.chdir("Application"); 
 			process.chdir("build"); 
 			process.chdir("outputs"); 
