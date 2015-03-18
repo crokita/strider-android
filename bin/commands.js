@@ -408,7 +408,7 @@ function installAndroidStudioApk2 (config, callback) {
 			process.chdir("outputs"); 
 			process.chdir("apk"); 
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 				next(null, stdout); //return the name of the debug apk
 			});
 		},
@@ -416,7 +416,7 @@ function installAndroidStudioApk2 (config, callback) {
 			//install the debug apk and find the debug test apk
 			child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-					stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+					stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 					next(null, debugApkName, stdout); //return the name of the debug test apk
 				});
 			});
@@ -435,14 +435,27 @@ function installAndroidStudioApk2 (config, callback) {
 			});
 		},
 		function (debugApkName, debugTestApkName, packageName, next) {
-			console.log("Time to take roll call");
-			console.log(debugApkName);
-			console.log(debugTestApkName);
-			console.log(packageName);
-			next(null, null);
+			//now re-sign the apk files so the security error doesn't pop up
+			resignApk(debugApkName, function () {
+				resignApk(debugTestApkName, function () {
+					next(null, debugApkName, debugTestApkName, packageName);
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, packageName, next) {
+			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
+			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+			runTestsCmd.stdout.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			runTestsCmd.stderr.on('data', function (data) {
+				console.log(decoder.write(data));
+			});
+			runTestsCmd.on('close', function (code) { //emulator booted
+				return next(null, code);
+			});
 		}
 	], function (err, result) {
-		console.log(result);
 		callback(err, result);
 	});
 
@@ -504,6 +517,19 @@ function installAndroidStudioApk2 (config, callback) {
 */
 }
 
+var resignApk = function (apkName, callback) {
+	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
+	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
+						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
+						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
+						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
+	child.exec(resignCommand, function (err, stdout, stderr) {
+		console.log(stdout);
+		callback();
+	});
+
+}
+
 var sanitizeString = function (string) {
 	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
 }
@@ -514,7 +540,6 @@ var sanitizeBoolean = function (bool) {
 }
 
 //TODO: should it uninstall the apks from the device on completion?
-//LOOK UP ASYNC OR PROMISES TO AVOID THE PYRAMID OF DOOM
 
 //./android update sdk --no-ui to fix dependency issues
 //find a way to show errors/process of build in the strider test page!
