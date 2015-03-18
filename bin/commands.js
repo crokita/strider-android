@@ -75,7 +75,7 @@ module.exports = {
 		});
 	},
 
-	startEmulator: function (config, callback) {
+	startEmulator: function (config, context, callback) {
 		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
 		var deviceName = sanitizeString(config.device);
 		var sdkLocation = sanitizeString(config.sdkLocation);
@@ -90,19 +90,19 @@ module.exports = {
 		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
-			console.log("STDOUT: " + data);
+			context.comment(data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
-			console.log("STDERR: " + data);
+			context.comment(data);
 		});
 
 		adbCommand.stdout.on('data', function (data) {
-			console.log("STDOUT: " + data);
+			context.comment(data);
 		});
 
 		adbCommand.stderr.on('data', function (data) {
-			console.log("STDERR: " + data);
+			context.comment(data);
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted

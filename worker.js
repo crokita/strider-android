@@ -41,7 +41,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 
-				SDK.startEmulator(configData, function (result) {
+				SDK.startEmulator(configData, context, function (result) {
 					console.log(result);
 					done(null, true);
 				});
