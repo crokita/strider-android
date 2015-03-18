@@ -42,7 +42,6 @@ module.exports = {
 				};
 				context.log("Test!");	
 				console.log(context.out("test"));
-				context.cmd("test");
 				context.comment('testttttttt');
 
 				SDK.startEmulator(configData, context, function (err, result) {
