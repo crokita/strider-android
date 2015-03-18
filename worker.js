@@ -31,9 +31,6 @@ module.exports = {
 
 			//string style
 			environment: 'echo "' + config.environment + '"',
-			prepare: 'echo "' + config.prepare + '"',
-			test: 'echo "' + config.test + '"',
-			/*
 			//object style
 			prepare: function (context, done) {
 				var configData = {
@@ -65,7 +62,6 @@ module.exports = {
 					done(null, true);
 				});
 			},
-			*/
 			deploy: 'echo "' + config.deploy + '"',
 			cleanup: 'echo "' + config.cleanup + '"'
 
