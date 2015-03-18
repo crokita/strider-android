@@ -518,6 +518,7 @@ function installAndroidStudioApk2 (config, callback) {
 }
 
 var resignApk = function (apkName, callback) {
+	console.log("Apk Name: " + apkName);
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
