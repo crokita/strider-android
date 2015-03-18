@@ -414,7 +414,7 @@ function installAndroidStudioApk2 (config, callback) {
 				console.log(stdout);
 			});
 		})
-	]
+	])
 	.catch(function (error) {
 		console.log("caught!");
 		return (error, null);
