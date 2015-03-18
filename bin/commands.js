@@ -398,22 +398,21 @@ function installAndroidStudioApk2 (config, callback) {
 				console.log(decoder.write(data));
 			});
 			assembleCommand.on('close', function (code) {
-				next();
+				next(null);
 			});
 		},
 		function (next) {
-			console.log("Testing execution order");
-			next(null, "Done!");
-
-/*
 			process.chdir("Application"); 
 			process.chdir("build"); 
 			process.chdir("outputs"); 
 			process.chdir("apk"); 
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-				deferred.resolve(stdout);
+				next(null, stdout); //return the name of the debug apk
 			});
-*/
+		},
+		function (debugApkName, next) {
+			console.log(debugApkName);
+			next(null, "test");
 		}
 	], function (err, result) {
 		console.log(result);
