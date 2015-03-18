@@ -402,7 +402,7 @@ function installAndroidStudioApk2 (config, callback) {
 				deferred.resolve(); //command finished
 			});
 			return deferred.promise;
-		}),
+		},
 		function () {
 			//INSTALL THE TEST APK
 			var deferred = Q.defer();
@@ -413,7 +413,7 @@ function installAndroidStudioApk2 (config, callback) {
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 				console.log(stdout);
 			});
-		})
+		}
 	])
 	.catch(function (error) {
 		console.log("caught!");
