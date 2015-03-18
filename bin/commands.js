@@ -402,17 +402,44 @@ function installAndroidStudioApk2 (config, callback) {
 			});
 		},
 		function (next) {
+			//find the debug apk
 			process.chdir("Application"); 
 			process.chdir("build"); 
 			process.chdir("outputs"); 
 			process.chdir("apk"); 
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
 				next(null, stdout); //return the name of the debug apk
 			});
 		},
 		function (debugApkName, next) {
+			//install the debug apk and find the debug test apk
+			child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+					stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+					next(null, debugApkName, stdout); //return the name of the debug test apk
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, next) {
+			//install the debug test apk and get the test package name
+			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
+				//source for the aapt solution (dljava):
+				//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+				var getPackageCmd = aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+				child.exec(getPackageCmd, function (err, stdout, stderr) {	
+					stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+					next(null, debugApkName, debugTestApkName, stdout); //return the package name
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, packageName, next) {
+			console.log("Time to take roll call");
 			console.log(debugApkName);
-			next(null, "test");
+			console.log(debugTestApkName);
+			console.log(packageName);
+			next(null, null);
 		}
 	], function (err, result) {
 		console.log(result);
