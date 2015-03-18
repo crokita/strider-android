@@ -40,8 +40,8 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				context.comment("Testing out the comment system!");
-				context.comment("Okay");		
+				context.logger("Testing out the comment system!");
+				context.logger("Okay");		
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
