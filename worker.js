@@ -11,7 +11,7 @@ module.exports = {
 		//config = config || {};
 		//console.log(config);
 
-		cb(null, {
+		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
 			// Listen for events on the internal job emitter.
