@@ -408,6 +408,7 @@ function installAndroidStudioApk2 (config, callback) {
 			process.chdir("outputs"); 
 			process.chdir("apk"); 
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				stdout = stdout.slice(2); //remove the "./" characters at the beginning
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 				next(null, stdout); //return the name of the debug apk
 			});
@@ -416,6 +417,7 @@ function installAndroidStudioApk2 (config, callback) {
 			//install the debug apk and find the debug test apk
 			child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+					stdout = stdout.slice(2); //remove the "./" characters at the beginning
 					stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 					next(null, debugApkName, stdout); //return the name of the debug test apk
 				});
