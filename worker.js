@@ -21,7 +21,7 @@ module.exports = {
 			listen: function (emitter, context) {
 				emitter.on('job.status.phase.done', function (id, data) {
 					var phase = data.phase;
-					console.log('the ' + phase + ' phase has completed');
+					context.log('the ' + phase + ' phase has completed');
 					return true;
 				});
 			},
@@ -41,6 +41,10 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
+				console.log(job);
+				console.log(job["phases"]);
+				console.log(job["phases"]["prepare"]["commands"]);
+
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
