@@ -387,44 +387,15 @@ function installAndroidStudioApk2 (config, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
-	Q.all([
-		function () {
-			//ASSEMBLE THE PROJECT INTO APKS
-			var deferred = Q.defer();
-			console.log("hey listen");
-			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-			assembleCommand.stdout.on('data', function (data) {
-				console.log(decoder.write(data));
-			});
-			assembleCommand.stderr.on('data', function (data) {
-				console.log(decoder.write(data));
-			});
-			assembleCommand.on('close', function (code) {
-				deferred.resolve(); //command finished
-			});
-			return deferred.promise;
-		},
-		function () {
-			//INSTALL THE TEST APK
-			var deferred = Q.defer();
-			console.log("hey listen2");
-			process.chdir("Application"); 
-			process.chdir("build"); 
-			process.chdir("outputs"); 
-			process.chdir("apk"); 
-			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-				console.log(stdout);
-				deferred.resolve();
-			});
-			return deferred.promise;
-		}
-	])
+	studioTests.assembleDebug()
+	.then(studioTests.getDebugApk())
 	.catch(function (error) {
 		console.log("caught!");
 		return (error, null);
 	})
-	.done(function () {
+	.done(function (result) {
 		console.log("completed!");
+		console.log(result);
 		return (null, null);
 	});
 /*
@@ -494,6 +465,43 @@ var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
 }
 
+
+//Functions which assist in running the unit tests
+var eclipseTests = {
+
+}
+
+var studioTests = {
+	assembleDebug: function () { 
+		var deferred = Q.defer();
+		console.log("hey listen");
+		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+		assembleCommand.stdout.on('data', function (data) {
+			console.log(decoder.write(data));
+		});
+		assembleCommand.stderr.on('data', function (data) {
+			console.log(decoder.write(data));
+		});
+		assembleCommand.on('close', function (code) {
+			deferred.resolve(); //command finished
+		});
+		return deferred.promise;
+	},
+
+	getDebugApk: function () { 
+		var deferred = Q.defer();
+		console.log("hey listen2");
+
+		process.chdir("Application"); 
+		process.chdir("build"); 
+		process.chdir("outputs"); 
+		process.chdir("apk"); 
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			deferred.resolve(stdout);
+		});
+		return deferred.promise;
+	}
+}
 
 //TODO: should it uninstall the apks from the device on completion?
 //LOOK UP ASYNC OR PROMISES TO AVOID THE PYRAMID OF DOOM
