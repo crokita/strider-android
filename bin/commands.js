@@ -420,17 +420,6 @@ function installAndroidStudioApk2 (config, callback) {
 		callback(err, result);
 	});
 
-	studioTests.assembleDebug()
-	.then(studioTests.getDebugApk())
-	.catch(function (error) {
-		console.log("caught!");
-		return (error, null);
-	})
-	.done(function (result) {
-		console.log("completed!");
-		console.log(result);
-		return (null, null);
-	});
 /*
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
