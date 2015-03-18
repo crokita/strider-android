@@ -3,6 +3,7 @@
 var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
+var Q = require('q');
 
 
 var sdkTools =  {
@@ -384,6 +385,40 @@ function installAndroidStudioApk2 (config, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
+	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
+
+	Q.fcall(function () {
+		//ASSEMBLE THE PROJECT INTO APKS
+		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+		assembleCommand.stdout.on('data', function (data) {
+			console.log(decoder.write(data));
+		});
+		assembleCommand.stderr.on('data', function (data) {
+			console.log(decoder.write(data));
+		});
+		assembleCommand.on('close', function (code) {
+			return; //command finished
+		}); //emulator booted
+	})
+	.then(function () {
+		//INSTALL THE TEST APK
+		process.chdir("Application"); 
+		process.chdir("build"); 
+		process.chdir("outputs"); 
+		process.chdir("apk"); 
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			console.log(stdout);
+		});
+	})
+	.catch(function (error) {
+		console.log("caught!");
+		return (error, null);
+	})
+	.done(function () {
+		console.log("completed!");
+		return (null, null);
+	});
+/*
 	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
@@ -422,15 +457,6 @@ function installAndroidStudioApk2 (config, callback) {
 							//packageName = packageName.slice(2);
 							console.log("PACKAGE: " + packageName);
 							
-							var finallyRunTestCmd = "adb shell am start -n " + packageName+"/"+activityName;
-							console.log(finallyRunTestCmd);
-/*
-							child.exec(finallyRunTestCmd, function (err, stdout, stderr) {
-								console.log(stdout);
-								return callback(null, stdout);
-							});
-						*/
-							
 							var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 							runTestsCmd.stdout.on('data', function (data) {
 								console.log(decoder.write(data));
@@ -447,7 +473,7 @@ function installAndroidStudioApk2 (config, callback) {
 			});
 		});
 	});
-
+*/
 }
 
 var sanitizeString = function (string) {
@@ -460,9 +486,8 @@ var sanitizeBoolean = function (bool) {
 }
 
 
-//unfinished. theres multiple apks
-//var startEmulatorStudio = 	'chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/'; 
-//use ./gradlew --refresh-dependencies?
+//TODO: should it uninstall the apks from the device on completion?
+//LOOK UP ASYNC OR PROMISES TO AVOID THE PYRAMID OF DOOM
 
 //./android update sdk --no-ui to fix dependency issues
 //find a way to show errors/process of build in the strider test page!
@@ -470,6 +495,20 @@ var sanitizeBoolean = function (bool) {
 //	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
 //use -r for adb install or ".apk" to reinstall the app
 /*
+Resigning apks:
+mkdir unzip-output
+cd unzip-output
+jar xf ../Application-debug-test-unaligned.apk
+rm -r META-INF/
+ls | xargs jar -cvf Application-debug-test-unaligned.apk
+jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android Application-debug-test-unaligned.apk androiddebugkey
+AND DONE
+optional:
+rm ../Application-debug-test-unaligned.apk
+mv Application-debug-test-unaligned.apk ../Application-debug-test-unaligned.apk
+cd ../
+rm -r unzip-output
+
 equivalent of below:
 
 //adb push Application-debug.apk /data/local/tmp/com.example.android.activityinstrumentation
@@ -489,45 +528,15 @@ adb shell am instrument -w com.example.android.activityinstrumentation.test/andr
 //maybe try this:
 //This problem can be solved by uninstalling the apk file and the test application from the emulator. And then resign the application with re-sign.jar and then install the apk and then run the test app.
 //from http://stackoverflow.com/questions/3082780/java-lang-securityexception-permission-denial ^
+//http://stackoverflow.com/questions/11411223/android-apk-resign-jar-is-getting-hanged
+
+//$HOME/.android/debug.keystore
 
 //if you get a Failure [INSTALL_FAILED_UPDATE_INCOMPATIBLE]: for the test, uninstall and reinstall the packages (pm in adb shell, and adb otherwise)
 //adb shell wipe data (probably not a good idea) or just uninstall/reinstall the packages from before (or delete all in tmp directory?)
 
 //do we REALLY need this?
 //jarsigner -verbose -keystore ~/.android/debug.keystore -storepass android -keypass android PATH/TO/YOUR_UNSIGNED_PROJECT.apk androiddebugkey
-
-Uploading file
-	local path: /Users/chrisrokita/AndroidStudioProjects/ActivityInstrumentation/Application/build/outputs/apk/Application-debug.apk
-	remote path: /data/local/tmp/com.example.android.activityinstrumentation
-Installing com.example.android.activityinstrumentation
-DEVICE SHELL COMMAND: pm install -r "/data/local/tmp/com.example.android.activityinstrumentation"
-pkg: /data/local/tmp/com.example.android.activityinstrumentation
-Success
-
-
-Uploading file
-	local path: /Users/chrisrokita/AndroidStudioProjects/ActivityInstrumentation/Application/build/outputs/apk/Application-debug-test-unaligned.apk
-	remote path: /data/local/tmp/com.example.android.activityinstrumentation.test
-Installing com.example.android.activityinstrumentation.test
-DEVICE SHELL COMMAND: pm install -r "/data/local/tmp/com.example.android.activityinstrumentation.test"
-pkg: /data/local/tmp/com.example.android.activityinstrumentation.test
-Success
-
-
-Running tests
-Test running started
-junit.framework.AssertionFailedError: expected:<5> but was:<2>
-at com.example.android.activityinstrumentation.SampleTests.testSpinnerValuePersistedBetweenLaunches(SampleTests.java:120)
-at java.lang.reflect.Method.invokeNative(Native Method)
-at android.test.InstrumentationTestCase.runMethod(InstrumentationTestCase.java:214)
-at android.test.InstrumentationTestCase.runTest(InstrumentationTestCase.java:199)
-at android.test.ActivityInstrumentationTestCase2.runTest(ActivityInstrumentationTestCase2.java:192)
-at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:169)
-at android.test.AndroidTestRunner.runTest(AndroidTestRunner.java:154)
-at android.test.InstrumentationTestRunner.onStart(InstrumentationTestRunner.java:545)
-at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:1551)
-
-Finish
 
 
 use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1 to get the package + activity
