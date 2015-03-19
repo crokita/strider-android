@@ -412,10 +412,12 @@ function installAndroidStudioApk2 (config, context, callback) {
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 			assembleCommand.stdout.on('data', function (data) {
-				context.out(decoder.write(data));
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
 			});
 			assembleCommand.stderr.on('data', function (data) {
-				context.out(decoder.write(data));
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
 			});
 			assembleCommand.on('close', function (code) {
 				next(null);
@@ -469,10 +471,12 @@ function installAndroidStudioApk2 (config, context, callback) {
 			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 			runTestsCmd.stdout.on('data', function (data) {
-				context.out(decoder.write(data));
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
 			});
 			runTestsCmd.stderr.on('data', function (data) {
-				context.out(decoder.write(data));
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
 			});
 			runTestsCmd.on('close', function (code) { //emulator booted
 				return next(null, code);
@@ -583,7 +587,8 @@ var resignApk = function (apkName, context, callback) {
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		context.out(stdout);
+		//context.out(stdout);
+		console.log(stdout);
 		callback();
 	});
 
