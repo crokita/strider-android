@@ -592,8 +592,8 @@ var resignApk = function (apkName, context, callback) {
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		context.out(stdout);
-		//console.log(stdout);
+		//context.out(stdout);
+		console.log(stdout);
 		callback();
 	});
 
