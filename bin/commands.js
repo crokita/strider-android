@@ -340,6 +340,7 @@ function installAndroidStudioApk (config, context, callback) {
 		adb: adb,
 		android: android,
 		emulator: emulator,
+		sdkLocation: sdkLocation
 	}
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
@@ -356,29 +357,10 @@ function installAndroidStudioApk (config, context, callback) {
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
 	});
-//REMOVE BELOW
-
 }
-/*
-function installAndroidStudioApk2 (path, context, callback) {
-	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
-	var tasks = [];
-	tasks.push(studioTasksFirst(context, decoder, path));
-	tasks.push(studioTasksSecond(context, decoder, path));
-	tasks.push(studioTasksThird(context, decoder, path));
-	tasks.push(studioTasksFourth(context, decoder, path));
-	tasks.push(studioTasksFifth(context, decoder, path));
-	tasks.push(studioTasksSixth(context, decoder, path));
 
-	async.waterfall(tasks, function (err, result) {
-		callback(err, result);
-	});
-
-}
-*/
 //the following methods are used exlusively for async.waterfall tasks
-
 var studioTasksZero = function(context, decoder, path) {
 	return function(next) {
 		//get to the project main directory
@@ -388,8 +370,8 @@ var studioTasksZero = function(context, decoder, path) {
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
 		fs.chmod("gradlew", 755, function () { //allow execution of gradlew
-			if (sdkLocation) {
-				child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+			if (path.sdkLocation) {
+				child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 					next(null);
 				});
 			}
