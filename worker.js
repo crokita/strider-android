@@ -30,7 +30,7 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: 'echo "' + config.environment + '"',
+			environment: 'echo "' + config + '"',
 			//object style
 			prepare: function (context, done) {
 				var configData = {

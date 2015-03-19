@@ -461,62 +461,6 @@ function installAndroidStudioApk2 (config, callback) {
 		callback(err, result);
 	});
 
-/*
-	var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
-	assembleCommand.stdout.on('data', function (data) {
-		console.log(decoder.write(data));
-	});
-	assembleCommand.stderr.on('data', function (data) {
-		console.log(decoder.write(data));
-	});
-	assembleCommand.on('close', function (code) { //emulator booted
-		process.chdir("Application"); 
-		process.chdir("build"); 
-		process.chdir("outputs"); 
-		process.chdir("apk"); 
-		//install the test apk
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
-				console.log(stdout);
-				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-					var apkName = stdout; 
-					apkName = apkName.replace(/\n/g, ""); //make sure theres no newline characters
-					child.exec(adb + " install -r " + stdout, function (err, stdout, stderr) {
-						//source for the aapt solution (dljava):
-						//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-						console.log("TEST APK: " + apkName);
-
-						var getPackageCmd = aapt + " dump badging " + apkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
-						var packageName;	
-
-						var activityName = "android.test.InstrumentationTestRunner";
-						console.log(getPackageCmd);
-						child.exec(getPackageCmd, function (err, stdout, stderr) {
-							packageName = stdout;
-							packageName = packageName.replace(/\n/g, ""); //make sure theres no newline characters
-
-							//packageName = packageName.slice(2);
-							console.log("PACKAGE: " + packageName);
-							
-							var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-							runTestsCmd.stdout.on('data', function (data) {
-								console.log(decoder.write(data));
-							});
-							runTestsCmd.stderr.on('data', function (data) {
-								console.log(decoder.write(data));
-							});
-							runTestsCmd.on('close', function (code) { //emulator booted
-								return callback(null, code);
-							});
-						});
-					});
-				});
-			});
-		});
-	});
-*/
 }
 
 var resignApk = function (apkName, callback) {
@@ -550,19 +494,6 @@ var sanitizeBoolean = function (bool) {
 //	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
 //use -r for adb install or ".apk" to reinstall the app
 /*
-Resigning apks:
-mkdir unzip-output
-cd unzip-output
-jar xf ../Application-debug-test-unaligned.apk
-rm -r META-INF/
-ls | xargs jar -cvf Application-debug-test-unaligned.apk
-jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android Application-debug-test-unaligned.apk androiddebugkey
-AND DONE
-optional:
-rm ../Application-debug-test-unaligned.apk
-mv Application-debug-test-unaligned.apk ../Application-debug-test-unaligned.apk
-cd ../
-rm -r unzip-output
 
 equivalent of below:
 
@@ -624,3 +555,75 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 
 //you can update test-project and lib-project
 //https://developer.android.com/tools/help/android.html
+
+/*
+figure out how to get result data on the page:
+
+<div class="console-output">
+              <i class="fa fa-gear fa-light fa-spin loading-icon ng-hide" ng-show="loading"></i>
+              <!-- ngRepeat: phase in phases --><div ng-repeat="phase in phases" class="phase phase-environment ng-hide" ng-class="{ collapsed: job.phases[phase].collapsed }" ng-show="job.phases[phase].commands.length">
+  <div class="title" ng-click="job.phases[phase].collapsed = !job.phases[phase].collapsed">
+    <i class="fa fa-caret-down arrow"></i>
+    <span class="name ng-binding">environment</span>
+    <span class="pull-right meta">
+      <time class="duration" datetime="" since="" duration="" data-original-title="" title=""></time>
+      <span class="exit-status ng-binding" ng-show="job.phases[phase].exitCode">-1</span>
+    </span>
+  </div>
+  <div class="commands" ng-hide="job.phases[phase].collapsed">
+    <!-- ngRepeat: command in job.phases[phase].commands -->
+  </div>
+</div><!-- end ngRepeat: phase in phases --><div ng-repeat="phase in phases" class="phase phase-prepare ng-hide" ng-class="{ collapsed: job.phases[phase].collapsed }" ng-show="job.phases[phase].commands.length">
+  <div class="title" ng-click="job.phases[phase].collapsed = !job.phases[phase].collapsed">
+    <i class="fa fa-caret-down arrow"></i>
+    <span class="name ng-binding">prepare</span>
+    <span class="pull-right meta">
+      <time class="duration" datetime="" since="" duration="" data-original-title="" title=""></time>
+      <span class="exit-status ng-binding" ng-show="job.phases[phase].exitCode">-1</span>
+    </span>
+  </div>
+  <div class="commands" ng-hide="job.phases[phase].collapsed">
+    <!-- ngRepeat: command in job.phases[phase].commands -->
+  </div>
+</div><!-- end ngRepeat: phase in phases --><div ng-repeat="phase in phases" class="phase phase-test ng-hide" ng-class="{ collapsed: job.phases[phase].collapsed }" ng-show="job.phases[phase].commands.length">
+  <div class="title" ng-click="job.phases[phase].collapsed = !job.phases[phase].collapsed">
+    <i class="fa fa-caret-down arrow"></i>
+    <span class="name ng-binding">test</span>
+    <span class="pull-right meta">
+      <time class="duration" datetime="" since="" duration="" data-original-title="" title=""></time>
+      <span class="exit-status ng-binding" ng-show="job.phases[phase].exitCode">-1</span>
+    </span>
+  </div>
+  <div class="commands" ng-hide="job.phases[phase].collapsed">
+    <!-- ngRepeat: command in job.phases[phase].commands -->
+  </div>
+</div><!-- end ngRepeat: phase in phases --><div ng-repeat="phase in phases" class="phase phase-deploy ng-hide" ng-class="{ collapsed: job.phases[phase].collapsed }" ng-show="job.phases[phase].commands.length">
+  <div class="title" ng-click="job.phases[phase].collapsed = !job.phases[phase].collapsed">
+    <i class="fa fa-caret-down arrow"></i>
+    <span class="name ng-binding">deploy</span>
+    <span class="pull-right meta">
+      <time class="duration" datetime="" since="" duration="" data-original-title="" title=""></time>
+      <span class="exit-status ng-binding" ng-show="job.phases[phase].exitCode">-1</span>
+    </span>
+  </div>
+  <div class="commands" ng-hide="job.phases[phase].collapsed">
+    <!-- ngRepeat: command in job.phases[phase].commands -->
+  </div>
+</div><!-- end ngRepeat: phase in phases --><div ng-repeat="phase in phases" class="phase phase-cleanup ng-hide" ng-class="{ collapsed: job.phases[phase].collapsed }" ng-show="job.phases[phase].commands.length">
+  <div class="title" ng-click="job.phases[phase].collapsed = !job.phases[phase].collapsed">
+    <i class="fa fa-caret-down arrow"></i>
+    <span class="name ng-binding">cleanup</span>
+    <span class="pull-right meta">
+      <time class="duration" datetime="" since="" duration="" data-original-title="" title=""></time>
+      <span class="exit-status ng-binding" ng-show="job.phases[phase].exitCode">-1</span>
+    </span>
+  </div>
+  <div class="commands" ng-hide="job.phases[phase].collapsed">
+    <!-- ngRepeat: command in job.phases[phase].commands -->
+  </div>
+</div><!-- end ngRepeat: phase in phases -->
+            </div>
+
+
+
+*/
