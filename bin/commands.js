@@ -463,14 +463,16 @@ var studioTasksSeventh = function(context, decoder, path) {
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		var fullOutputResults = "";
 		runTestsCmd.stdout.on('data', function (data) {
-			context.out(decoder.write(data));
-			fullOutputResults.concat(decoder.write(data));
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults.concat(data);
 		});
 		runTestsCmd.stderr.on('data', function (data) {
-			context.out(decoder.write(data));
-			fullOutputResults.concat(decoder.write(data));
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults.concat(data);
 		});
-		runTestsCmd.on('close', function (code) { //emulator booted
+		runTestsCmd.on('close', function (code) {
 			console.log("Final result:");
 			console.log(fullOutputResults);
 			return next(null, code);
