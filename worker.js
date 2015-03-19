@@ -46,8 +46,6 @@ module.exports = {
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("Testing more");
 				console.log(context.out());
-				console.log(context.out());
-				console.log(context.cmd());
 				console.log(context.data());
 
 				console.log("NO ARGS");
