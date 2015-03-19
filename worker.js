@@ -30,7 +30,7 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: 'echo "' + config.device + '"',
+			environment: 'echo "' + config.environment + '"',
 			//object style
 			prepare: function (context, done) {
 				var configData = {
@@ -45,8 +45,8 @@ module.exports = {
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("This is a comment. It gets shown on the Strider webpage");
-				console.log(context.out("boop")); //figure out what these do
-				console.log(context.data("boop"));
+				//context.out("boop");
+				context.data("boop");
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
