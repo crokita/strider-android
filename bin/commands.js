@@ -393,7 +393,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 	}
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-/*
+
 	var tasks = [];
 	tasks.push(studioTasksFirst(context, decoder, path));
 	tasks.push(studioTasksSecond(context, decoder, path));
@@ -404,8 +404,8 @@ function installAndroidStudioApk2 (config, context, callback) {
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
-	});*/
-
+	});
+/*
 	async.waterfall([
 		function (next) {
 			//create the APKs
@@ -485,9 +485,9 @@ function installAndroidStudioApk2 (config, context, callback) {
 	], function (err, result) {
 		callback(err, result);
 	});
-
+*/
 }
-/*
+
 //the following methods are used exlusively for async.waterfall tasks
 var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
@@ -495,10 +495,12 @@ var studioTasksFirst = function(context, decoder, path) {
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {
-			context.out(decoder.write(data));
+			//context.out(decoder.write(data));
+			console.log(decoder.write(data));
 		});
 		assembleCommand.stderr.on('data', function (data) {
-			context.out(decoder.write(data));
+			//context.out(decoder.write(data));
+			console.log(decoder.write(data));
 		});
 		assembleCommand.on('close', function (code) {
 			next(null);
@@ -567,17 +569,20 @@ var studioTasksSixth = function(context, decoder, path) {
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		runTestsCmd.stdout.on('data', function (data) {
-			context.out(decoder.write(data));
+			//context.out(decoder.write(data));
+			console.log(decoder.write(data));
 		});
 		runTestsCmd.stderr.on('data', function (data) {
-			context.out(decoder.write(data));
+			//context.out(decoder.write(data));
+			console.log(decoder.write(data));
 		});
 		runTestsCmd.on('close', function (code) { //emulator booted
 			return next(null, code);
 		});
 	};
 }
-*/
+
+
 //this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
 var resignApk = function (apkName, context, callback) {
 	context.out("Apk Name: " + apkName);
