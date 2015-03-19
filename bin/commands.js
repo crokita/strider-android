@@ -348,6 +348,23 @@ function installAndroidStudioApk (config, context, callback) {
 	process.chdir("data"); 
 	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
+	fs.chmod("gradlew", 755, function () {
+		if (sdkLocation) {
+			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+				installAndroidStudioApk2(path, context, function (err, output) {
+					return callback(err, output);
+				});
+			});
+		}
+		else {
+			installAndroidStudioApk2(path, context, function (err, output) {
+				return callback(err, output);
+			});
+		}
+	});
+}
+
+function installAndroidStudioApk2 (path, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
@@ -362,20 +379,6 @@ function installAndroidStudioApk (config, context, callback) {
 		callback(err, result);
 	});
 
-	fs.chmod("gradlew", 755, function () {
-		if (sdkLocation) {
-			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-				async.waterfall(tasks, function (err, result) {
-					callback(err, result);
-				});
-			});
-		}
-		else {
-			async.waterfall(tasks, function (err, result) {
-				callback(err, result);
-			});
-		}
-	});
 }
 
 //the following methods are used exlusively for async.waterfall tasks
