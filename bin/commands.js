@@ -499,8 +499,8 @@ var studioTasksFirst = function(context, decoder, path) {
 			//console.log(decoder.write(data));
 		});
 		assembleCommand.stderr.on('data', function (data) {
-			//context.out(decoder.write(data));
-			console.log(decoder.write(data));
+			context.out(decoder.write(data));
+			//console.log(decoder.write(data));
 		});
 		assembleCommand.on('close', function (code) {
 			next(null);
@@ -569,12 +569,12 @@ var studioTasksSixth = function(context, decoder, path) {
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		runTestsCmd.stdout.on('data', function (data) {
-			//context.out(decoder.write(data));
-			console.log(decoder.write(data));
+			context.out(decoder.write(data));
+			//console.log(decoder.write(data));
 		});
 		runTestsCmd.stderr.on('data', function (data) {
-			//context.out(decoder.write(data));
-			console.log(decoder.write(data));
+			context.out(decoder.write(data));
+			//console.log(decoder.write(data));
 		});
 		runTestsCmd.on('close', function (code) { //emulator booted
 			return next(null, code);
@@ -592,8 +592,8 @@ var resignApk = function (apkName, context, callback) {
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		//context.out(stdout);
-		console.log(stdout);
+		context.out(stdout);
+		//console.log(stdout);
 		callback();
 	});
 
