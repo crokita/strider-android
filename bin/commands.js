@@ -393,7 +393,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 	}
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
+/*
 	var tasks = [];
 	tasks.push(studioTasksFirst(context, decoder, path));
 	tasks.push(studioTasksSecond(context, decoder, path));
@@ -404,8 +404,8 @@ function installAndroidStudioApk2 (config, context, callback) {
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
-	});
-/*
+	});*/
+
 	async.waterfall([
 		function (next) {
 			//create the APKs
@@ -480,7 +480,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 		}
 	], function (err, result) {
 		callback(err, result);
-	});*/
+	});
 
 }
 
