@@ -71,7 +71,6 @@ module.exports = {
 				};
 
 				SDK.installApk(configData, context, function (err, result) {
-					console.log(result);
 					done(null, true);
 				});
 			},

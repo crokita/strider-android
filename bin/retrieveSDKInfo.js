@@ -61,7 +61,7 @@ module.exports = {
 	},
 
 	installApk: function (configData, context, callback) {
-		cmd.installApk(configData, function (err, output) {
+		cmd.installApk(configData, context, function (err, output) {
 			return callback(err, output);
 		});
 	}
