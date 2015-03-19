@@ -483,7 +483,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 	});
 
 }
-
+/*
 //the following methods are used exlusively for async.waterfall tasks
 var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
@@ -573,7 +573,7 @@ var studioTasksSixth = function(context, decoder, path) {
 		});
 	};
 }
-
+*/
 //this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
 var resignApk = function (apkName, context, callback) {
 	context.out("Apk Name: " + apkName);
