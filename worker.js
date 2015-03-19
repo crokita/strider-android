@@ -54,7 +54,6 @@ module.exports = {
 				context.logger.timeEnd();
 				context.logger.trace();
 				//context.logger.assert();
-				context.logger.Console();
 				context.logger.debug();
 
 				console.log("ARGS");
@@ -67,7 +66,6 @@ module.exports = {
 				context.logger.timeEnd("test");
 				context.logger.trace("test");
 				context.logger.assert(true);
-				context.logger.Console("test");
 				context.logger.debug("test");
 
 				SDK.startEmulator(configData, context, function (err, result) {
