@@ -44,13 +44,11 @@ module.exports = {
 				//job["phases"]["prepare"]["commands"] = 'echo "testing"';
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
-				context.comment("Testing more");
+				context.comment("This is a comment. It gets shown on the Strider webpage");
 				console.log(context.out());
 				console.log(context.data());
 
 				console.log("NO ARGS");
-
-				context.logger.timeEnd();
 				context.logger.debug();
 
 				console.log("ARGS");
