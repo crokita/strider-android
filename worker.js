@@ -40,13 +40,13 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				context.log("Test!");	
+				//context.log("Test!");	
 				//job["phases"]["prepare"]["commands"] = 'echo "testing"';
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("This is a comment. It gets shown on the Strider webpage");
-				//context.out("boop");
-				context.data("boop");
+				context.out("boop");
+				//context.data("boop");
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
