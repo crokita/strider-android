@@ -308,11 +308,11 @@ function installEclipseApk (config, context, callback) {
 }
 
 function installAndroidStudioApk (config, context, callback) {
-	var deviceName = "\"" + sanitizeString(config.device) + "\"";
-	var isLibrary = sanitizeBoolean(config.isLibrary);
-	var testFolderName = sanitizeString(config.testFolderName);
+	//var deviceName = "\"" + sanitizeString(config.device) + "\"";
+	//var isLibrary = sanitizeBoolean(config.isLibrary);
+	//var testFolderName = sanitizeString(config.testFolderName);
 	var sdkLocation = sanitizeString(config.sdkLocation);
-	var ide = sanitizeString(config.ide);
+	//var ide = sanitizeString(config.ide);
 
 	var absoluteSdk;
 	var aapt;
@@ -342,28 +342,24 @@ function installAndroidStudioApk (config, context, callback) {
 		emulator: emulator,
 	}
 
-	process.chdir(process.env.HOME);
-	process.chdir(".strider"); //go to the root project directory
-	process.chdir("data"); 
-	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
+	var tasks = [];
+	tasks.push(studioTasksZero(context, decoder, path));
+	tasks.push(studioTasksFirst(context, decoder, path));
+	tasks.push(studioTasksSecond(context, decoder, path));
+	tasks.push(studioTasksThird(context, decoder, path));
+	tasks.push(studioTasksFourth(context, decoder, path));
+	tasks.push(studioTasksFifth(context, decoder, path));
+	tasks.push(studioTasksSixth(context, decoder, path));
 
-	fs.chmod("gradlew", 755, function () {
-		if (sdkLocation) {
-			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-				installAndroidStudioApk2(path, context, function (err, output) {
-					return callback(err, output);
-				});
-			});
-		}
-		else {
-			installAndroidStudioApk2(path, context, function (err, output) {
-				return callback(err, output);
-			});
-		}
+	async.waterfall(tasks, function (err, result) {
+		callback(err, result);
 	});
-}
+//REMOVE BELOW
 
+}
+/*
 function installAndroidStudioApk2 (path, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
@@ -380,8 +376,30 @@ function installAndroidStudioApk2 (path, context, callback) {
 	});
 
 }
-
+*/
 //the following methods are used exlusively for async.waterfall tasks
+
+var studioTasksZero = function(context, decoder, path) {
+	return function(next) {
+		//get to the project main directory
+		process.chdir(process.env.HOME);
+		process.chdir(".strider"); //go to the root project directory
+		process.chdir("data"); 
+		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+
+		fs.chmod("gradlew", 755, function () { //allow execution of gradlew
+			if (sdkLocation) {
+				child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+					next(null);
+				});
+			}
+			else {
+				next(null);
+			}
+		});
+	};
+}
+
 var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
 		//create the APKs
