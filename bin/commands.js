@@ -465,12 +465,12 @@ var studioTasksSeventh = function(context, decoder, path) {
 		runTestsCmd.stdout.on('data', function (data) {
 			var data = decoder.write(data)
 			context.out(data);
-			fullOutputResults.concat(data);
+			fullOutputResults = fullOutputResults.concat(data);
 		});
 		runTestsCmd.stderr.on('data', function (data) {
 			var data = decoder.write(data)
 			context.out(data);
-			fullOutputResults.concat(data);
+			fullOutputResults = fullOutputResults.concat(data);
 		});
 		runTestsCmd.on('close', function (code) {
 			console.log("Final result:");
