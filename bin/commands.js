@@ -346,13 +346,13 @@ function installAndroidStudioApk (config, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
-	tasks.push(studioTasksZero(context, decoder, path));
 	tasks.push(studioTasksFirst(context, decoder, path));
 	tasks.push(studioTasksSecond(context, decoder, path));
 	tasks.push(studioTasksThird(context, decoder, path));
 	tasks.push(studioTasksFourth(context, decoder, path));
 	tasks.push(studioTasksFifth(context, decoder, path));
 	tasks.push(studioTasksSixth(context, decoder, path));
+	tasks.push(studioTasksSeventh(context, decoder, path));
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
@@ -361,7 +361,7 @@ function installAndroidStudioApk (config, context, callback) {
 
 
 //the following methods are used exlusively for async.waterfall tasks
-var studioTasksZero = function(context, decoder, path) {
+var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
 		//get to the project main directory
 		process.chdir(process.env.HOME);
@@ -370,7 +370,7 @@ var studioTasksZero = function(context, decoder, path) {
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
 		fs.chmod("gradlew", 755, function () { //allow execution of gradlew
-			if (path.sdkLocation) {
+			if (path.sdkLocation) {//specify the android sdk location in gradle's local.properties file
 				child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 					next(null);
 				});
@@ -382,7 +382,7 @@ var studioTasksZero = function(context, decoder, path) {
 	};
 }
 
-var studioTasksFirst = function(context, decoder, path) {
+var studioTasksSecond = function(context, decoder, path) {
 	return function(next) {
 		//create the APKs
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
@@ -399,7 +399,7 @@ var studioTasksFirst = function(context, decoder, path) {
 	};
 }
 
-var studioTasksSecond = function(context, decoder, path) {
+var studioTasksThird = function(context, decoder, path) {
 	return function(next) {
 		//find the debug apk
 		process.chdir("Application"); 
@@ -414,7 +414,7 @@ var studioTasksSecond = function(context, decoder, path) {
 	};
 }
 
-var studioTasksThird = function(context, decoder, path) {
+var studioTasksFourth = function(context, decoder, path) {
 	return function(debugApkName, next) {
 		//install the debug apk and find the debug test apk
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
@@ -428,7 +428,7 @@ var studioTasksThird = function(context, decoder, path) {
 	};
 }
 
-var studioTasksFourth = function(context, decoder, path) {
+var studioTasksFifth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, next) {
 		//install the debug test apk and get the test package name
 		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
@@ -445,7 +445,7 @@ var studioTasksFourth = function(context, decoder, path) {
 	};
 }
 
-var studioTasksFifth = function(context, decoder, path) {
+var studioTasksSixth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, packageName, next) {
 		//now re-sign the apk files so the security error doesn't pop up
 		resignApk(debugApkName, context, function () {
@@ -456,18 +456,23 @@ var studioTasksFifth = function(context, decoder, path) {
 	};
 }
 
-var studioTasksSixth = function(context, decoder, path) {
+var studioTasksSeventh = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, packageName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+		var fullOutputResults;
 		runTestsCmd.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
+			fullOutputResults.concat(decoder.write(data));
 		});
 		runTestsCmd.stderr.on('data', function (data) {
 			context.out(decoder.write(data));
+			fullOutputResults.concat(decoder.write(data));
 		});
 		runTestsCmd.on('close', function (code) { //emulator booted
+			console.log("Final result:");
+			console.log(fullOutputResults);
 			return next(null, code);
 		});
 	};
