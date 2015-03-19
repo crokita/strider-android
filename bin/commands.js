@@ -391,6 +391,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 		function (next) {
 			//create the APKs
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+			console.log(context);
 			assembleCommand.stdout.on('data', function (data) {
 				context.out(decoder.write(data));
 			});
@@ -438,8 +439,8 @@ function installAndroidStudioApk2 (config, context, callback) {
 		},
 		function (debugApkName, debugTestApkName, packageName, next) {
 			//now re-sign the apk files so the security error doesn't pop up
-			resignApk(debugApkName, function () {
-				resignApk(debugTestApkName, function () {
+			resignApk(debugApkName, context, function () {
+				resignApk(debugTestApkName, context, function () {
 					next(null, debugApkName, debugTestApkName, packageName);
 				});
 			});
@@ -463,7 +464,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 
 }
 
-var resignApk = function (apkName, callback) {
+var resignApk = function (apkName, context, callback) {
 	context.out("Apk Name: " + apkName);
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
