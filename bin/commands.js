@@ -405,87 +405,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
 	});
-/*
-	async.waterfall([
-		function (next) {
-			//create the APKs
-			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
-			assembleCommand.stdout.on('data', function (data) {
-				//context.out(decoder.write(data));
-				console.log(decoder.write(data));
-			});
-			assembleCommand.stderr.on('data', function (data) {
-				//context.out(decoder.write(data));
-				console.log(decoder.write(data));
-			});
-			assembleCommand.on('close', function (code) {
-				next(null);
-			});
-		},
-		function (next) {
-			//find the debug apk
-			process.chdir("Application"); 
-			process.chdir("build"); 
-			process.chdir("outputs"); 
-			process.chdir("apk"); 
-			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-				stdout = stdout.slice(2); //remove the "./" characters at the beginning
-				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
-				next(null, stdout); //return the name of the debug apk
-			});
-		},
-		function (debugApkName, next) {
-			//install the debug apk and find the debug test apk
-			child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-					stdout = stdout.slice(2); //remove the "./" characters at the beginning
-					stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
-					next(null, debugApkName, stdout); //return the name of the debug test apk
-				});
-			});
-		},
-		function (debugApkName, debugTestApkName, next) {
-			//install the debug test apk and get the test package name
-			child.exec(adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-				//source for the aapt solution (dljava):
-				//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-				var getPackageCmd = aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
-
-				child.exec(getPackageCmd, function (err, stdout, stderr) {	
-					stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
-					next(null, debugApkName, debugTestApkName, stdout); //return the package name
-				});
-			});
-		},
-		function (debugApkName, debugTestApkName, packageName, next) {
-			//now re-sign the apk files so the security error doesn't pop up
-			resignApk(debugApkName, context, function () {
-				resignApk(debugTestApkName, context, function () {
-					next(null, debugApkName, debugTestApkName, packageName);
-				});
-			});
-		},
-		function (debugApkName, debugTestApkName, packageName, next) {
-			//run the tests!
-			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
-			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-			runTestsCmd.stdout.on('data', function (data) {
-				//context.out(decoder.write(data));
-				console.log(decoder.write(data));
-			});
-			runTestsCmd.stderr.on('data', function (data) {
-				//context.out(decoder.write(data));
-				console.log(decoder.write(data));
-			});
-			runTestsCmd.on('close', function (code) { //emulator booted
-				return next(null, code);
-			});
-		}
-	], function (err, result) {
-		callback(err, result);
-	});
-*/
 }
 
 //the following methods are used exlusively for async.waterfall tasks
@@ -496,11 +416,9 @@ var studioTasksFirst = function(context, decoder, path) {
 
 		assembleCommand.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
-			//console.log(decoder.write(data));
 		});
 		assembleCommand.stderr.on('data', function (data) {
 			context.out(decoder.write(data));
-			//console.log(decoder.write(data));
 		});
 		assembleCommand.on('close', function (code) {
 			next(null);
@@ -570,11 +488,9 @@ var studioTasksSixth = function(context, decoder, path) {
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		runTestsCmd.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
-			//console.log(decoder.write(data));
 		});
 		runTestsCmd.stderr.on('data', function (data) {
 			context.out(decoder.write(data));
-			//console.log(decoder.write(data));
 		});
 		runTestsCmd.on('close', function (code) { //emulator booted
 			return next(null, code);
@@ -593,7 +509,6 @@ var resignApk = function (apkName, context, callback) {
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
 		context.out(stdout);
-		//console.log(stdout);
 		callback();
 	});
 
@@ -747,5 +662,84 @@ figure out how to get result data on the page:
             </div>
 
 
+	async.waterfall([
+		function (next) {
+			//create the APKs
+			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+
+			assembleCommand.stdout.on('data', function (data) {
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
+			});
+			assembleCommand.stderr.on('data', function (data) {
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
+			});
+			assembleCommand.on('close', function (code) {
+				next(null);
+			});
+		},
+		function (next) {
+			//find the debug apk
+			process.chdir("Application"); 
+			process.chdir("build"); 
+			process.chdir("outputs"); 
+			process.chdir("apk"); 
+			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				stdout = stdout.slice(2); //remove the "./" characters at the beginning
+				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+				next(null, stdout); //return the name of the debug apk
+			});
+		},
+		function (debugApkName, next) {
+			//install the debug apk and find the debug test apk
+			child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+				child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+					stdout = stdout.slice(2); //remove the "./" characters at the beginning
+					stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+					next(null, debugApkName, stdout); //return the name of the debug test apk
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, next) {
+			//install the debug test apk and get the test package name
+			child.exec(adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+				//source for the aapt solution (dljava):
+				//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+				var getPackageCmd = aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+				child.exec(getPackageCmd, function (err, stdout, stderr) {	
+					stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+					next(null, debugApkName, debugTestApkName, stdout); //return the package name
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, packageName, next) {
+			//now re-sign the apk files so the security error doesn't pop up
+			resignApk(debugApkName, context, function () {
+				resignApk(debugTestApkName, context, function () {
+					next(null, debugApkName, debugTestApkName, packageName);
+				});
+			});
+		},
+		function (debugApkName, debugTestApkName, packageName, next) {
+			//run the tests!
+			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
+			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+			runTestsCmd.stdout.on('data', function (data) {
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
+			});
+			runTestsCmd.stderr.on('data', function (data) {
+				//context.out(decoder.write(data));
+				console.log(decoder.write(data));
+			});
+			runTestsCmd.on('close', function (code) { //emulator booted
+				return next(null, code);
+			});
+		}
+	], function (err, result) {
+		callback(err, result);
+	});
 
 */
