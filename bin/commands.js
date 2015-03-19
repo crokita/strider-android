@@ -495,8 +495,8 @@ var studioTasksFirst = function(context, decoder, path) {
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {
-			//context.out(decoder.write(data));
-			console.log(decoder.write(data));
+			context.out(decoder.write(data));
+			//console.log(decoder.write(data));
 		});
 		assembleCommand.stderr.on('data', function (data) {
 			//context.out(decoder.write(data));
