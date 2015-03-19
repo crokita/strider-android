@@ -90,19 +90,19 @@ module.exports = {
 		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 
 		adbCommand.stdout.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 
 		adbCommand.stderr.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
@@ -275,19 +275,19 @@ function installEclipseApk (config, context, callback) {
 
 	var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
 	updateProjectCommand.stdout.on('data', function (data) {
-		context.out(data);
+		common.context.out(data);
 	});
 	updateProjectCommand.stderr.on('data', function (data) {
-		context.out(data);
+		common.context.out(data);
 	});
 	updateProjectCommand.on('close', function (code) { //emulator booted
 		process.chdir(testFolderName);
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 		antCleanCommand.stderr.on('data', function (data) {
-			context.out(data);
+			common.context.out(data);
 		});
 		antCleanCommand.on('close', function (code) { //emulator booted
 			process.chdir("bin");
@@ -295,10 +295,10 @@ function installEclipseApk (config, context, callback) {
 				var installCommand = child.spawn(adb, ["install", stdout]);
 
 				installCommand.stdout.on('data', function (data) {
-					context.out(data);
+					common.context.out(data);
 				});
 				installCommand.stderr.on('data', function (data) {
-					context.out(data);
+					common.context.out(data);
 				});
 				installCommand.on('close', function (code) { //emulator booted
 					return callback(null, code);
@@ -391,12 +391,12 @@ function installAndroidStudioApk2 (config, context, callback) {
 		function (next) {
 			//create the APKs
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
-			console.log(context);
+
 			assembleCommand.stdout.on('data', function (data) {
-				context.out(decoder.write(data));
+				common.context.out(decoder.write(data));
 			});
 			assembleCommand.stderr.on('data', function (data) {
-				context.out(decoder.write(data));
+				common.context.out(decoder.write(data));
 			});
 			assembleCommand.on('close', function (code) {
 				next(null);
@@ -449,10 +449,10 @@ function installAndroidStudioApk2 (config, context, callback) {
 			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 			runTestsCmd.stdout.on('data', function (data) {
-				context.out(decoder.write(data));
+				common.context.out(decoder.write(data));
 			});
 			runTestsCmd.stderr.on('data', function (data) {
-				context.out(decoder.write(data));
+				common.context.out(decoder.write(data));
 			});
 			runTestsCmd.on('close', function (code) { //emulator booted
 				return next(null, code);
@@ -465,14 +465,14 @@ function installAndroidStudioApk2 (config, context, callback) {
 }
 
 var resignApk = function (apkName, context, callback) {
-	context.out("Apk Name: " + apkName);
+	common.context.out("Apk Name: " + apkName);
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		context.out(stdout);
+		common.context.out(stdout);
 		callback();
 	});
 
