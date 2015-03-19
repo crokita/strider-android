@@ -16,7 +16,7 @@ An Android device must be selected through the config webpage before clicking "T
 
 #### Custom configurations on the webapge:
 
-Add a new Android device
+##### Adding a new Android device
 Select an existing android device
 Select the name of the testing folder (it will attempt to find it for you if not specified)
 
