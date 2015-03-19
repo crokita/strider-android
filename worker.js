@@ -30,7 +30,7 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: 'echo "' + config + '"',
+			environment: 'echo "' + config.device + '"',
 			//object style
 			prepare: function (context, done) {
 				var configData = {
@@ -41,9 +41,10 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
-				job["phases"]["prepare"]["commands"] = 'echo "testing"';
-				console.log(job["phases"]);
-				console.log(job["phases"]["prepare"]["commands"]);
+				//job["phases"]["prepare"]["commands"] = 'echo "testing"';
+				//console.log(job["phases"]);
+				//console.log(job["phases"]["prepare"]["commands"]);
+				context.comment("Testing more");
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
