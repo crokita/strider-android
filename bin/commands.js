@@ -472,9 +472,17 @@ var studioTasksSeventh = function(context, decoder, path) {
 			context.out(data);
 			fullOutputResults = fullOutputResults.concat(data);
 		});
+		
 		runTestsCmd.on('close', function (code) {
-			console.log("Final result:");
-			console.log(fullOutputResults);
+			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
+			//check whether the unit tests passed
+			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
+			if (result == -1) {
+				console.log("THE TEST PASSED!");
+			}
+			else {
+				console.log("THE TEST FAILED!");
+			}
 			return next(null, code);
 		});
 	};
