@@ -195,7 +195,6 @@ module.exports = {
 }
 
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
-// //will return back to the original directory upon completion
 var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
 	//var initialDir = process.cwd();
 	var location = sdkLocation;
@@ -348,6 +347,7 @@ function installAndroidStudioApk (config, context, callback) {
 	process.chdir("data"); 
 	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
+
 	fs.chmod("gradlew", 755, function () {
 		if (sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
@@ -418,6 +418,7 @@ var studioTasksThird = function(context, decoder, path) {
 	return function(debugApkName, next) {
 		//install the debug apk and find the debug test apk
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+			context.out(decoder.write(stdout));
 			child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 				stdout = stdout.slice(2); //remove the "./" characters at the beginning
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
@@ -431,6 +432,7 @@ var studioTasksFourth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, next) {
 		//install the debug test apk and get the test package name
 		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+			context.out(decoder.write(stdout));
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
