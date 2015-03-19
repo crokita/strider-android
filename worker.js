@@ -30,7 +30,7 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: 'echo "' + config.environment + '"',
+			environment: '',
 			//object style
 			prepare: function (context, done) {
 				var configData = {
@@ -74,10 +74,10 @@ module.exports = {
 					done(null, true);
 				});
 			},
-			deploy: 'echo "' + config.deploy + '"',
-			cleanup: 'echo "' + config.cleanup + '"'
+			deploy: '',
+			cleanup: ''
 
-		});
+		});//TODO: uninstall the apks in the cleanup phase?
 	},
 	// this is only used if there is _no_ plugin configuration for a
 	// project. See gumshoe for documentation on detection rules.
