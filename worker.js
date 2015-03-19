@@ -41,6 +41,10 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.log("Test!");	
+				job["phases"]["prepare"]["commands"].command = "testing";
+				console.log(job["phases"]);
+				console.log(job["phases"]["prepare"]["commands"]);
+				console.log(job["phases"]["prepare"]["commands"].command);
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
