@@ -397,7 +397,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
-	}));
+	});
 /*
 	async.waterfall([
 		function (next) {
