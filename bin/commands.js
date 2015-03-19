@@ -385,15 +385,22 @@ function installAndroidStudioApk2 (config, context, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
+	var path = {
+		aapt: aapt,
+		adb: adb,
+		android: android,
+		emulator: emulator,
+	}
+
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
-	tasks.push(studioTasksFirst(context, decoder));
-	tasks.push(studioTasksSecond(context, decoder));
-	tasks.push(studioTasksThird(context, decoder));
-	tasks.push(studioTasksFourth(context, decoder));
-	tasks.push(studioTasksFifth(context, decoder));
-	tasks.push(studioTasksSixth(context, decoder));
+	tasks.push(studioTasksFirst(context, decoder, path));
+	tasks.push(studioTasksSecond(context, decoder, path));
+	tasks.push(studioTasksThird(context, decoder, path));
+	tasks.push(studioTasksFourth(context, decoder, path));
+	tasks.push(studioTasksFifth(context, decoder, path));
+	tasks.push(studioTasksSixth(context, decoder, path));
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
@@ -478,7 +485,7 @@ function installAndroidStudioApk2 (config, context, callback) {
 }
 
 //the following methods are used exlusively for async.waterfall tasks
-var studioTasksFirst = function(context) {
+var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
 		//create the APKs
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
@@ -495,7 +502,7 @@ var studioTasksFirst = function(context) {
 	};
 }
 
-var studioTasksSecond = function(context, decoder) {
+var studioTasksSecond = function(context, decoder, path) {
 	return function(next) {
 		//find the debug apk
 		process.chdir("Application"); 
@@ -510,10 +517,10 @@ var studioTasksSecond = function(context, decoder) {
 	};
 }
 
-var studioTasksThird = function(context, decoder) {
+var studioTasksThird = function(context, decoder, path) {
 	return function(debugApkName, next) {
 		//install the debug apk and find the debug test apk
-		child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 			child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 				stdout = stdout.slice(2); //remove the "./" characters at the beginning
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
@@ -523,13 +530,13 @@ var studioTasksThird = function(context, decoder) {
 	};
 }
 
-var studioTasksFourth = function(context, decoder) {
+var studioTasksFourth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, next) {
 		//install the debug test apk and get the test package name
-		child.exec(adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-			var getPackageCmd = aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
 
 			child.exec(getPackageCmd, function (err, stdout, stderr) {	
 				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
@@ -539,7 +546,7 @@ var studioTasksFourth = function(context, decoder) {
 	};
 }
 
-var studioTasksFifth = function(context, decoder) {
+var studioTasksFifth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, packageName, next) {
 		//now re-sign the apk files so the security error doesn't pop up
 		resignApk(debugApkName, context, function () {
@@ -550,11 +557,11 @@ var studioTasksFifth = function(context, decoder) {
 	};
 }
 
-var studioTasksSixth = function(context, decoder) {
+var studioTasksSixth = function(context, decoder, path) {
 	return function(debugApkName, debugTestApkName, packageName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
-		var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		runTestsCmd.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
 		});
