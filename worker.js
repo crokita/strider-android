@@ -45,6 +45,7 @@ module.exports = {
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("Testing more");
+				console.log(context);
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
