@@ -336,6 +336,13 @@ function installAndroidStudioApk (config, context, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
+	var path = {
+		aapt: aapt,
+		adb: adb,
+		android: android,
+		emulator: emulator,
+	}
+	
 	process.chdir(process.env.HOME);
 	process.chdir(".strider"); //go to the root project directory
 	process.chdir("data"); 
@@ -344,54 +351,20 @@ function installAndroidStudioApk (config, context, callback) {
 	fs.chmod("gradlew", 755, function () {
 		if (sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-				installAndroidStudioApk2(config, context, function (err, output) {
+				installAndroidStudioApk2(path, context, function (err, output) {
 					return callback(err, output);
 				});
 			});
 		}
 		else {
-			installAndroidStudioApk2(config, context, function (err, output) {
+			installAndroidStudioApk2(path, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
 	});
 }
 
-function installAndroidStudioApk2 (config, context, callback) {
-	var deviceName = "\"" + sanitizeString(config.device) + "\"";
-	var isLibrary = sanitizeBoolean(config.isLibrary);
-	var testFolderName = sanitizeString(config.testFolderName);
-	var sdkLocation = sanitizeString(config.sdkLocation);
-	var ide = sanitizeString(config.ide);
-
-	var absoluteSdk;
-	var aapt;
-	var adb;
-	var android;
-	var emulator;
-
-	if (!sdkLocation) { //assume tools is in the path if no location is specified
-		aapt = "aapt";
-		adb = "adb";
-		android = "android";
-		emulator = "emulator";
-	}
-	else {
-		//set up the absolute locations of the android tools for reference
-		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		android = absoluteSdk + sdkTools["android"]["toolFull"];
-		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-	}
-
-	var path = {
-		aapt: aapt,
-		adb: adb,
-		android: android,
-		emulator: emulator,
-	}
-
+function installAndroidStudioApk2 (path, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
