@@ -90,19 +90,19 @@ module.exports = {
 		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 
 		adbCommand.stdout.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 
 		adbCommand.stderr.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
@@ -275,19 +275,19 @@ function installEclipseApk (config, context, callback) {
 
 	var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
 	updateProjectCommand.stdout.on('data', function (data) {
-		common.context.out(data);
+		context.out(data);
 	});
 	updateProjectCommand.stderr.on('data', function (data) {
-		common.context.out(data);
+		context.out(data);
 	});
 	updateProjectCommand.on('close', function (code) { //emulator booted
 		process.chdir(testFolderName);
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 		antCleanCommand.stderr.on('data', function (data) {
-			common.context.out(data);
+			context.out(data);
 		});
 		antCleanCommand.on('close', function (code) { //emulator booted
 			process.chdir("bin");
@@ -295,10 +295,10 @@ function installEclipseApk (config, context, callback) {
 				var installCommand = child.spawn(adb, ["install", stdout]);
 
 				installCommand.stdout.on('data', function (data) {
-					common.context.out(data);
+					context.out(data);
 				});
 				installCommand.stderr.on('data', function (data) {
-					common.context.out(data);
+					context.out(data);
 				});
 				installCommand.on('close', function (code) { //emulator booted
 					return callback(null, code);
@@ -387,16 +387,28 @@ function installAndroidStudioApk2 (config, context, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
+	var tasks = [];
+	tasks.push(studioTasksFirst(context, decoder));
+	tasks.push(studioTasksSecond(context, decoder));
+	tasks.push(studioTasksThird(context, decoder));
+	tasks.push(studioTasksFourth(context, decoder));
+	tasks.push(studioTasksFifth(context, decoder));
+	tasks.push(studioTasksSixth(context, decoder));
+
+	async.waterfall(tasks, function (err, result) {
+		callback(err, result);
+	}));
+/*
 	async.waterfall([
 		function (next) {
 			//create the APKs
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 			assembleCommand.stdout.on('data', function (data) {
-				common.context.out(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			assembleCommand.stderr.on('data', function (data) {
-				common.context.out(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			assembleCommand.on('close', function (code) {
 				next(null);
@@ -446,13 +458,14 @@ function installAndroidStudioApk2 (config, context, callback) {
 			});
 		},
 		function (debugApkName, debugTestApkName, packageName, next) {
+			//run the tests!
 			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 			runTestsCmd.stdout.on('data', function (data) {
-				common.context.out(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			runTestsCmd.stderr.on('data', function (data) {
-				common.context.out(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			runTestsCmd.on('close', function (code) { //emulator booted
 				return next(null, code);
@@ -460,19 +473,110 @@ function installAndroidStudioApk2 (config, context, callback) {
 		}
 	], function (err, result) {
 		callback(err, result);
-	});
+	});*/
 
 }
 
+//the following methods are used exlusively for async.waterfall tasks
+var studioTasksFirst = function(context) {
+	return function(next) {
+		//create the APKs
+		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+
+		assembleCommand.stdout.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		assembleCommand.stderr.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		assembleCommand.on('close', function (code) {
+			next(null);
+		});
+	};
+}
+
+var studioTasksSecond = function(context, decoder) {
+	return function(next) {
+		//find the debug apk
+		process.chdir("Application"); 
+		process.chdir("build"); 
+		process.chdir("outputs"); 
+		process.chdir("apk"); 
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			stdout = stdout.slice(2); //remove the "./" characters at the beginning
+			stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+			next(null, stdout); //return the name of the debug apk
+		});
+	};
+}
+
+var studioTasksThird = function(context, decoder) {
+	return function(debugApkName, next) {
+		//install the debug apk and find the debug test apk
+		child.exec(adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+			child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
+				stdout = stdout.slice(2); //remove the "./" characters at the beginning
+				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+				next(null, debugApkName, stdout); //return the name of the debug test apk
+			});
+		});
+	};
+}
+
+var studioTasksFourth = function(context, decoder) {
+	return function(debugApkName, debugTestApkName, next) {
+		//install the debug test apk and get the test package name
+		child.exec(adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+			//source for the aapt solution (dljava):
+			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+			var getPackageCmd = aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+			child.exec(getPackageCmd, function (err, stdout, stderr) {	
+				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+				next(null, debugApkName, debugTestApkName, stdout); //return the package name
+			});
+		});
+	};
+}
+
+var studioTasksFifth = function(context, decoder) {
+	return function(debugApkName, debugTestApkName, packageName, next) {
+		//now re-sign the apk files so the security error doesn't pop up
+		resignApk(debugApkName, context, function () {
+			resignApk(debugTestApkName, context, function () {
+				next(null, debugApkName, debugTestApkName, packageName);
+			});
+		});
+	};
+}
+
+var studioTasksSixth = function(context, decoder) {
+	return function(debugApkName, debugTestApkName, packageName, next) {
+		//run the tests!
+		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
+		var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+		runTestsCmd.stdout.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		runTestsCmd.stderr.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		runTestsCmd.on('close', function (code) { //emulator booted
+			return next(null, code);
+		});
+	};
+}
+
+//this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
 var resignApk = function (apkName, context, callback) {
-	common.context.out("Apk Name: " + apkName);
+	context.out("Apk Name: " + apkName);
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		common.context.out(stdout);
+		context.out(stdout);
 		callback();
 	});
 
