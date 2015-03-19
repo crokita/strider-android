@@ -44,8 +44,7 @@ module.exports = {
 				//job["phases"]["prepare"]["commands"] = 'echo "testing"';
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
-				context.comment("This is a comment. It gets shown on the Strider webpage");
-				context.out("boop");
+				//context.comment("This is a comment. It gets shown on the Strider webpage");
 				//context.data("boop");
 /*
 				console.log("ARGS");
@@ -71,7 +70,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 
-				SDK.installApk(configData, function (err, result) {
+				SDK.installApk(configData, context, function (err, result) {
 					console.log(result);
 					done(null, true);
 				});

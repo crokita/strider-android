@@ -60,7 +60,7 @@ module.exports = {
 		});
 	},
 
-	installApk: function (configData, callback) {
+	installApk: function (configData, context, callback) {
 		cmd.installApk(configData, function (err, output) {
 			return callback(err, output);
 		});

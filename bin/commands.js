@@ -90,19 +90,19 @@ module.exports = {
 		//workers.push(adbCommand);
 
 		emulatorCommand.stdout.on('data', function (data) {
-			console.log("STDOUT: " + data);
+			context.out(data);
 		});
 
 		emulatorCommand.stderr.on('data', function (data) {
-			console.log("STDERR: " + data);
+			context.out(data);
 		});
 
 		adbCommand.stdout.on('data', function (data) {
-			console.log("STDOUT: " + data);
+			context.out(data);
 		});
 
 		adbCommand.stderr.on('data', function (data) {
-			console.log("STDERR: " + data);
+			context.out(data);
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
@@ -110,16 +110,16 @@ module.exports = {
 		});
 	},
 
-	installApk: function (config, callback) {
+	installApk: function (config, context, callback) {
 		var ide = sanitizeString(config.ide);
 
 		if (ide == "Eclipse") {
-			installEclipseApk(config, function (err, output) {
+			installEclipseApk(config, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else if (ide == "AndroidStudio") {
-			installAndroidStudioApk(config, function (err, output) {
+			installAndroidStudioApk(config, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
@@ -240,7 +240,7 @@ var goToAndroid = function (location, toolObj) {
 	return null;
 }
 
-function installEclipseApk (config, callback) {
+function installEclipseApk (config, context, callback) {
 	var deviceName = "\"" + sanitizeString(config.device) + "\"";
 	var isLibrary = sanitizeBoolean(config.isLibrary);
 	var testFolderName = sanitizeString(config.testFolderName);
@@ -275,19 +275,19 @@ function installEclipseApk (config, callback) {
 
 	var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
 	updateProjectCommand.stdout.on('data', function (data) {
-		console.log(data);
+		context.out(data);
 	});
 	updateProjectCommand.stderr.on('data', function (data) {
-		console.log(data);
+		context.out(data);
 	});
 	updateProjectCommand.on('close', function (code) { //emulator booted
 		process.chdir(testFolderName);
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
-			console.log(data);
+			context.out(data);
 		});
 		antCleanCommand.stderr.on('data', function (data) {
-			console.log(data);
+			context.out(data);
 		});
 		antCleanCommand.on('close', function (code) { //emulator booted
 			process.chdir("bin");
@@ -295,10 +295,10 @@ function installEclipseApk (config, callback) {
 				var installCommand = child.spawn(adb, ["install", stdout]);
 
 				installCommand.stdout.on('data', function (data) {
-					console.log(data);
+					context.out(data);
 				});
 				installCommand.stderr.on('data', function (data) {
-					console.log(data);
+					context.out(data);
 				});
 				installCommand.on('close', function (code) { //emulator booted
 					return callback(null, code);
@@ -308,7 +308,7 @@ function installEclipseApk (config, callback) {
 	});
 }
 
-function installAndroidStudioApk (config, callback) {
+function installAndroidStudioApk (config, context, callback) {
 	var deviceName = "\"" + sanitizeString(config.device) + "\"";
 	var isLibrary = sanitizeBoolean(config.isLibrary);
 	var testFolderName = sanitizeString(config.testFolderName);
@@ -344,20 +344,20 @@ function installAndroidStudioApk (config, callback) {
 	fs.chmod("gradlew", 755, function () {
 		if (sdkLocation) {
 			child.exec("echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-				installAndroidStudioApk2(config, function (err, output) {
+				installAndroidStudioApk2(config, context, function (err, output) {
 					return callback(err, output);
 				});
 			});
 		}
 		else {
-			installAndroidStudioApk2(config, function (err, output) {
+			installAndroidStudioApk2(config, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
 	});
 }
 
-function installAndroidStudioApk2 (config, callback) {
+function installAndroidStudioApk2 (config, context, callback) {
 	var deviceName = "\"" + sanitizeString(config.device) + "\"";
 	var isLibrary = sanitizeBoolean(config.isLibrary);
 	var testFolderName = sanitizeString(config.testFolderName);
@@ -392,10 +392,10 @@ function installAndroidStudioApk2 (config, callback) {
 			//create the APKs
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 			assembleCommand.stdout.on('data', function (data) {
-				console.log(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			assembleCommand.stderr.on('data', function (data) {
-				console.log(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			assembleCommand.on('close', function (code) {
 				next(null);
@@ -448,10 +448,10 @@ function installAndroidStudioApk2 (config, callback) {
 			var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 			var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 			runTestsCmd.stdout.on('data', function (data) {
-				console.log(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			runTestsCmd.stderr.on('data', function (data) {
-				console.log(decoder.write(data));
+				context.out(decoder.write(data));
 			});
 			runTestsCmd.on('close', function (code) { //emulator booted
 				return next(null, code);
@@ -464,14 +464,14 @@ function installAndroidStudioApk2 (config, callback) {
 }
 
 var resignApk = function (apkName, callback) {
-	console.log("Apk Name: " + apkName);
+	context.out("Apk Name: " + apkName);
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
 						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
 						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
 	child.exec(resignCommand, function (err, stdout, stderr) {
-		console.log(stdout);
+		context.out(stdout);
 		callback();
 	});
 
