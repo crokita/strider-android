@@ -45,7 +45,36 @@ module.exports = {
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("Testing more");
-				console.log(context);
+				console.log(context.out());
+				console.log(context.out());
+				console.log(context.cmd());
+				console.log(context.data());
+
+				console.log("NO ARGS");
+				context.logger.log();
+				context.logger.info();
+				context.logger.warn();
+				context.logger.error();
+				context.logger.dir();
+				context.logger.time();
+				context.logger.timeEnd();
+				context.logger.trace();
+				context.logger.assert();
+				context.logger.Console();
+				context.logger.debug();
+
+				console.log("ARGS");
+				context.logger.log("test");
+				context.logger.info("test");
+				context.logger.warn("test");
+				context.logger.error("test");
+				context.logger.dir("test");
+				context.logger.time("test");
+				context.logger.timeEnd("test");
+				context.logger.trace("test");
+				context.logger.assert("test");
+				context.logger.Console("test");
+				context.logger.debug("test");
 
 				SDK.startEmulator(configData, context, function (err, result) {
 					console.log(result);
