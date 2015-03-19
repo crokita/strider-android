@@ -461,7 +461,7 @@ var studioTasksSeventh = function(context, decoder, path) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-		var fullOutputResults;
+		var fullOutputResults = "";
 		runTestsCmd.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
 			fullOutputResults.concat(decoder.write(data));
