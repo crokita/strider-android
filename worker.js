@@ -45,9 +45,9 @@ module.exports = {
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("This is a comment. It gets shown on the Strider webpage");
-				console.log(context.out()); //figure out what these do
-				console.log(context.data());
-
+				console.log(context.out("boop")); //figure out what these do
+				console.log(context.data("boop"));
+/*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
 				context.logger.info("helpful info");
@@ -56,10 +56,8 @@ module.exports = {
 				context.logger.time("Current time");
 				context.logger.trace("error message");
 				context.logger.assert(true); //just make this true
-				context.logger.debug("test");
-
+*/
 				SDK.startEmulator(configData, context, function (err, result) {
-					console.log(result);
 					done(null, true);
 				});
 			},
