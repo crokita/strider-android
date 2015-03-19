@@ -45,20 +45,15 @@ module.exports = {
 				//console.log(job["phases"]);
 				//console.log(job["phases"]["prepare"]["commands"]);
 				context.comment("This is a comment. It gets shown on the Strider webpage");
-				console.log(context.out());
+				console.log(context.out()); //figure out what these do
 				console.log(context.data());
-
-				console.log("NO ARGS");
-				context.logger.debug();
 
 				console.log("ARGS");
 				context.logger.log("basically just like info");
 				context.logger.info("helpful info");
 				context.logger.warn("give a warning");
 				context.logger.error("abort");
-				context.logger.dir("test directory");
 				context.logger.time("Current time");
-				context.logger.timeEnd("Did it end?");
 				context.logger.trace("error message");
 				context.logger.assert(true); //just make this true
 				context.logger.debug("test");
