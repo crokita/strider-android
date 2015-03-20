@@ -86,7 +86,7 @@ module.exports = {
 	},
 
 	findEmulator: function (context, callback) {
-		child.exec("ps", function (err, stdout, stderr) {
+		child.exec("ps aco command --no-header", function (err, stdout, stderr) {
 			console.log("output: ");
 			console.log(stdout);
 			//convert the processes result into a list
