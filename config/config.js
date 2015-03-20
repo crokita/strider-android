@@ -78,7 +78,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
-			$scope.dataResult += data.error;
+			$scope.dataResult += data.error+"\n";
 			$scope.deviceResults = data.result;
 		});
 		/*
@@ -104,7 +104,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			urlParams = '?sdk=' + $scope.config.sdkLocation;
 		}
 		$http.get('/ext/android/targets' + urlParams).success(function(data, status, headers, config) {
-			$scope.dataResult += data.error;
+			$scope.dataResult += data.error+"\n";
 			$scope.targetResults = data.result;
 		});
 	}
@@ -123,10 +123,10 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		if (data.name != "" && data.target != "" && data.abi != "") {
 			$http.post('/ext/android/devices', data).success(function(data, status, headers, config) {
 				if (data.result != null) {
-					$scope.dataResult += data.result;
+					$scope.dataResult += data.result+"\n";
 				}
 				else {
-					$scope.dataResult += data.error;
+					$scope.dataResult += data.error+"\n";
 				}
 				
 				//reset the options
@@ -159,10 +159,10 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
 		$http.put('/ext/android/devices', data).success(function(data, status, headers, config) {
 			if (data.result != null) {
-				$scope.dataResult += data.result;
+				$scope.dataResult += data.result+"\n";
 			}
 			else {
-				$scope.dataResult += data.error;
+				$scope.dataResult += data.error+"\n";
 			}
 
 			//now update the device list
