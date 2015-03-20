@@ -93,13 +93,13 @@ module.exports = {
 			var processArray = stdout.split("\n");
 			console.log(processArray);
 			//return the first emulator found
-			processArray.foreach(function (process) {
-				emulators.foreach(function (emulator) {
-					if (process == emulator) {
+			for (var index = 0; index < processArray.length; index++) {
+				for (var subindex = 0; subindex < emulators.length; subindex++) {
+					if (processArray[index] == emulators[subindex]) {
 						return process;
 					}
-				});
-			});
+				}
+			}
 			//no matches
 			return null;
 		});
