@@ -40,12 +40,7 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				//context.log("Test!");	
-				//job["phases"]["prepare"]["commands"] = 'echo "testing"';
-				//console.log(job["phases"]);
-				//console.log(job["phases"]["prepare"]["commands"]);
 				//context.comment("This is a comment. It gets shown on the Strider webpage");
-				//context.data("boop");
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
@@ -60,7 +55,7 @@ module.exports = {
 					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (err, result) {
-							done(null, false);
+							done(null, true);
 						});
 					}
 					else {

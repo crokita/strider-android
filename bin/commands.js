@@ -294,43 +294,24 @@ function installEclipseApk (config, context, callback) {
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
 
-	process.chdir(process.env.HOME);
-	process.chdir(".strider"); //go to the root project directory
-	process.chdir("data"); 
-	process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+	var path = {
+		aapt: aapt,
+		adb: adb,
+		android: android,
+		emulator: emulator,
+		sdkLocation: sdkLocation,
+		testFolderName: testFolderName
+	}
 
-	var updateProjectCommand = child.spawn(android, ["update", "project", "--subprojects", "-p", "."]);
-	updateProjectCommand.stdout.on('data', function (data) {
-		context.out(data);
-	});
-	updateProjectCommand.stderr.on('data', function (data) {
-		context.out(data);
-	});
-	updateProjectCommand.on('close', function (code) { //emulator booted
-		process.chdir(testFolderName);
-		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
-		antCleanCommand.stdout.on('data', function (data) {
-			context.out(data);
-		});
-		antCleanCommand.stderr.on('data', function (data) {
-			context.out(data);
-		});
-		antCleanCommand.on('close', function (code) { //emulator booted
-			process.chdir("bin");
-			child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
-				var installCommand = child.spawn(adb, ["install", stdout]);
+	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
-				installCommand.stdout.on('data', function (data) {
-					context.out(data);
-				});
-				installCommand.stderr.on('data', function (data) {
-					context.out(data);
-				});
-				installCommand.on('close', function (code) { //emulator booted
-					return callback(null, code);
-				});
-			});
-		});
+	var tasks = [];
+	tasks.push(eclipseTasksFirst(context, decoder, path));
+	tasks.push(eclipseTasksSecond(context, decoder, path));
+	tasks.push(eclipseTasksThird(context, decoder, path));
+
+	async.waterfall(tasks, function (err, result) {
+		callback(err, result);
 	});
 }
 
@@ -388,6 +369,64 @@ function installAndroidStudioApk (config, context, callback) {
 
 
 //the following methods are used exlusively for async.waterfall tasks
+var eclipseTasksFirst = function(context, decoder, path) {
+	return function(next) {
+		//get to the project main directory
+		process.chdir(process.env.HOME);
+		process.chdir(".strider"); //go to the root project directory
+		process.chdir("data"); 
+		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+
+		var updateProjectCommand = child.spawn(path.android, ["update", "project", "--subprojects", "-p", "."]);
+		updateProjectCommand.stdout.on('data', function (data) {
+			context.out(data);
+		});
+		updateProjectCommand.stderr.on('data', function (data) {
+			context.out(data);
+		});
+		updateProjectCommand.on('close', function (code) {
+			next(null);
+		});
+	};
+}
+
+var eclipseTasksSecond = function(context, decoder, path) {
+	return function(next) {
+		//clean the project
+		process.chdir(path.testFolderName); //go inside the test folder
+		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
+		antCleanCommand.stdout.on('data', function (data) {
+			context.out(data);
+		});
+		antCleanCommand.stderr.on('data', function (data) {
+			context.out(data);
+		});
+		antCleanCommand.on('close', function (code) { 
+			next(null);
+		});
+	};
+}
+
+var eclipseTasksThird = function(context, decoder, path) {
+	return function(next) {
+		//install the apk
+		process.chdir("bin"); //the apk is in the bin directory
+		child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
+			var installCommand = child.spawn(path.adb, ["install", stdout]);
+
+			installCommand.stdout.on('data', function (data) {
+				context.out(data);
+			});
+			installCommand.stderr.on('data', function (data) {
+				context.out(data);
+			});
+			installCommand.on('close', function (code) { 
+				next(null);
+			});
+		});
+	};
+}
+
 var studioTasksFirst = function(context, decoder, path) {
 	return function(next) {
 		//get to the project main directory
