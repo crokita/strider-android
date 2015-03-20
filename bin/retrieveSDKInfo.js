@@ -55,7 +55,7 @@ module.exports = {
 	},
 
 	findEmulator: function (context, callback) {
-		cmd.isEmulator(context, function (result) {
+		cmd.findEmulator(context, function (result) {
 			return callback(result);
 		});
 	},
