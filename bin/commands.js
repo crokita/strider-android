@@ -504,6 +504,7 @@ var studioTasksSeventh = function(context, decoder, path) {
 		
 		runTestsCmd.on('close', function (code) {
 			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
+			//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
 			//check whether the unit tests passed
 			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
 			if (result == -1) {
