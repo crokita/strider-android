@@ -56,9 +56,24 @@ module.exports = {
 				context.logger.trace("error message");
 				context.logger.assert(true); //just make this true
 */
-				SDK.startEmulator(configData, context, function (err, result) {
-					done(null, true);
+				/*
+				make sure the emulator process isn't already running
+				look out for the following:
+				emulator64-arm
+				emulator64-mips
+				emulator64-x86
+				emulator-arm
+				emulator-mips
+				emulator-x86
+				*/
+				SDK.findEmulator(context, function (result) {
+					if (!result) { //if it didn't return a matching emulator then start a new one
+						SDK.startEmulator(configData, context, function (err, result) {
+							done(null, true);
+						});
+					}
 				});
+				
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {

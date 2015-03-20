@@ -29,6 +29,16 @@ var sdkTools =  {
 	}
 };
 
+//a list of all possible emulators running as a process
+var emulators = [
+	"emulator64-arm",
+	"emulator64-mips",
+	"emulator64-x86",
+	"emulator-arm",
+	"emulator-mips",
+	"emulator-x86"
+];
+
 
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
@@ -72,6 +82,26 @@ module.exports = {
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
+		});
+	},
+
+	findEmulator: function (context, callback) {
+		child.exec("ps", function (err, stdout, stderr) {
+			console.log("output: ");
+			console.log(stdout);
+			//convert the processes result into a list
+			var processArray = stdout.split("\n");
+			console.log(processArray);
+			//return the first emulator found
+			processArray.foreach(function (process) {
+				emulators.foreach(function (emulator) {
+					if (process == emulator) {
+						return process;
+					}
+				});
+			});
+			//no matches
+			return null;
 		});
 	},
 
