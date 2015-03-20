@@ -95,7 +95,7 @@ module.exports = {
 			for (var index = 0; index < processArray.length; index++) {
 				for (var subindex = 0; subindex < emulators.length; subindex++) {
 					if (processArray[index] == emulators[subindex]) {
-						callback(process);
+						callback(processArray[index]);
 					}
 				}
 			}

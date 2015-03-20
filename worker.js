@@ -68,13 +68,13 @@ module.exports = {
 				*/
 				SDK.findEmulator(context, function (result) {
 					if (!result) { //if it didn't return a matching emulator then start a new one
-						context.out("No emulator found. Starting up emulator");
+						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (err, result) {
 							done(null, true);
 						});
 					}
 					else {
-						context.out("Found running emulator: " + result);
+						context.out("Found running emulator: " + result + "\n");
 					}
 				});
 				
