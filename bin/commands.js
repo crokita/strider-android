@@ -89,8 +89,6 @@ module.exports = {
 		child.exec("ps aco command --no-header", function (err, stdout, stderr) {
 			//convert the processes result into a list
 			var processArray = stdout.split("\n");
-			console.log(processArray);
-			console.log(emulators);
 			//return the first emulator found
 			for (var index = 0; index < processArray.length; index++) {
 				for (var subindex = 0; subindex < emulators.length; subindex++) {
