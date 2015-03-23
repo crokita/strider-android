@@ -1,5 +1,8 @@
 var SDK = require("./bin/retrieveSDKInfo");
 
+//packageName needs to be transferred from the prepare to test phases. use this for such purposes
+var packageName = "";
+
 module.exports = {
 	// Initialize the plugin for a job
 	//   config: the config for this job, made by extending the DB config
@@ -36,6 +39,7 @@ module.exports = {
 				var configData = {
 					device: config.device,
 					isLibrary: config.isLibrary,
+					projectFolderName: config.projectFolderName,
 					testFolderName: config.testFolderName,
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
@@ -55,7 +59,10 @@ module.exports = {
 					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (err, result) {
-							done(null, true);
+							SDK.installApk(configData, context, function (packageName) {
+								this.packageName = packageName;
+								done(null, true);
+							});
 						});
 					}
 					else {
@@ -66,16 +73,8 @@ module.exports = {
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
-				var configData = {
-					device: config.device,
-					isLibrary: config.isLibrary,
-					projectFolderName: config.projectFolderName,
-					testFolderName: config.testFolderName,
-					ide: config.ide,
-					sdkLocation: config.sdkLocation
-				};
-
-				SDK.installApk(configData, context, function (err, result) {
+				//use installToTestObj from the prepare phase to help start the tests
+				SDK.runTests(packageName, context, function (err, result) {
 					done(null, true);
 				});
 			},

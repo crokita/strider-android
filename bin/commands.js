@@ -194,6 +194,15 @@ module.exports = {
 	        
 	    });
 */
+	},
+
+	runTests: function (packageName, context, callback) {
+		console.log(packageName);
+		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
+
+		runTheTests(context, decoder, packageName, function (err, output) {
+			callback(err, output);
+		});
 	}
 }
 
@@ -258,10 +267,10 @@ function installEclipseApk (path, context, callback) {
 	tasks.push(eclipseTasksThird(context, decoder, path));
 	tasks.push(eclipseTasksFourth(context, decoder, path));
 	tasks.push(eclipseTasksFifth(context, decoder, path));
-	tasks.push(runTheTests(context, decoder, path));
+	//tasks.push(runTheTests(context, decoder, path));
 
-	async.waterfall(tasks, function (err, result) {
-		callback(err, result);
+	async.waterfall(tasks, function (packageName) {
+		callback(packageName);
 	});
 }
 
@@ -275,10 +284,10 @@ function installAndroidStudioApk (path, context, callback) {
 	tasks.push(studioTasksThird(context, decoder, path));
 	tasks.push(studioTasksFourth(context, decoder, path));
 	tasks.push(studioTasksFifth(context, decoder, path));
-	tasks.push(runTheTests(context, decoder, path));
+	//tasks.push(runTheTests(context, decoder, path));
 
-	async.waterfall(tasks, function (err, result) {
-		callback(err, result);
+	async.waterfall(tasks, function (packageName) {
+		callback(packageName);
 	});
 }
 
@@ -411,7 +420,7 @@ var eclipseTasksFifth = function(context, decoder, path) {
 			process.chdir(path.testFolderName);
 			process.chdir("bin"); //the apk is in the bin directory
 			resignApk(debugTestApkName, context, function () {
-				next(null, debugTestApkName, debugApkName, packageName);
+				next(null, packageName);
 			});
 		});
 	};
@@ -492,44 +501,44 @@ var studioTasksFifth = function(context, decoder, path) {
 		//now re-sign the apk files so the security error doesn't pop up
 		resignApk(debugApkName, context, function () {
 			resignApk(debugTestApkName, context, function () {
-				next(null, debugApkName, debugTestApkName, packageName);
+				next(null, packageName);
 			});
 		});
 	};
 }
 
 //use this regardless of which IDE is used
-var runTheTests = function(context, decoder, path) {
-	return function (debugApkName, debugTestApkName, packageName, next) {
-		//run the tests!
-		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
-		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-		var fullOutputResults = "";
-		runTestsCmd.stdout.on('data', function (data) {
-			var data = decoder.write(data)
-			context.out(data);
-			fullOutputResults = fullOutputResults.concat(data);
-		});
-		runTestsCmd.stderr.on('data', function (data) {
-			var data = decoder.write(data)
-			context.out(data);
-			fullOutputResults = fullOutputResults.concat(data);
-		});
-		
-		runTestsCmd.on('close', function (code) {
-			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
-			//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
-			//check whether the unit tests passed
-			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
-			if (result == -1) {
-				console.log("THE TEST PASSED!");
-			}
-			else {
-				console.log("THE TEST FAILED!");
-			}
-			return next(null, code);
-		});
-	};
+var runTheTests = function(context, decoder, packageName, callback) {
+	//run the tests!
+	var packageName = config.packageName;
+
+	var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
+	var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+	var fullOutputResults = "";
+	runTestsCmd.stdout.on('data', function (data) {
+		var data = decoder.write(data)
+		context.out(data);
+		fullOutputResults = fullOutputResults.concat(data);
+	});
+	runTestsCmd.stderr.on('data', function (data) {
+		var data = decoder.write(data)
+		context.out(data);
+		fullOutputResults = fullOutputResults.concat(data);
+	});
+	
+	runTestsCmd.on('close', function (code) {
+		//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
+		//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
+		//check whether the unit tests passed
+		var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
+		if (result == -1) {
+			console.log("THE TEST PASSED!");
+		}
+		else {
+			console.log("THE TEST FAILED!");
+		}
+		callback(null, code);
+	});
 }
 
 
@@ -575,18 +584,12 @@ var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
 }
 
-//TODO: should it uninstall the apks from the device on completion?
-
 //./android update sdk --no-ui to fix dependency issues
 //find a way to show errors/process of build in the strider test page!
 //		./android list sdk --all lists all the things
 //	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
 //use -r for adb install or ".apk" to reinstall the app
-/*
 
-use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1 to get the package + activity
-*/
-// ONLY USE -data-wipe OPTION IF YOUR LOCAL FOLDER HAS AN I/O ERROR
 //Error: Could not access the Package Manager.  Is the system running?  <-- ping the install command until this goes away 
 //if the apk isnt there in the first place bad things will happen. what do?
 
