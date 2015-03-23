@@ -12,7 +12,7 @@ Requirements:
 
 An Android device must be selected through the config webpage before clicking "Test"
 
-#### Custom configurations on the webapge:
+#### Custom configurations on the webpage:
 
 ##### Adding a new Android device
 Select an existing android device
