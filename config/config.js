@@ -2,6 +2,7 @@ var app = window.app;
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
+var timeoutVarProjectFolder; //this is used for a timeout function whenever a user is typing and changes need to be saved
 var timeoutVarTestFolder; //this is used for a timeout function whenever a user is typing and changes need to be saved
 var timeoutVarSdkLocation; //this is used for a timeout function whenever a user is typing and changes need to be saved
 
@@ -20,13 +21,15 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.targetOptions = "";
 		$scope.abiOptions = "";
 		$scope.eclipseModel = {}; //for eclipse configurations
-		$scope.eclipseModel.savingFolderName = false; //for the spinner testFolderName
+		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
+		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
 		$scope.isLibrary = false;
 		$scope.testFolderName = "";
+		$scope.projectFolderName = "";
 		$scope.sdkLocation = "";
 	}
 
@@ -43,6 +46,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.ide = $scope.config.ide;
 		$scope.deviceSelected = $scope.config.device;
 		$scope.isLibrary = $scope.config.isLibrary;
+		$scope.eclipseModel.projectFolderName = $scope.config.projectFolderName;
 		$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
 	});
@@ -180,10 +184,22 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.changeTestFolderName = function () {
 		//whenever a change is made, reset the automatic save timer
 		clearTimeout(timeoutVarTestFolder);
-		$scope.eclipseModel.savingFolderName = true;
+		$scope.eclipseModel.savingTestFolderName = true;
 		timeoutVarTestFolder = setTimeout(function () {
-			$scope.eclipseModel.savingFolderName = false;
+			$scope.eclipseModel.savingTestFolderName = false;
 			$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
+			$scope.save();
+		}, 1000);
+	}
+
+	//saves the input of what is the Eclipse project folder name
+	$scope.changeProjectFolderName = function () {
+		//whenever a change is made, reset the automatic save timer
+		clearTimeout(timeoutVarProjectFolder);
+		$scope.eclipseModel.savingProjectFolderName = true;
+		timeoutVarProjectFolder = setTimeout(function () {
+			$scope.eclipseModel.savingProjectFolderName = false;
+			$scope.config.projectFolderName = $scope.eclipseModel.projectFolderName;
 			$scope.save();
 		}, 1000);
 	}

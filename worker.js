@@ -69,6 +69,7 @@ module.exports = {
 				var configData = {
 					device: config.device,
 					isLibrary: config.isLibrary,
+					projectFolderName: config.projectFolderName,
 					testFolderName: config.testFolderName,
 					ide: config.ide,
 					sdkLocation: config.sdkLocation

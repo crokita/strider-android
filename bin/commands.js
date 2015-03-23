@@ -17,6 +17,11 @@ var sdkTools =  {
 		"tool": "adb",
 		"location": "platform-tools"
 	},
+	"ant": {
+		"toolFull": "tools/android/ant",
+		"tool": "ant",
+		"location": "tools/android/"
+	},
 	"android": {
 		"toolFull": "tools/android",
 		"tool": "android",
@@ -270,12 +275,14 @@ function installEclipseApk (config, context, callback) {
 	var deviceName = "\"" + sanitizeString(config.device) + "\"";
 	var isLibrary = sanitizeBoolean(config.isLibrary);
 	var testFolderName = sanitizeString(config.testFolderName);
+	var projectFolderName = sanitizeString(config.projectFolderName);
 	var sdkLocation = sanitizeString(config.sdkLocation);
 	var ide = sanitizeString(config.ide);
 
 	var absoluteSdk;
 	var aapt;
 	var adb;
+	var ant;
 	var android;
 	var emulator;
 
@@ -284,12 +291,14 @@ function installEclipseApk (config, context, callback) {
 		adb = "adb";
 		android = "android";
 		emulator = "emulator";
+		ant = "ant";
 	}
 	else {
 		//set up the absolute locations of the android tools for reference
 		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
 		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		ant = absoluteSdk + sdkTools["ant"]["toolFull"];
 		android = absoluteSdk + sdkTools["android"]["toolFull"];
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
@@ -297,18 +306,29 @@ function installEclipseApk (config, context, callback) {
 	var path = {
 		aapt: aapt,
 		adb: adb,
+		ant: ant,
 		android: android,
 		emulator: emulator,
 		sdkLocation: sdkLocation,
+		projectFolderName: projectFolderName,
 		testFolderName: testFolderName
 	}
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
+	if (config.projectFolderName == '') {
+		tasks.push(eclipseTasksFindProjectName(context, decoder, path));
+	}
+	if (config.testFolderName == '') {
+		tasks.push(eclipseTasksFindTestName(context, decoder, path));
+	}
 	tasks.push(eclipseTasksFirst(context, decoder, path));
 	tasks.push(eclipseTasksSecond(context, decoder, path));
 	tasks.push(eclipseTasksThird(context, decoder, path));
+	tasks.push(eclipseTasksFourth(context, decoder, path));
+	tasks.push(eclipseTasksFifth(context, decoder, path));
+	tasks.push(eclipseTasksSixth(context, decoder, path));
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
@@ -369,20 +389,55 @@ function installAndroidStudioApk (config, context, callback) {
 
 
 //the following methods are used exlusively for async.waterfall tasks
-var eclipseTasksFirst = function(context, decoder, path) {
+
+var eclipseTasksFindProjectName = function(context, decoder, path) {
 	return function(next) {
+		//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
+		exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*[tT][eE][sS][tT].*" -type d', function (err, stdout, stderr) {
+			//grab only the first result
+			var resultArray = stdout.split("\n");
+        	console.log("test folder list");
+			console.log(resultArray);
+        	path.testFolderName = resultArray[0];
+        	next(null);
+    	});
+	};
+}
+
+var eclipseTasksFindTestName = function(context, decoder, path) {
+	return function(next) {
+		//attempt to figure out which folder is the project folder (the first folder found that doesn't have "test" in the name)
+		//WARNING: this command ignores hidden directories and the "." directory!
+		exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 ! -regex ".*[tT][eE][sS][tT].*" -not -path \'*\/\\.*\' -not -path \'.\' -type d', function (err, stdout, stderr) {
+        	var resultArray = stdout.split("\n");
+        	console.log("project folder list");
+			console.log(resultArray);
+        	path.projectFolderName = resultArray[0];
+        	next(null);
+    	});
+	};
+}
+
+var eclipseTasksFirst = function(context, decoder, path) {
+	return function (next) {
 		//get to the project main directory
+		//double check path! see if path changes
+		console.log(path);
 		process.chdir(process.env.HOME);
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
-		var updateProjectCommand = child.spawn(path.android, ["update", "project", "--subprojects", "-p", "."]);
+		//${HOME}/android-sdk-linux/tools/android update test-project -m ../Spinner -p SpinnerTest 
+		//cd SpinnerTest
+		//ant clean debug    ant is part of SDK. now BOTH apks are each inside the bin folders of each project
+
+		var updateProjectCommand = child.spawn(path.android, ["update", "test-project", "-m", "../" + path.projectFolderName, "-p", path.testFolderName]);
 		updateProjectCommand.stdout.on('data', function (data) {
-			context.out(data);
+			context.out(decoder.write(stdout));
 		});
 		updateProjectCommand.stderr.on('data', function (data) {
-			context.out(data);
+			context.out(decoder.write(stdout));
 		});
 		updateProjectCommand.on('close', function (code) {
 			next(null);
@@ -391,15 +446,15 @@ var eclipseTasksFirst = function(context, decoder, path) {
 }
 
 var eclipseTasksSecond = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//clean the project
 		process.chdir(path.testFolderName); //go inside the test folder
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
-			context.out(data);
+			context.out(decoder.write(stdout));
 		});
 		antCleanCommand.stderr.on('data', function (data) {
-			context.out(data);
+			context.out(decoder.write(stdout));
 		});
 		antCleanCommand.on('close', function (code) { 
 			next(null);
@@ -408,27 +463,100 @@ var eclipseTasksSecond = function(context, decoder, path) {
 }
 
 var eclipseTasksThird = function(context, decoder, path) {
-	return function(next) {
-		//install the apk
+	return function (next) {
+		//install the test apk
 		process.chdir("bin"); //the apk is in the bin directory
-		child.exec("find $directory -type f -name \*.apk", function (err, stdout, stderr) {
-			var installCommand = child.spawn(path.adb, ["install", stdout]);
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			var testApkName = stdout.slice(2); //remove the "./" characters at the beginning
+			testApkName = sanitizeString(testApkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
-			installCommand.stdout.on('data', function (data) {
-				context.out(data);
-			});
-			installCommand.stderr.on('data', function (data) {
-				context.out(data);
-			});
-			installCommand.on('close', function (code) { 
-				next(null);
+			//source for the aapt solution (dljava):
+			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+			var getPackageCmd = path.aapt + " dump badging " + testApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+			child.exec(getPackageCmd, function (err, stdout, stderr) {	
+				var packageName = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+
+				child.exec(path.adb + " install -r " + testApkName, function (err, stdout, stderr) {
+					context.out(stdout);
+					next(null, testApkName, packageName); //return the name of the debug apk and the package name
+				});
+
 			});
 		});
 	};
 }
 
+var eclipseTasksFourth = function(context, decoder, path) {
+	return function (testApkName, packageName, next) {
+		//install the project apk
+		process.chdir("../");
+		process.chdir("../");
+		process.chdir(path.projectFolderName);
+		process.chdir("bin"); //the apk is in the bin directory
+		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+			stdout = stdout.slice(2); //remove the "./" characters at the beginning
+			stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+
+			child.exec(path.adb + " install -r " + stdout, function (err, stdout, stderr) {
+				context.out(stdout);
+				next(null, testApkName, packageName, stdout); //return the name of the debug apk
+			});
+
+		});
+	};
+}
+
+var eclipseTasksFifth = function(context, decoder, path) {
+	return function (testApkName, packageName, projectApkName, next) {
+		//now re-sign the apk files so the security error doesn't pop up
+		resignApk(projectApkName, context, function () {
+			process.chdir("../");
+			process.chdir("../");
+			process.chdir(path.testFolderName);
+			process.chdir("bin"); //the apk is in the bin directory
+			resignApk(testApkName, context, function () {
+				next(null, testApkName, packageName, projectApkName, packageName);
+			});
+		});
+	};
+}
+
+var eclipseTasksSixth = function(context, decoder, path) {
+	return function (debugApkName, debugTestApkName, packageName, next) {
+		//run the tests!
+		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
+		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+		var fullOutputResults = "";
+		runTestsCmd.stdout.on('data', function (data) {
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults = fullOutputResults.concat(data);
+		});
+		runTestsCmd.stderr.on('data', function (data) {
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults = fullOutputResults.concat(data);
+		});
+		
+		runTestsCmd.on('close', function (code) {
+			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
+			//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
+			//check whether the unit tests passed
+			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
+			if (result == -1) {
+				console.log("THE TEST PASSED!");
+			}
+			else {
+				console.log("THE TEST FAILED!");
+			}
+			return next(null, code);
+		});
+	};
+}
+
 var studioTasksFirst = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//get to the project main directory
 		process.chdir(process.env.HOME);
 		process.chdir(".strider"); //go to the root project directory
@@ -449,7 +577,7 @@ var studioTasksFirst = function(context, decoder, path) {
 }
 
 var studioTasksSecond = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//create the APKs
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
@@ -466,7 +594,7 @@ var studioTasksSecond = function(context, decoder, path) {
 }
 
 var studioTasksThird = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//find the debug apk
 		process.chdir("Application"); 
 		process.chdir("build"); 
@@ -481,10 +609,11 @@ var studioTasksThird = function(context, decoder, path) {
 }
 
 var studioTasksFourth = function(context, decoder, path) {
-	return function(debugApkName, next) {
+	return function (debugApkName, next) {
 		//install the debug apk and find the debug test apk
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-			context.out(decoder.write(stdout));
+			//context.out(decoder.write(stdout));
+			context.out(stdout);
 			child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
 				stdout = stdout.slice(2); //remove the "./" characters at the beginning
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
@@ -495,10 +624,12 @@ var studioTasksFourth = function(context, decoder, path) {
 }
 
 var studioTasksFifth = function(context, decoder, path) {
-	return function(debugApkName, debugTestApkName, next) {
+	return function (debugApkName, debugTestApkName, next) {
 		//install the debug test apk and get the test package name
 		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-			context.out(decoder.write(stdout));
+			//context.out(decoder.write(stdout));
+			context.out(stdout);
+
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
@@ -512,7 +643,7 @@ var studioTasksFifth = function(context, decoder, path) {
 }
 
 var studioTasksSixth = function(context, decoder, path) {
-	return function(debugApkName, debugTestApkName, packageName, next) {
+	return function (debugApkName, debugTestApkName, packageName, next) {
 		//now re-sign the apk files so the security error doesn't pop up
 		resignApk(debugApkName, context, function () {
 			resignApk(debugTestApkName, context, function () {
@@ -523,7 +654,7 @@ var studioTasksSixth = function(context, decoder, path) {
 }
 
 var studioTasksSeventh = function(context, decoder, path) {
-	return function(debugApkName, debugTestApkName, packageName, next) {
+	return function (debugApkName, debugTestApkName, packageName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
