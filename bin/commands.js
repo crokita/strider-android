@@ -695,7 +695,13 @@ var resignApk = function (apkName, context, callback) {
 }
 
 var sanitizeString = function (string) {
-	return string.match(/[a-zA-Z\d\.\_\-*]/g).join("");
+	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
+	if (matches == null) {
+		return "";
+	}
+	else {
+		return matches.join("");
+	} 
 }
 
 //return false if it is anything but "true" or true
