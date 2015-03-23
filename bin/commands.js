@@ -153,39 +153,7 @@ module.exports = {
 		else {
 			return callback("No IDE or invalid IDE specified", null);
 		}
-/*
 
-
-		var eclipseInPath = 	"android update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
-								+ "find $directory -type f -name \*.apk | xargs adb install";
-
-//TODO: execute the do until command for installing the apk (or something that checks for this) NO MATTER WHICH IDE
-		var eclipseNotInPath = 	android + " update project --subprojects -p .; "
-								+ "cd " + testFolderName + "; ant clean debug; cd bin/; "
-								+ "find $directory -type f -name \*.apk | xargs adb install";
-
-		var androidStudioInPath = 		"chmod +x gradlew; ./gradlew assembleDebug; cd Application/build/outputs/apk/; "
-										+ "find $directory -type f -name \*test-unaligned.apk | xargs " + adb + " install"; //install test apk
-										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
-
-
-		var androidStudioNotInPath = 	"chmod +x gradlew; "
-										+ "echo \"sdk.dir=${HOME}/" + sdkLocation + "\" >> local.properties; "
-										+ "./gradlew assembleDebug; cd Application/build/outputs/apk/;";
-										+ "find $directory -type f -name \*test-unaligned.apk | xargs " + adb + " install"; //install test apk
-										+ "find $directory -type f -name \*debug-unaligned.apk | xargs " + adb + " install"; //install project apk
-
-		if (ide == "Eclipse") {
-			
-		}
-		else if (ide == "AndroidStudio") {
-			
-		}
-		else {
-			return callback("No IDE or invalid IDE specified", null);
-		}
-*/
 
 
 
@@ -747,16 +715,13 @@ use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using
 + "done";
 */							
 
-
 //pm uninstall com.example.android.activityinstrumentation
 //./gradlew assembleDebugTest
 //./gradlew installDebugTest
 
-//NOTE: YOU NEED BOTH THE DEBUG AND THE DEBUG-TEST APK TO RUN UNIT TESTS
 //not enough RAM. lower the memory size of the emulator to fix this (find hidden .android/avd/emulator.avd/config.ini file)
 //you need to use AAPT android tool in order to get the apk information on what package to find for testing
 //I recommend just putting these in a separate script and then calling those scripts. this is getting ridiculous
-
 
 //get path vars:
 //process.env.PATH
