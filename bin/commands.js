@@ -663,13 +663,11 @@ var findAndInstall = function (regex, context, path, callback) {
 }
 
 var sanitizeString = function (string) {
-	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
-	if (matches == null) {
+	if (!string) {
 		return "";
 	}
-	else {
-		return matches.join("");
-	} 
+	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
+	return matches.join("");
 }
 
 //return false if it is anything but "true" or true
