@@ -528,6 +528,7 @@ var studioTasksFifth = function(context, decoder, path) {
 
 //use this regardless of which IDE is used
 var runTheTests = function(context, decoder, path, packageName, callback) {
+	console.log(packageName);
 	//run the tests!
 	var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 	var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
