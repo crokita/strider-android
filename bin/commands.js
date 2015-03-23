@@ -418,7 +418,7 @@ var eclipseTasksFourth = function(context, decoder, path) {
 			process.chdir("bin"); //the apk is in the bin directory
 
 			findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
-				next(null, testApkName, packageName, stdout); //return the name of the project apk
+				next(null, testApkName, packageName, apkName); //return the name of the project apk
 			});
 			/*
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
@@ -530,7 +530,7 @@ var studioTasksThird = function(context, decoder, path) {
 		process.chdir("apk"); 
 
 		findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
-			next(null, stdout); //return the name of the debug apk
+			next(null, apkName); //return the name of the debug apk
 		});
 		/*
 		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
@@ -545,7 +545,7 @@ var studioTasksFourth = function(context, decoder, path) {
 	return function (debugApkName, next) {
 		//find the debug test apk and install it
 		findAndInstall("\*test-unaligned.apk", context, path, function (apkName) {
-			next(null, debugApkName, stdout); //return the name of the debug apk
+			next(null, debugApkName, apkName); //return the name of the debug apk
 		});
 /*
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
