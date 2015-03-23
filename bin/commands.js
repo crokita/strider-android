@@ -384,7 +384,7 @@ function installAndroidStudioApk (config, context, callback) {
 var eclipseTasksFindProjectName = function(context, decoder, path) {
 	return function(next) {
 		//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
-		exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*[tT][eE][sS][tT].*" -type d', function (err, stdout, stderr) {
+		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*[tT][eE][sS][tT].*" -type d', function (err, stdout, stderr) {
 			//grab only the first result
 			var resultArray = stdout.split("\n");
         	console.log("test folder list");
@@ -399,7 +399,7 @@ var eclipseTasksFindTestName = function(context, decoder, path) {
 	return function(next) {
 		//attempt to figure out which folder is the project folder (the first folder found that doesn't have "test" in the name)
 		//WARNING: this command ignores hidden directories and the "." directory!
-		exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 ! -regex ".*[tT][eE][sS][tT].*" -not -path \'*\/\\.*\' -not -path \'.\' -type d', function (err, stdout, stderr) {
+		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 ! -regex ".*[tT][eE][sS][tT].*" -not -path \'*\/\\.*\' -not -path \'.\' -type d', function (err, stdout, stderr) {
         	var resultArray = stdout.split("\n");
         	console.log("project folder list");
 			console.log(resultArray);
