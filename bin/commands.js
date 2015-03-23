@@ -446,6 +446,8 @@ var eclipseTasksFirst = function(context, decoder, path) {
 var eclipseTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//clean the project
+		console.log(process.cwd());
+		console.log(path.testFolderName);
 		process.chdir(path.testFolderName); //go inside the test folder
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
