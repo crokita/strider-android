@@ -1,7 +1,5 @@
 # strider-android
 
-NOTE: ECLIPSE PROJECT TESTING IS STILL UNDER DEVELOPMENT
-
 A Strider plugin for automating Android projects developed in Eclipse and Android Studio IDEs
 
 Requirements:
