@@ -258,7 +258,7 @@ function installEclipseApk (path, context, callback) {
 	tasks.push(eclipseTasksThird(context, decoder, path));
 	tasks.push(eclipseTasksFourth(context, decoder, path));
 	tasks.push(eclipseTasksFifth(context, decoder, path));
-	tasks.push(eclipseTasksSixth(context, decoder, path));
+	tasks.push(runTheTests(context, decoder, path));
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
@@ -275,8 +275,7 @@ function installAndroidStudioApk (path, context, callback) {
 	tasks.push(studioTasksThird(context, decoder, path));
 	tasks.push(studioTasksFourth(context, decoder, path));
 	tasks.push(studioTasksFifth(context, decoder, path));
-	tasks.push(studioTasksSixth(context, decoder, path));
-	tasks.push(studioTasksSeventh(context, decoder, path));
+	tasks.push(runTheTests(context, decoder, path));
 
 	async.waterfall(tasks, function (err, result) {
 		callback(err, result);
@@ -317,10 +316,6 @@ var eclipseTasksFirst = function(context, decoder, path) {
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-
-		//${HOME}/android-sdk-linux/tools/android update test-project -m ../Spinner -p SpinnerTest 
-		//cd SpinnerTest
-		//ant clean debug    now BOTH apks are each inside the bin folders of each project
 
 		//update the test project
 		var updateTestProjectCommand = child.spawn(path.android, ["update", "test-project", "-m", "../" + path.projectFolderName, "-p", path.testFolderName]);
@@ -367,40 +362,22 @@ var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
 		//install the test apk
 		process.chdir("bin"); //the apk is in the bin directory
-		findAndInstall("\*debug-unaligned.apk", context, path, function (testApkName) {
+		findAndInstall("\*debug-unaligned.apk", context, path, function (debugTestApkName) {
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-			var getPackageCmd = path.aapt + " dump badging " + testApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
 
 			child.exec(getPackageCmd, function (err, stdout, stderr) {	
 				var packageName = stdout.replace(/\n/g, ""); //make sure theres no newline characters
-				next(null, testApkName, packageName); //return the name of the debug apk and the package name
+				next(null, debugTestApkName, packageName); //return the name of the debug apk and the package name
 			});
 		});
-/*
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			var testApkName = stdout.slice(2); //remove the "./" characters at the beginning
-			testApkName = sanitizeString(testApkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
-			//source for the aapt solution (dljava):
-			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-			var getPackageCmd = path.aapt + " dump badging " + testApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
-
-			child.exec(getPackageCmd, function (err, stdout, stderr) {	
-				var packageName = stdout.replace(/\n/g, ""); //make sure theres no newline characters
-
-				child.exec(path.adb + " install -r " + testApkName, function (err, stdout, stderr) {
-					context.out(stdout);
-					next(null, testApkName, packageName); //return the name of the debug apk and the package name
-				});
-
-			});
-		});*/
 	};
 }
 
 var eclipseTasksFourth = function(context, decoder, path) {
-	return function (testApkName, packageName, next) {
+	return function (debugTestApkName, packageName, next) {
 		//install the project apk
 		process.chdir("../");
 		process.chdir("../");
@@ -418,67 +395,24 @@ var eclipseTasksFourth = function(context, decoder, path) {
 			process.chdir("bin"); //the apk is in the bin directory
 
 			findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
-				next(null, testApkName, packageName, apkName); //return the name of the project apk
+				next(null, debugTestApkName, apkName, packageName); //return the name of the project apk
 			});
-			/*
-			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-				stdout = stdout.slice(2); //remove the "./" characters at the beginning
-				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
-				child.exec(path.adb + " install -r " + stdout, function (err, stdout, stderr) {
-					context.out(stdout);
-					next(null, testApkName, packageName, stdout); //return the name of the debug apk
-				});
-
-			});*/
 		});
 	};
 }
 
 var eclipseTasksFifth = function(context, decoder, path) {
-	return function (testApkName, packageName, projectApkName, next) {
+	return function (debugTestApkName, debugApkName, packageName, next) {
 		//now re-sign the apk files so the security error doesn't pop up
-		resignApk(projectApkName, context, function () {
+		resignApk(debugApkName, context, function () {
 			process.chdir("../");
 			process.chdir("../");
 			process.chdir(path.testFolderName);
 			process.chdir("bin"); //the apk is in the bin directory
-			resignApk(testApkName, context, function () {
-				next(null, testApkName, packageName, projectApkName);
+			resignApk(debugTestApkName, context, function () {
+				next(null, debugTestApkName, debugApkName, packageName);
 			});
-		});
-	};
-}
-
-var eclipseTasksSixth = function(context, decoder, path) {
-	return function (debugTestApkName, packageName, debugApkName, next) {
-		//run the tests!
-		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
-		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
-		var fullOutputResults = "";
-		runTestsCmd.stdout.on('data', function (data) {
-			var data = decoder.write(data)
-			context.out(data);
-			fullOutputResults = fullOutputResults.concat(data);
-		});
-		runTestsCmd.stderr.on('data', function (data) {
-			var data = decoder.write(data)
-			context.out(data);
-			fullOutputResults = fullOutputResults.concat(data);
-		});
-		
-		runTestsCmd.on('close', function (code) {
-			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
-			//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
-			//check whether the unit tests passed
-			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
-			if (result == -1) {
-				console.log("THE TEST PASSED!");
-			}
-			else {
-				console.log("THE TEST FAILED!");
-			}
-			return next(null, code);
 		});
 	};
 }
@@ -523,44 +457,22 @@ var studioTasksSecond = function(context, decoder, path) {
 
 var studioTasksThird = function(context, decoder, path) {
 	return function (next) {
-		//find the debug apk and install it
+		//find the debug apk and the test apk, then install both
 		process.chdir("Application"); 
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
 
 		findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
-			next(null, apkName); //return the name of the debug apk
+			findAndInstall("\*test-unaligned.apk", context, path, function (apkName) {
+				next(null, debugApkName, apkName); //return the names of the apks
+			});
 		});
-		/*
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			stdout = stdout.slice(2); //remove the "./" characters at the beginning
-			stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
-			next(null, stdout); //return the name of the debug apk
-		});*/
+
 	};
 }
 
 var studioTasksFourth = function(context, decoder, path) {
-	return function (debugApkName, next) {
-		//find the debug test apk and install it
-		findAndInstall("\*test-unaligned.apk", context, path, function (apkName) {
-			next(null, debugApkName, apkName); //return the name of the debug apk
-		});
-/*
-		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-			//context.out(decoder.write(stdout));
-			context.out(stdout);
-			child.exec("find $directory -type f -name \*test-unaligned.apk", function (err, stdout, stderr) {
-				stdout = stdout.slice(2); //remove the "./" characters at the beginning
-				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
-				next(null, debugApkName, stdout); //return the name of the debug test apk
-			});
-		});*/
-	};
-}
-
-var studioTasksFifth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, next) {
 		//get the test package name
 		//source for the aapt solution (dljava):
@@ -571,24 +483,11 @@ var studioTasksFifth = function(context, decoder, path) {
 			stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
 			next(null, debugApkName, debugTestApkName, stdout); //return the package name
 		});
-		/*
-		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-			//context.out(decoder.write(stdout));
-			context.out(stdout);
 
-			//source for the aapt solution (dljava):
-			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
-
-			child.exec(getPackageCmd, function (err, stdout, stderr) {	
-				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
-				next(null, debugApkName, debugTestApkName, stdout); //return the package name
-			});
-		});*/
 	};
 }
 
-var studioTasksSixth = function(context, decoder, path) {
+var studioTasksFifth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, packageName, next) {
 		//now re-sign the apk files so the security error doesn't pop up
 		resignApk(debugApkName, context, function () {
@@ -599,7 +498,8 @@ var studioTasksSixth = function(context, decoder, path) {
 	};
 }
 
-var studioTasksSeventh = function(context, decoder, path) {
+//use this regardless of which IDE is used
+var runTheTests = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, packageName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
