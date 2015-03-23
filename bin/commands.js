@@ -387,9 +387,7 @@ var eclipseTasksFindProjectName = function(context, decoder, path) {
 		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*[tT][eE][sS][tT].*" -type d', function (err, stdout, stderr) {
 			//grab only the first result
 			var resultArray = stdout.split("\n");
-        	console.log("test folder list");
-			console.log(resultArray);
-        	path.testFolderName = resultArray[0];
+        	path.testFolderName = resultArray[0].slice(2); //remove the "./" characters at the beginning
         	next(null);
     	});
 	};
@@ -401,9 +399,7 @@ var eclipseTasksFindTestName = function(context, decoder, path) {
 		//WARNING: this command ignores hidden directories and the "." directory!
 		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 ! -regex ".*[tT][eE][sS][tT].*" -not -path \'*\/\\.*\' -not -path \'.\' -type d', function (err, stdout, stderr) {
         	var resultArray = stdout.split("\n");
-        	console.log("project folder list");
-			console.log(resultArray);
-        	path.projectFolderName = resultArray[0];
+        	path.projectFolderName = resultArray[0].slice(2); //remove the "./" characters at the beginning
         	next(null);
     	});
 	};
@@ -412,8 +408,6 @@ var eclipseTasksFindTestName = function(context, decoder, path) {
 var eclipseTasksFirst = function(context, decoder, path) {
 	return function (next) {
 		//get to the project main directory
-		//double check path! see if path changes
-		console.log(path);
 		process.chdir(process.env.HOME);
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
@@ -421,16 +415,29 @@ var eclipseTasksFirst = function(context, decoder, path) {
 
 		//${HOME}/android-sdk-linux/tools/android update test-project -m ../Spinner -p SpinnerTest 
 		//cd SpinnerTest
-		//ant clean debug    ant is part of SDK. now BOTH apks are each inside the bin folders of each project
+		//ant clean debug    now BOTH apks are each inside the bin folders of each project
 
-		var updateProjectCommand = child.spawn(path.android, ["update", "test-project", "-m", "../" + path.projectFolderName, "-p", path.testFolderName]);
-		updateProjectCommand.stdout.on('data', function (data) {
+		//update the test project
+		var updateTestProjectCommand = child.spawn(path.android, ["update", "test-project", "-m", "../" + path.projectFolderName, "-p", path.testFolderName]);
+		updateTestProjectCommand.stdout.on('data', function (data) {
 			context.out(decoder.write(data));
 		});
-		updateProjectCommand.stderr.on('data', function (data) {
+		updateTestProjectCommand.stderr.on('data', function (data) {
 			context.out(decoder.write(data));
 		});
-		updateProjectCommand.on('close', function (code) {
+		updateTestProjectCommand.on('close', function (code) {
+			//now update the main project. this is so both have a local.properties file which knows where the android sdk is
+			var updateProjectCommand = child.spawn(path.android, ["update", "project", "-p", path.projectFolderName]);
+			updateProjectCommand.stdout.on('data', function (data) {
+				context.out(decoder.write(data));
+			});
+			updateProjectCommand.stderr.on('data', function (data) {
+				context.out(decoder.write(data));
+			});
+			updateProjectCommand.on('close', function (code) {
+				next(null);
+			});
+
 			next(null);
 		});
 	};
@@ -456,7 +463,6 @@ var eclipseTasksSecond = function(context, decoder, path) {
 var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
 		//install the test apk
-		console.log(process.cwd());
 		process.chdir("bin"); //the apk is in the bin directory
 		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 			var testApkName = stdout.slice(2); //remove the "./" characters at the beginning
@@ -485,16 +491,27 @@ var eclipseTasksFourth = function(context, decoder, path) {
 		process.chdir("../");
 		process.chdir("../");
 		process.chdir(path.projectFolderName);
-		process.chdir("bin"); //the apk is in the bin directory
-		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
-			stdout = stdout.slice(2); //remove the "./" characters at the beginning
-			stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
-			child.exec(path.adb + " install -r " + stdout, function (err, stdout, stderr) {
-				context.out(stdout);
-				next(null, testApkName, packageName, stdout); //return the name of the debug apk
+		//now build the main project to generate the apk
+		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
+		antCleanCommand.stdout.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		antCleanCommand.stderr.on('data', function (data) {
+			context.out(decoder.write(data));
+		});
+		antCleanCommand.on('close', function (code) { 
+			process.chdir("bin"); //the apk is in the bin directory
+			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
+				stdout = stdout.slice(2); //remove the "./" characters at the beginning
+				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+
+				child.exec(path.adb + " install -r " + stdout, function (err, stdout, stderr) {
+					context.out(stdout);
+					next(null, testApkName, packageName, stdout); //return the name of the debug apk
+				});
+
 			});
-
 		});
 	};
 }
