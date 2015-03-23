@@ -60,7 +60,6 @@ module.exports = {
 						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (err, result) {
 							SDK.installApk(configData, context, function (packageName) {
-								temp = packageName; //place the package name in the temp variable
 								done(null, true);
 							});
 						});
