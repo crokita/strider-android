@@ -1,7 +1,7 @@
 var SDK = require("./bin/retrieveSDKInfo");
 
 //packageName needs to be transferred from the prepare to test phases. use this for such purposes
-var packageName = "";
+var temp = "";
 
 module.exports = {
 	// Initialize the plugin for a job
@@ -60,7 +60,7 @@ module.exports = {
 						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (err, result) {
 							SDK.installApk(configData, context, function (packageName) {
-								this.packageName = packageName;
+								temp = packageName; //place the package name in the temp variable
 								done(null, true);
 							});
 						});
@@ -82,7 +82,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				//use installToTestObj from the prepare phase to help start the tests
-				SDK.runTests(configData, packageName, context, function (err, result) {
+				SDK.runTests(configData, temp, context, function (err, result) {
 					done(null, true);
 				});
 			},
