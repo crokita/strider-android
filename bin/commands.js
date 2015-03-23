@@ -268,6 +268,7 @@ function installEclipseApk (path, context, callback) {
 function installAndroidStudioApk (path, context, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
+	context.logger.assert(false); 
 
 	var tasks = [];
 	tasks.push(studioTasksFirst(context, decoder, path));
