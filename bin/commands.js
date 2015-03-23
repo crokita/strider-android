@@ -444,8 +444,6 @@ var eclipseTasksFirst = function(context, decoder, path) {
 var eclipseTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//clean the project
-		console.log(process.cwd());
-		console.log(path.testFolderName);
 		process.chdir(path.testFolderName); //go inside the test folder
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
@@ -525,14 +523,14 @@ var eclipseTasksFifth = function(context, decoder, path) {
 			process.chdir(path.testFolderName);
 			process.chdir("bin"); //the apk is in the bin directory
 			resignApk(testApkName, context, function () {
-				next(null, testApkName, packageName, projectApkName, packageName);
+				next(null, testApkName, packageName, projectApkName);
 			});
 		});
 	};
 }
 
 var eclipseTasksSixth = function(context, decoder, path) {
-	return function (debugApkName, debugTestApkName, packageName, next) {
+	return function (debugTestApkName, packageName, debugApkName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 		var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
