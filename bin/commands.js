@@ -17,11 +17,6 @@ var sdkTools =  {
 		"tool": "adb",
 		"location": "platform-tools"
 	},
-	"ant": {
-		"toolFull": "tools/android/ant",
-		"tool": "ant",
-		"location": "tools/android/"
-	},
 	"android": {
 		"toolFull": "tools/android",
 		"tool": "android",
@@ -282,7 +277,6 @@ function installEclipseApk (config, context, callback) {
 	var absoluteSdk;
 	var aapt;
 	var adb;
-	var ant;
 	var android;
 	var emulator;
 
@@ -291,14 +285,12 @@ function installEclipseApk (config, context, callback) {
 		adb = "adb";
 		android = "android";
 		emulator = "emulator";
-		ant = "ant";
 	}
 	else {
 		//set up the absolute locations of the android tools for reference
 		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
 		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
 		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		ant = absoluteSdk + sdkTools["ant"]["toolFull"];
 		android = absoluteSdk + sdkTools["android"]["toolFull"];
 		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 	}
@@ -306,7 +298,6 @@ function installEclipseApk (config, context, callback) {
 	var path = {
 		aapt: aapt,
 		adb: adb,
-		ant: ant,
 		android: android,
 		emulator: emulator,
 		sdkLocation: sdkLocation,
@@ -465,6 +456,7 @@ var eclipseTasksSecond = function(context, decoder, path) {
 var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
 		//install the test apk
+		console.log(process.cwd());
 		process.chdir("bin"); //the apk is in the bin directory
 		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 			var testApkName = stdout.slice(2); //remove the "./" characters at the beginning
