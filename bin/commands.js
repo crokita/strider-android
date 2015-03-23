@@ -463,9 +463,9 @@ var studioTasksThird = function(context, decoder, path) {
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
 
-		findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
-			findAndInstall("\*test-unaligned.apk", context, path, function (apkName) {
-				next(null, debugApkName, apkName); //return the names of the apks
+		findAndInstall("\*debug-unaligned.apk", context, path, function (debugApkName) {
+			findAndInstall("\*test-unaligned.apk", context, path, function (debugTestApkName) {
+				next(null, debugApkName, debugTestApkName); //return the names of the apks
 			});
 		});
 
