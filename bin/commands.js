@@ -367,7 +367,7 @@ var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
 		//install the test apk
 		process.chdir("bin"); //the apk is in the bin directory
-		findAndInstall("\*debug-unaligned.apk", function (testApkName) {
+		findAndInstall("\*debug-unaligned.apk", path, function (testApkName) {
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 			var getPackageCmd = path.aapt + " dump badging " + testApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
@@ -417,7 +417,7 @@ var eclipseTasksFourth = function(context, decoder, path) {
 		antCleanCommand.on('close', function (code) { 
 			process.chdir("bin"); //the apk is in the bin directory
 
-			findAndInstall("\*debug-unaligned.apk", function (apkName) {
+			findAndInstall("\*debug-unaligned.apk", path, function (apkName) {
 				next(null, testApkName, packageName, stdout); //return the name of the project apk
 			});
 			/*
@@ -529,7 +529,7 @@ var studioTasksThird = function(context, decoder, path) {
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
 
-		findAndInstall("\*debug-unaligned.apk", function (apkName) {
+		findAndInstall("\*debug-unaligned.apk", path, function (apkName) {
 			next(null, stdout); //return the name of the debug apk
 		});
 		/*
@@ -544,7 +544,7 @@ var studioTasksThird = function(context, decoder, path) {
 var studioTasksFourth = function(context, decoder, path) {
 	return function (debugApkName, next) {
 		//find the debug test apk and install it
-		findAndInstall("\*test-unaligned.apk", function (apkName) {
+		findAndInstall("\*test-unaligned.apk", path, function (apkName) {
 			next(null, debugApkName, stdout); //return the name of the debug apk
 		});
 /*
@@ -649,7 +649,7 @@ var resignApk = function (apkName, context, callback) {
 }
 
 //finds an apk based on a regex input, installs it and returns the name of the apk
-var findAndInstall = function (regex, callback) {
+var findAndInstall = function (regex, path, callback) {
 	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
 		apkName = sanitizeString(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
