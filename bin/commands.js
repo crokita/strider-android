@@ -434,10 +434,10 @@ var eclipseTasksFirst = function(context, decoder, path) {
 
 		var updateProjectCommand = child.spawn(path.android, ["update", "test-project", "-m", "../" + path.projectFolderName, "-p", path.testFolderName]);
 		updateProjectCommand.stdout.on('data', function (data) {
-			context.out(decoder.write(stdout));
+			context.out(decoder.write(data));
 		});
 		updateProjectCommand.stderr.on('data', function (data) {
-			context.out(decoder.write(stdout));
+			context.out(decoder.write(data));
 		});
 		updateProjectCommand.on('close', function (code) {
 			next(null);
@@ -451,10 +451,10 @@ var eclipseTasksSecond = function(context, decoder, path) {
 		process.chdir(path.testFolderName); //go inside the test folder
 		var antCleanCommand = child.spawn("ant", ["clean", "debug"]);
 		antCleanCommand.stdout.on('data', function (data) {
-			context.out(decoder.write(stdout));
+			context.out(decoder.write(data));
 		});
 		antCleanCommand.stderr.on('data', function (data) {
-			context.out(decoder.write(stdout));
+			context.out(decoder.write(data));
 		});
 		antCleanCommand.on('close', function (code) { 
 			next(null);
