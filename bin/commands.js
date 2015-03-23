@@ -151,10 +151,10 @@ module.exports = {
 		else {
 			//set up the absolute locations of the android tools for reference
 			path.absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
-			path.emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+			path.aapt = path.absoluteSdk + sdkTools["aapt"]["toolFull"];
+			path.adb = path.absoluteSdk + sdkTools["adb"]["toolFull"];
+			path.android = path.absoluteSdk + sdkTools["android"]["toolFull"];
+			path.emulator = path.absoluteSdk + sdkTools["emulator"]["toolFull"];
 		}
 
 		if (ide == "Eclipse") {
