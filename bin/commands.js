@@ -247,10 +247,10 @@ function installEclipseApk (path, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
-	if (config.projectFolderName == '') { //automatically try to find the main project if none is specified
+	if (path.projectFolderName == '') { //automatically try to find the main project if none is specified
 		tasks.push(eclipseTasksFindProjectName(context, decoder, path));
 	}
-	if (config.testFolderName == '') { //automatically try to find the test project if none is specified
+	if (path.testFolderName == '') { //automatically try to find the test project if none is specified
 		tasks.push(eclipseTasksFindTestName(context, decoder, path));
 	}
 	tasks.push(eclipseTasksFirst(context, decoder, path));
