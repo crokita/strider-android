@@ -123,14 +123,6 @@ module.exports = {
 		emulatorCommand.stderr.on('data', function (data) {
 			context.out(data);
 		});
-
-		adbCommand.stdout.on('data', function (data) {
-			context.out(data);
-		});
-
-		adbCommand.stderr.on('data', function (data) {
-			context.out(data);
-		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback(code);
@@ -138,24 +130,46 @@ module.exports = {
 	},
 
 	installApk: function (config, context, callback) {
+		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
+		//var isLibrary = sanitizeBoolean(config.isLibrary);
+		var testFolderName = sanitizeString(config.testFolderName);
+		var projectFolderName = sanitizeString(config.projectFolderName);
+		var sdkLocation = sanitizeString(config.sdkLocation);
 		var ide = sanitizeString(config.ide);
 
+		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
+		path.sdkLocation = sdkLocation;
+		path.projectFolderName = projectFolderName;
+		path.testFolderName = testFolderName;
+
+		if (!sdkLocation) { //assume tools is in the path if no location is specified
+			path.aapt = "aapt";
+			path.adb = "adb";
+			path.android = "android";
+			path.emulator = "emulator";
+		}
+		else {
+			//set up the absolute locations of the android tools for reference
+			path.absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
+			path.emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+		}
+
 		if (ide == "Eclipse") {
-			installEclipseApk(config, context, function (err, output) {
+			installEclipseApk(path, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else if (ide == "AndroidStudio") {
-			installAndroidStudioApk(config, context, function (err, output) {
+			installAndroidStudioApk(path, context, function (err, output) {
 				return callback(err, output);
 			});
 		}
 		else {
 			return callback("No IDE or invalid IDE specified", null);
 		}
-
-
-
 
 		//var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
 
@@ -179,13 +193,6 @@ module.exports = {
 	        
 	    });
 */
-	},
-
-	runTests: function (config, callback) {
-		//the sauce for the aapt solution: http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
-		var runTestsScript = 
-		"pkg=$(" + aapt + " dump badging $1|awk -F\" \" '/package/ {print $2}'|awk -F\"'\" '/name=/ {print $2}');" +
-		adb + " shell am instrument -w $pkg/android.test.InstrumentationTestRunner";
 	}
 }
 
@@ -234,52 +241,15 @@ var goToAndroid = function (location, toolObj) {
 	return null;
 }
 
-function installEclipseApk (config, context, callback) {
-	var deviceName = "\"" + sanitizeString(config.device) + "\"";
-	var isLibrary = sanitizeBoolean(config.isLibrary);
-	var testFolderName = sanitizeString(config.testFolderName);
-	var projectFolderName = sanitizeString(config.projectFolderName);
-	var sdkLocation = sanitizeString(config.sdkLocation);
-	var ide = sanitizeString(config.ide);
-
-	var absoluteSdk;
-	var aapt;
-	var adb;
-	var android;
-	var emulator;
-
-	if (!sdkLocation) { //assume tools is in the path if no location is specified
-		aapt = "aapt";
-		adb = "adb";
-		android = "android";
-		emulator = "emulator";
-	}
-	else {
-		//set up the absolute locations of the android tools for reference
-		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		android = absoluteSdk + sdkTools["android"]["toolFull"];
-		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-	}
-
-	var path = {
-		aapt: aapt,
-		adb: adb,
-		android: android,
-		emulator: emulator,
-		sdkLocation: sdkLocation,
-		projectFolderName: projectFolderName,
-		testFolderName: testFolderName
-	}
+function installEclipseApk (path, context, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
-	if (config.projectFolderName == '') {
+	if (config.projectFolderName == '') { //automatically try to find the main project if none is specified
 		tasks.push(eclipseTasksFindProjectName(context, decoder, path));
 	}
-	if (config.testFolderName == '') {
+	if (config.testFolderName == '') { //automatically try to find the test project if none is specified
 		tasks.push(eclipseTasksFindTestName(context, decoder, path));
 	}
 	tasks.push(eclipseTasksFirst(context, decoder, path));
@@ -294,41 +264,7 @@ function installEclipseApk (config, context, callback) {
 	});
 }
 
-function installAndroidStudioApk (config, context, callback) {
-	//var deviceName = "\"" + sanitizeString(config.device) + "\"";
-	//var isLibrary = sanitizeBoolean(config.isLibrary);
-	//var testFolderName = sanitizeString(config.testFolderName);
-	var sdkLocation = sanitizeString(config.sdkLocation);
-	//var ide = sanitizeString(config.ide);
-
-	var absoluteSdk;
-	var aapt;
-	var adb;
-	var android;
-	var emulator;
-
-	if (!sdkLocation) { //assume tools is in the path if no location is specified
-		aapt = "aapt";
-		adb = "adb";
-		android = "android";
-		emulator = "emulator";
-	}
-	else {
-		//set up the absolute locations of the android tools for reference
-		absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-		adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		android = absoluteSdk + sdkTools["android"]["toolFull"];
-		emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-	}
-
-	var path = {
-		aapt: aapt,
-		adb: adb,
-		android: android,
-		emulator: emulator,
-		sdkLocation: sdkLocation
-	}
+function installAndroidStudioApk (path, context, callback) {
 
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
@@ -430,6 +366,17 @@ var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
 		//install the test apk
 		process.chdir("bin"); //the apk is in the bin directory
+		findAndInstall("\*debug-unaligned.apk", function (testApkName) {
+			//source for the aapt solution (dljava):
+			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+			var getPackageCmd = path.aapt + " dump badging " + testApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+			child.exec(getPackageCmd, function (err, stdout, stderr) {	
+				var packageName = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+				next(null, testApkName, packageName); //return the name of the debug apk and the package name
+			});
+		});
+/*
 		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 			var testApkName = stdout.slice(2); //remove the "./" characters at the beginning
 			testApkName = sanitizeString(testApkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
@@ -447,7 +394,7 @@ var eclipseTasksThird = function(context, decoder, path) {
 				});
 
 			});
-		});
+		});*/
 	};
 }
 
@@ -468,6 +415,11 @@ var eclipseTasksFourth = function(context, decoder, path) {
 		});
 		antCleanCommand.on('close', function (code) { 
 			process.chdir("bin"); //the apk is in the bin directory
+
+			findAndInstall("\*debug-unaligned.apk", function (apkName) {
+				next(null, testApkName, packageName, stdout); //return the name of the project apk
+			});
+			/*
 			child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 				stdout = stdout.slice(2); //remove the "./" characters at the beginning
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
@@ -477,7 +429,7 @@ var eclipseTasksFourth = function(context, decoder, path) {
 					next(null, testApkName, packageName, stdout); //return the name of the debug apk
 				});
 
-			});
+			});*/
 		});
 	};
 }
@@ -570,22 +522,31 @@ var studioTasksSecond = function(context, decoder, path) {
 
 var studioTasksThird = function(context, decoder, path) {
 	return function (next) {
-		//find the debug apk
+		//find the debug apk and install it
 		process.chdir("Application"); 
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
+
+		findAndInstall("\*debug-unaligned.apk", function (apkName) {
+			next(null, stdout); //return the name of the debug apk
+		});
+		/*
 		child.exec("find $directory -type f -name \*debug-unaligned.apk", function (err, stdout, stderr) {
 			stdout = stdout.slice(2); //remove the "./" characters at the beginning
 			stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 			next(null, stdout); //return the name of the debug apk
-		});
+		});*/
 	};
 }
 
 var studioTasksFourth = function(context, decoder, path) {
 	return function (debugApkName, next) {
-		//install the debug apk and find the debug test apk
+		//find the debug test apk and install it
+		findAndInstall("\*test-unaligned.apk", function (apkName) {
+			next(null, debugApkName, stdout); //return the name of the debug apk
+		});
+/*
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 			//context.out(decoder.write(stdout));
 			context.out(stdout);
@@ -594,13 +555,22 @@ var studioTasksFourth = function(context, decoder, path) {
 				stdout = sanitizeString(stdout.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 				next(null, debugApkName, stdout); //return the name of the debug test apk
 			});
-		});
+		});*/
 	};
 }
 
 var studioTasksFifth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, next) {
-		//install the debug test apk and get the test package name
+		//get the test package name
+		//source for the aapt solution (dljava):
+		//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
+		var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
+
+		child.exec(getPackageCmd, function (err, stdout, stderr) {	
+			stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
+			next(null, debugApkName, debugTestApkName, stdout); //return the package name
+		});
+		/*
 		child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
 			//context.out(decoder.write(stdout));
 			context.out(stdout);
@@ -613,7 +583,7 @@ var studioTasksFifth = function(context, decoder, path) {
 				stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
 				next(null, debugApkName, debugTestApkName, stdout); //return the package name
 			});
-		});
+		});*/
 	};
 }
 
@@ -675,6 +645,20 @@ var resignApk = function (apkName, context, callback) {
 		callback();
 	});
 
+}
+
+//finds an apk based on a regex input, installs it and returns the name of the apk
+var findAndInstall = function (regex, callback) {
+	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
+		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
+		apkName = sanitizeString(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+
+		child.exec(path.adb + " install -r " + apkName, function (err, stdout, stderr) {
+			context.out(stdout);
+			callback(apkName); //return the name of the apk
+		});
+
+	});
 }
 
 var sanitizeString = function (string) {
