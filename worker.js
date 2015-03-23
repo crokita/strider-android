@@ -73,8 +73,16 @@ module.exports = {
 			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
+				var configData = {
+					device: config.device,
+					isLibrary: config.isLibrary,
+					projectFolderName: config.projectFolderName,
+					testFolderName: config.testFolderName,
+					ide: config.ide,
+					sdkLocation: config.sdkLocation
+				};
 				//use installToTestObj from the prepare phase to help start the tests
-				SDK.runTests(packageName, context, function (err, result) {
+				SDK.runTests(configData, packageName, context, function (err, result) {
 					done(null, true);
 				});
 			},

@@ -196,11 +196,30 @@ module.exports = {
 */
 	},
 
-	runTests: function (packageName, context, callback) {
-		console.log(packageName);
+	runTests: function (config, packageName, context, callback) {
+		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
+		var sdkLocation = sanitizeString(config.sdkLocation);
+		path.sdkLocation = sdkLocation;
+
+		if (!sdkLocation) { //assume tools is in the path if no location is specified
+			path.aapt = "aapt";
+			path.adb = "adb";
+			path.android = "android";
+			path.emulator = "emulator";
+		}
+		else {
+			//set up the absolute locations of the android tools for reference
+			var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+			path.absoluteSdk = absoluteSdk;
+			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
+			path.emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+		}
+
 		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
-		runTheTests(context, decoder, packageName, function (err, output) {
+		runTheTests(context, decoder, path, packageName, function (err, output) {
 			callback(err, output);
 		});
 	}
@@ -508,7 +527,7 @@ var studioTasksFifth = function(context, decoder, path) {
 }
 
 //use this regardless of which IDE is used
-var runTheTests = function(context, decoder, packageName, callback) {
+var runTheTests = function(context, decoder, path, packageName, callback) {
 	//run the tests!
 	var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
 	var runTestsCmd = child.spawn(path.adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);

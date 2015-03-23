@@ -71,8 +71,8 @@ module.exports = {
 		});
 	},
 
-	runTests: function (packageName, context, callback) {
-		cmd.runTests(packageName, context, function (err, output) {
+	runTests: function (configData, packageName, context, callback) {
+		cmd.runTests(configData, packageName, context, function (err, output) {
 			return callback(err, output);
 		});
 	}
