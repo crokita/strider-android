@@ -437,8 +437,6 @@ var eclipseTasksFirst = function(context, decoder, path) {
 			updateProjectCommand.on('close', function (code) {
 				next(null);
 			});
-
-			next(null);
 		});
 	};
 }
