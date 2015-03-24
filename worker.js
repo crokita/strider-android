@@ -41,7 +41,8 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				//context.comment("This is a comment. It gets shown on the Strider webpage");
-				job.cancel(); //see what happens
+				console.log(job);
+				job.cancel(job.project.runner.id); //see what happens
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
