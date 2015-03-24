@@ -62,9 +62,6 @@ module.exports = {
 
 	startEmulator: function (configData, context, callback) {
 		cmd.startEmulator(configData, context, function (result) {
-			if (err) {
-				context.out(err); //print the error
-			}
 			return callback(result);
 		});
 	},
