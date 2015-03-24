@@ -522,9 +522,11 @@ var runTheTests = function(context, decoder, path) {
 			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
 			if (result == -1) {
 				console.log("THE TEST PASSED!");
+				done(null, true);
 			}
 			else {
 				console.log("THE TEST FAILED!");
+				done("One or more unit tests have failed", true);
 			}
 			return next(null, code);
 		});

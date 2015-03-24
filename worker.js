@@ -74,11 +74,10 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				done(null, false);
-/*
+
 				SDK.installApk(configData, context, function (err, result) {
 					done(null, true);
-				});*/
+				});
 			},
 			deploy: '',
 			cleanup: ''
