@@ -519,7 +519,7 @@ var runTheTests = function(context, decoder, path) {
 			//Finding "InstrumentationTestRunner=." means the tests have passed. In any other case make it a failed test
 			//However, if "InstrumentationTestRunner" isn't found at all then a problem occured and a fail should happen anyway
 			//check whether the unit tests passed
-			var result = fullOutputResults.search(/InstrumentationTestRunner=\../g);
+			var result = fullOutputResults.search(/FAILURES!!!/g);
 			if (result == -1) {
 				console.log("THE TEST PASSED!");
 				return next(null, true);
