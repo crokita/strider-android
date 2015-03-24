@@ -79,9 +79,11 @@ module.exports = {
 					done(err, result); //result is a boolean. err is an error message (if any)
 					//if there is anything in err then Strider will recognize the test as a failure
 				});
-			}
+			},
 			//deploy: '',
-			//cleanup: ''
+			cleanup: function (context, done) {
+				done(null, true);
+			}
 
 		});//TODO: uninstall the apks in the cleanup phase?
 	},
