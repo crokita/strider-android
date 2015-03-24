@@ -35,3 +35,4 @@ TODO LIST:
 *  Support for IntelliJ IDEA projects?
 *  Remove the apks from the emulator when it's finished?
 *  Change the search from checking if a failure happens to changing if a test passes? (use the regex "OK \(\d* test(s*)\)")
+*  Option to automatically set up the Android SDK?
