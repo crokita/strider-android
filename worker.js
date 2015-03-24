@@ -76,7 +76,8 @@ module.exports = {
 				};
 
 				SDK.installApk(configData, context, function (err, result) {
-					done(null, true);
+					done(err, result); //result is a boolean. err is an error message (if any)
+					//if there is anything in err then Strider will recognize the test as a failure
 				});
 			},
 			deploy: '',
