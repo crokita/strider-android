@@ -40,7 +40,7 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				//context.comment("This is a comment. It gets shown on the Strider webpage");
+				context.comment("This is a comment. It gets shown on the Strider webpage");
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
