@@ -74,7 +74,7 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				done("ERROR", true);
+				done(null, false);
 /*
 				SDK.installApk(configData, context, function (err, result) {
 					done(null, true);
