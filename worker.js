@@ -18,13 +18,13 @@ module.exports = {
 			//   Look at strider-runner-core for an
 			//   enumeration of the events. Emit plugin.[pluginid].myevent to
 			//   communicate things up to the browser or to the webapp.
-			/*listen: function (emitter, context) {
+			listen: function (emitter, context) {
 				emitter.on('job.status.phase.done', function (id, data) {
 					var phase = data.phase;
 					context.log('the ' + phase + ' phase has completed');
 					return true;
 				});
-			},*/
+			},
 			// For each phase that you want to deal with, provide either a
 			// shell command [string] or [Object] (as demo'd below)
 			// or a fn(context, done(err, didrun))
