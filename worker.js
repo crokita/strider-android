@@ -41,8 +41,6 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				//context.comment("This is a comment. It gets shown on the Strider webpage");
-				console.log(job);
-				job.cancel(job.project.runner.id); //see what happens
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
@@ -76,10 +74,11 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-
+				done("ERROR", false);
+/*
 				SDK.installApk(configData, context, function (err, result) {
 					done(null, true);
-				});
+				});*/
 			},
 			deploy: '',
 			cleanup: ''
