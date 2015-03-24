@@ -21,10 +21,16 @@ Select the name of the testing folder (it will attempt to find it for you if not
 For Android Studio:
 *  make sure your local.properties file is NOT added in your VCS
 
-TODO: test this plugin for real android devices instead of just emulators
-
 Given this answer: http://stackoverflow.com/a/16683625
 *  If you imported an IntelliJ project to Android Studio then this plugin will not work for Android Studio at the time being
 
 If your computer fails due to not having enough memory than changing the hw.ramSize property down to 96 or 128 MB may help with the problem
 *  The config file for the hw.ramSize is in .android/avd/your_emulator_name.avd/config.ini, probably in your root directory
+
+TODO LIST: 
+*  Test this plugin for real android devices instead of just emulators
+*  Discern between erroring and failing
+*  Resolve re-test errors where the same phases get launched multiple times
+*  Allow the user to select a subset of tests to perform
+*  Support for IntelliJ IDEA projects?
+*  Remove the apks from the emulator when it's finished?
