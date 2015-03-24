@@ -62,12 +62,18 @@ module.exports = {
 
 	startEmulator: function (configData, context, callback) {
 		cmd.startEmulator(configData, context, function (result) {
+			if (err) {
+				context.out(err); //print the error
+			}
 			return callback(result);
 		});
 	},
 
 	installApk: function (configData, context, callback) {
 		cmd.installApk(configData, context, function (err, output) {
+			if (err) {
+				context.out(err); //print the error
+			}
 			return callback(err, output);
 		});
 	}
