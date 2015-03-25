@@ -41,7 +41,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.comment("This is a comment. It gets shown on the Strider webpage");
-				console.log(context.models);
+
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
@@ -76,7 +76,10 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				
-				job.test_exitcode = 5;
+				context.logger.assert(false);
+				return done(null, true);
+
+				//job.test_exitcode = 5;
 
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
