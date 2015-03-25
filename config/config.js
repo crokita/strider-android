@@ -2,9 +2,6 @@ var app = window.app;
 /*
 * $scope.configs, $scope.branch and $scope.pluginConfig, among others are available from the parent scope
 * */
-var timeoutVarProjectFolder; //this is used for a timeout function whenever a user is typing and changes need to be saved
-var timeoutVarTestFolder; //this is used for a timeout function whenever a user is typing and changes need to be saved
-var timeoutVarSdkLocation; //this is used for a timeout function whenever a user is typing and changes need to be saved
 
 app.controller('AndroidController', ['$scope', '$http', function ($scope, $http) {
 	$scope.saving = false;
@@ -180,40 +177,40 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.save();
 	}
 
-	//saves the input of what is the Eclipse testing folder name
-	$scope.changeTestFolderName = function () {
-		//whenever a change is made, reset the automatic save timer
-		clearTimeout(timeoutVarTestFolder);
+	//lets user know the input of what is the Eclipse testing folder name isnt saved
+	$scope.focusTestFolderName = function () {
 		$scope.eclipseModel.savingTestFolderName = true;
-		timeoutVarTestFolder = setTimeout(function () {
-			$scope.eclipseModel.savingTestFolderName = false;
-			$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
-			$scope.save();
-		}, 1000);
+	}
+
+	//lets user know the input of what is the Eclipse project folder name isnt saved
+	$scope.focusProjectFolderName = function () {
+		$scope.eclipseModel.savingProjectFolderName = true;
+	}
+
+	//lets user know the input of where the Android SDK is located isnt saved
+	$scope.focusSdkLocation = function () {
+		$scope.savingSdkLocation = true;
+	}
+
+	//saves the input of what is the Eclipse testing folder name
+	$scope.blurTestFolderName = function () {
+		$scope.eclipseModel.savingTestFolderName = false;
+		$scope.config.testFolderName = $scope.eclipseModel.testFolderName;
+		$scope.save();
 	}
 
 	//saves the input of what is the Eclipse project folder name
-	$scope.changeProjectFolderName = function () {
-		//whenever a change is made, reset the automatic save timer
-		clearTimeout(timeoutVarProjectFolder);
-		$scope.eclipseModel.savingProjectFolderName = true;
-		timeoutVarProjectFolder = setTimeout(function () {
-			$scope.eclipseModel.savingProjectFolderName = false;
-			$scope.config.projectFolderName = $scope.eclipseModel.projectFolderName;
-			$scope.save();
-		}, 1000);
+	$scope.blurProjectFolderName = function () {
+		$scope.eclipseModel.savingProjectFolderName = false;
+		$scope.config.projectFolderName = $scope.eclipseModel.projectFolderName;
+		$scope.save();
 	}
 
 	//saves the input of where the Android SDK is located
-	$scope.changeSdkLocation = function () {
-		//whenever a change is made, reset the automatic save timer
-		clearTimeout(timeoutVarSdkLocation);
-		$scope.savingSdkLocation = true;
-		timeoutVarSdkLocation = setTimeout(function () {
-			$scope.savingSdkLocation = false;
-			$scope.config.sdkLocation = $scope.sdkLocation;
-			$scope.save();
-		}, 1000);
+	$scope.blurSdkLocation = function () {
+		$scope.savingSdkLocation = false;
+		$scope.config.sdkLocation = $scope.sdkLocation;
+		$scope.save();
 	}
 
 	//function to easily add information to the console. ignores null inputs
@@ -222,10 +219,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			var time = new Date().toLocaleTimeString();
 			$scope.dataResult += time + "- " +data + "\n";
 		}
-	}
-
-	$scope.boop = function () {
-		alert("Lost focus!");
 	}
 
 }]);
