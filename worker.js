@@ -79,7 +79,7 @@ module.exports = {
 				//job.test_exitcode = 5;
 
 				SDK.installApk(configData, context, function (err, result) {
-					done(5, result); //result is a boolean. err is an error message (if any)
+					done("WHAT?", result); //result is a boolean. err is an error message (if any)
 					//if there is anything in err then Strider will recognize the test as a failure
 				});
 			},
