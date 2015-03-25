@@ -30,9 +30,9 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: '',
+			environment: ''
 			//object style
-			prepare: function (context, done) {
+			/*prepare: function (context, done) {
 				var configData = {
 					device: config.device,
 					isLibrary: config.isLibrary,
@@ -55,7 +55,7 @@ module.exports = {
 					}
 				});
 				
-			}/*,
+			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
 				var configData = {
