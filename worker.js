@@ -10,8 +10,9 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		//config = config || {};
 		//console.log(config);
+		/*
 		return cb(null, {
-			env: '',
+			env: {},
 			prepare: function (context, done) {
 				console.log("Prepare");
 				done(null, true);
@@ -24,8 +25,8 @@ module.exports = {
 				console.log("Cleanup");
 				done(null, true);
 			}
-		});
-/*
+		});*/
+
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -66,6 +67,7 @@ module.exports = {
 					}
 					else {
 						context.out("Found running emulator: " + result + "\n");
+						done(null, true);
 					}
 				});
 				
