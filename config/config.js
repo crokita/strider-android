@@ -224,5 +224,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		}
 	}
 
+	$scope.boop = function () {
+		alert("Lost focus!");
+	}
+
 }]);
 
