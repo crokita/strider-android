@@ -39,7 +39,18 @@ module.exports = {
 			},
 			test: function (context, done) {
 				console.log("Test");
-				done(null, true);
+				var configData = {
+					device: config.device,
+					isLibrary: config.isLibrary,
+					projectFolderName: config.projectFolderName,
+					testFolderName: config.testFolderName,
+					ide: config.ide,
+					sdkLocation: config.sdkLocation
+				};
+
+				SDK.installApk(configData, context, function (err, result) {
+					done(err, result); //result is a boolean. err is an error message (if any)
+				});
 			},
 			cleanup: function (context, done) {
 				console.log("Cleanup");
@@ -105,7 +116,6 @@ module.exports = {
 
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
-					//if there is anything in err then Strider will recognize the test as a failure
 				});
 			}
 			//deploy: '',
