@@ -10,7 +10,8 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		//config = config || {};
 		//console.log(config);
-
+		return cb(null, {});
+/*
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -70,13 +71,11 @@ module.exports = {
 					done(err, result); //result is a boolean. err is an error message (if any)
 					//if there is anything in err then Strider will recognize the test as a failure
 				});
-			},
-			//deploy: '',
-			cleanup: function (context, done) {
-				done(null, true);
 			}
+			//deploy: '',
+			//cleanup: ''
 
-		});//TODO: uninstall the apks in the cleanup phase?
+		});//TODO: uninstall the apks in the cleanup phase?*/
 	},
 	// this is only used if there is _no_ plugin configuration for a
 	// project. See gumshoe for documentation on detection rules.
