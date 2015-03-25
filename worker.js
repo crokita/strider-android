@@ -75,10 +75,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				
-				
-				job["phases"]["test"]["exitCode"] = 5;
-				console.log(job.phases.test);
-				
+				job.test_exitcode = 5;
 
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
@@ -87,7 +84,6 @@ module.exports = {
 			},
 			//deploy: '',
 			cleanup: function (context, done) {
-				console.log(job.phases);
 				done(null, true);
 			}
 
