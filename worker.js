@@ -43,17 +43,16 @@ module.exports = {
 				//context.comment("This is a comment. It gets shown on the Strider webpage");
 
 				SDK.findEmulator(context, function (result) {
-					/*if (!result) { //if it didn't return a matching emulator then start a new one
+					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator\n");
-						SDK.startEmulator(configData, context, function (code) {
+						//SDK.startEmulator(configData, context, function (code) {
 							done(null, true);
-						});
+						//});
 					}
 					else {
-						context.out("Found running emulator: " + result + "\n");
+						//context.out("Found running emulator: " + result + "\n");
 						done(null, true);
-					}*/
-					done(null, true);
+					}
 				});
 				
 			}/*,
