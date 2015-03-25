@@ -55,7 +55,7 @@ module.exports = {
 					}
 				});
 				
-			}/*,
+			},
 			//function style (calling done is a MUST)
 			test: function (context, done) {
 				var configData = {
@@ -70,7 +70,7 @@ module.exports = {
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
 				});
-			}*/
+			}
 			//deploy: '',
 			//cleanup: ''
 
