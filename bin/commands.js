@@ -125,7 +125,11 @@ module.exports = {
 		});
 		
 		adbCommand.on('close', function (code) { //emulator booted
-			return callback(code);
+			child.exec("ps", function (err. stdout, stderr) {
+				console.log(stdout);
+				return callback(code);
+			});
+			//return callback(code);
 		});
 	},
 
