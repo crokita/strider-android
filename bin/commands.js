@@ -172,28 +172,6 @@ module.exports = {
 			return callback("No IDE or invalid IDE specified", null);
 		}
 
-		//var finalCommand = "cd ${HOME}/.strider/data/*/" + testFolderName + "/bin; find $directory -type f -name \*.apk | xargs adb install";
-
-		//search for an apk
-/*		child.exec(finalCommand, function (err, stdout, stderr) {
-
-			console.log("Output: " + stdout);
-			if (stdout == "") { //no apk found
-				return callback("No APK file found", null);
-			}
-			else if (stdout == "Error: Could not access the Package Manager.  Is the system running?") {
-				//emulator not ready to install the apk. try again
-				console.log("Redo");
-				this.installApk(function (err, output) {
-					return callback(err, output);
-				});
-			} 
-			else {
-				return callback(err, stdout);
-			}
-	        
-	    });
-*/
 	}
 }
 
@@ -521,10 +499,10 @@ var runTheTests = function(context, decoder, path) {
 			//var result = fullOutputResults.search(/FAILURES!!!/g);
 			var result = fullOutputResults.search(/OK \(\d* test(s*)\)/g);
 			if (result == -1) {
-				return next(null, true); //the tests passed
+				return next(1, true); //non-zero number will cause a failure
 			}
 			else {
-				return next(1, true); //non-zero number will cause a failure
+				return next(null, true); //the tests passed
 			}
 			
 		});
