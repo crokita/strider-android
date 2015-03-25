@@ -87,6 +87,7 @@ module.exports = {
 			},
 			//deploy: '',
 			cleanup: function (context, done) {
+				console.log(job.phases);
 				done(null, true);
 			}
 
