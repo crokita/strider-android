@@ -74,12 +74,12 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				console.log(job);
-				console.log(job.phases);
+				
 				
 				job["phases"]["test"]["exitCode"] = {
 					exitCode: 5
 				}
+				console.log(job.phases.test);
 				
 
 				SDK.installApk(configData, context, function (err, result) {
