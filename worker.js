@@ -40,18 +40,8 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
-				context.comment("This is a comment. It gets shown on the Strider webpage");
+				//context.comment("This is a comment. It gets shown on the Strider webpage");
 
-/*
-				console.log("ARGS");
-				context.logger.log("basically just like info");
-				context.logger.info("helpful info");
-				context.logger.warn("give a warning");
-				context.logger.error("abort");
-				context.logger.time("Current time");
-				context.logger.trace("error message");
-				context.logger.assert(true); //just make this true
-*/
 				SDK.findEmulator(context, function (result) {
 					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator\n");
@@ -76,10 +66,8 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 
-				//job.test_exitcode = 5;
-
 				SDK.installApk(configData, context, function (err, result) {
-					done(undefined, result); //result is a boolean. err is an error message (if any)
+					done(err, result); //result is a boolean. err is an error message (if any)
 					//if there is anything in err then Strider will recognize the test as a failure
 				});
 			},

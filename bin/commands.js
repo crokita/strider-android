@@ -525,7 +525,7 @@ var runTheTests = function(context, decoder, path) {
 			}
 			else {
 				console.log("THE TEST FAILED!");
-				return next("One or more unit tests have failed", true);
+				return next(1, true); //non-zero number will cause a failure
 			}
 			
 		});

@@ -29,7 +29,6 @@ If your computer fails due to not having enough memory than changing the hw.ramS
 
 TODO LIST: 
 *  Test this plugin for real android devices instead of just emulators
-*  Discern between erroring and failing
 *  Resolve re-test errors where the same phases get launched multiple times
 *  Allow the user to select a subset of tests to perform
 *  Support for IntelliJ IDEA projects?
