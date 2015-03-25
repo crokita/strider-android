@@ -12,25 +12,12 @@ module.exports = {
 		//console.log(config);
 		
 		return cb(null, {
-			env: {},
 			listen: function (emitter, context) {
 				emitter.on('job.status.phase.done', function (id, data) {
 					var phase = data.phase;
 					context.log('the ' + phase + ' phase has completed');
 					return true;
 				});
-			},
-			prepare: function (context, done) {
-				console.log("Prepare");
-				done(null, true);
-			},
-			test: function (context, done) {
-				console.log("Test");
-				done(null, true);
-			},
-			cleanup: function (context, done) {
-				console.log("Cleanup");
-				done(null, true);
 			}
 		});
 /*
