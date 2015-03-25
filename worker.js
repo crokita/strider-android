@@ -10,22 +10,7 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		//config = config || {};
 		//console.log(config);
-		
-		return cb(null, {
-			listen: function (emitter, context) {
-				emitter.on('job.status.phase.done', function (id, data) {
-					var phase = data.phase;
-					context.log('the ' + phase + ' phase has completed');
-					return true;
-				});
-			},
-			environment: '',
-			prepare: '',
-			test: '',
-			cleanup: ''
-		});
 
-/*
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
@@ -89,7 +74,7 @@ module.exports = {
 			//deploy: '',
 			//cleanup: ''
 
-		});//TODO: uninstall the apks in the cleanup phase?*/
+		});//TODO: uninstall the apks in the cleanup phase?
 	},
 	// this is only used if there is _no_ plugin configuration for a
 	// project. See gumshoe for documentation on detection rules.
