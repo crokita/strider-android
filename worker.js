@@ -76,11 +76,11 @@ module.exports = {
 				};
 				console.log(job);
 				console.log(job.phases);
-				/*
-				job["phases"]["test"] = {
-					exitCode: 0
+				
+				job["phases"]["test"]["exitCode"] = {
+					exitCode: 5
 				}
-				*/
+				
 
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
