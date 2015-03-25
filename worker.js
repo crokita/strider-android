@@ -13,6 +13,13 @@ module.exports = {
 		
 		return cb(null, {
 			env: {},
+			listen: function (emitter, context) {
+				emitter.on('job.status.phase.done', function (id, data) {
+					var phase = data.phase;
+					context.log('the ' + phase + ' phase has completed');
+					return true;
+				});
+			},
 			prepare: function (context, done) {
 				console.log("Prepare");
 				var configData = {
