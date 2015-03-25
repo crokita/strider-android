@@ -74,6 +74,13 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation
 				};
+				console.log(job);
+				console.log(job.phases);
+				/*
+				job["phases"]["test"] = {
+					exitCode: 0
+				}
+				*/
 
 				SDK.installApk(configData, context, function (err, result) {
 					done(err, result); //result is a boolean. err is an error message (if any)
