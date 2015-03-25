@@ -76,9 +76,7 @@ module.exports = {
 				};
 				
 				
-				job["phases"]["test"]["exitCode"] = {
-					exitCode: 5
-				}
+				job["phases"]["test"]["exitCode"] = 5;
 				console.log(job.phases.test);
 				
 
