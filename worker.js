@@ -11,10 +11,22 @@ module.exports = {
 		//config = config || {};
 		//console.log(config);
 		return cb(null, {
-			env: 'echo "TEST ENVIRONMENT"',
-			prepare: 'echo "TEST PREPARE"',
-			test: 'echo "TEST TEST"',
-			cleanup: 'echo "TEST CLEANUP"'
+			env: function (context, done) {
+				console.log("Environment");
+				done(null, true);
+			},
+			prepare: function (context, done) {
+				console.log("Prepate");
+				done(null, true);
+			},
+			test: function (context, done) {
+				console.log("Test");
+				done(null, true);
+			},
+			cleanup: function (context, done) {
+				console.log("Cleanup");
+				done(null, true);
+			}
 		});
 /*
 		return cb(null, {
