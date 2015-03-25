@@ -93,12 +93,12 @@ module.exports = {
 			for (var index = 0; index < processArray.length; index++) {
 				for (var subindex = 0; subindex < emulators.length; subindex++) {
 					if (processArray[index] == emulators[subindex]) {
-						callback(processArray[index]);
+						return callback(processArray[index]);
 					}
 				}
 			}
 			//no matches
-			callback(null);
+			return callback(null);
 		});
 	},
 
