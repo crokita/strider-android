@@ -19,18 +19,17 @@
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()">
         <br><br>-->
         <p> 
-            In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. You should specify what the name of your testing folder is and what your project folder is below. 
+            In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. 
+            <br> You should specify what the name of your testing folder is and what your project folder is below. 
             <br> If you don't input anything in Test Folder Name then strider-android will pick the first one that contains 'test' in the name (case insensitive).
             <br> If you don't input anything in Project Folder Name then strider-android will pick the first one that doesn't contain 'test' in the name (case insensitive).
         </p>
         <br>
         Project Folder Name: <input type="text" ng-model="eclipseModel.projectFolderName" ng-focus="focusProjectFolderName()" ng-blur="blurProjectFolderName()"> </input>
-            <i ng-if="eclipseModel.savingProjectFolderName == true" class="fa fa-cog fa-spin"></i>
+        <i ng-if="eclipseModel.savingProjectFolderName == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
         <br>
         Test Folder Name: <input type="text" ng-model="eclipseModel.testFolderName" ng-focus="focusTestFolderName()" ng-blur="blurTestFolderName()"> </input>
-        <div ng-if="eclipseModel.savingTestFolderName == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
-            <i class="fa fa-cog fa-spin"></i>
-        </div>
+        <i ng-if="eclipseModel.savingTestFolderName == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
         <br>
 
     </div>
@@ -48,9 +47,8 @@
         Example input (if the folder for the sdk is in the root directory): android-sdk-linux
     </p>
     SDK Directory: <input type="text" ng-model="sdkLocation" ng-focus="focusSdkLocation()" ng-blur="blurSdkLocation()"> </input>
-    <div ng-if="savingSdkLocation == true"> <!-- a spinner to indicate that the text field isn't saved yet -->
-        <i class="fa fa-cog fa-spin"></i>
-    </div>
+    <i ng-if="savingSdkLocation == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
+    <br>
 
     <!-- General device settings -->
     <h4> Device Settings </h4>
