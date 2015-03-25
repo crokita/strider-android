@@ -41,6 +41,7 @@ module.exports = {
 					sdkLocation: config.sdkLocation
 				};
 				context.comment("This is a comment. It gets shown on the Strider webpage");
+				console.log(context.models);
 /*
 				console.log("ARGS");
 				context.logger.log("basically just like info");
