@@ -4,7 +4,7 @@ A Strider plugin for automating Android projects developed in Eclipse and Androi
 
 Requirements:
 *  Linux (tested only on Ubuntu so far)
-*  Android SDK installed. Recommended to add it to your PATH
+*  Android SDK installed. It is recommended to add it to your PATH
 *  Ant installed for Eclipse projects
 *  Over 512 MB of memory for running the emulator and for gradle
 *  Java Runtime Environment (JRE) or Java Development Kit (JDK)
@@ -13,10 +13,11 @@ Requirements:
 An Android device must be selected through the config webpage before clicking "Test"
 
 #### Custom configurations on the webpage:
-
-##### Adding a new Android device
-Select an existing android device
-Select the name of the testing folder (it will attempt to find it for you if not specified)
+*  If you don't have your Android SDK in your path you can specify it in a text field in the plugin
+*  strider-android can grab your existing android devices or create a new one. They can also be deleted in the config page
+*  If you create a new device then name, target level and ABI are required
+ 
+Android Studio projects require no extra configurations. Eclipse projects must have two directories: one which holds the unit tests and one which contains the project. The user can specify which directory contains the unit tests and which contains the project code (more info on the plugin config page).
 
 For Android Studio:
 *  make sure your local.properties file is NOT added in your VCS
