@@ -10,7 +10,12 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		//config = config || {};
 		//console.log(config);
-		return cb(null, {});
+		return cb(null, {
+			env: 'echo "TEST ENVIRONMENT"',
+			prepare: 'echo "TEST PREPARE"',
+			test: 'echo "TEST TEST"',
+			cleanup: 'echo "TEST CLEANUP"'
+		});
 /*
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
