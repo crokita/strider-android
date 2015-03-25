@@ -494,9 +494,7 @@ var runTheTests = function(context, decoder, path) {
 		});
 		
 		runTestsCmd.on('close', function (code) {
-			//Finding "FAILURES!!!" means the tests have failed. In any other case make it a failed test
 			//check whether the unit tests have passed
-			//var result = fullOutputResults.search(/FAILURES!!!/g);
 			var result = fullOutputResults.search(/OK \(\d* test(s*)\)/g);
 			if (result == -1) {
 				return next(1, true); //non-zero number will cause a failure
