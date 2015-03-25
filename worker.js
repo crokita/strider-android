@@ -11,10 +11,7 @@ module.exports = {
 		//config = config || {};
 		//console.log(config);
 		return cb(null, {
-			env: function (context, done) {
-				console.log("Environment");
-				done(null, true);
-			},
+			env: {},
 			prepare: function (context, done) {
 				console.log("Prepate");
 				done(null, true);
