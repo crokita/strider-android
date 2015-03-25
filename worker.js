@@ -10,12 +10,32 @@ module.exports = {
 	init: function (config, job, context, cb) {
 		//config = config || {};
 		//console.log(config);
-		/*
+		
 		return cb(null, {
 			env: {},
 			prepare: function (context, done) {
 				console.log("Prepare");
-				done(null, true);
+				var configData = {
+					device: config.device,
+					isLibrary: config.isLibrary,
+					testFolderName: config.testFolderName,
+					ide: config.ide,
+					sdkLocation: config.sdkLocation
+				};
+				//context.comment("This is a comment. It gets shown on the Strider webpage");
+
+				SDK.findEmulator(context, function (result) {
+					if (!result) { //if it didn't return a matching emulator then start a new one
+						context.out("No emulator found. Starting up emulator\n");
+						SDK.startEmulator(configData, context, function (err, result) {
+							done(null, true);
+						});
+					}
+					else {
+						context.out("Found running emulator: " + result + "\n");
+						done(null, true);
+					}
+				});
 			},
 			test: function (context, done) {
 				console.log("Test");
@@ -25,8 +45,8 @@ module.exports = {
 				console.log("Cleanup");
 				done(null, true);
 			}
-		});*/
-
+		});
+/*
 		return cb(null, {
 			// any extra env variables. Will be available during all phases
 			env: {},
