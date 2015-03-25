@@ -1,5 +1,3 @@
-//all the dirty work goes here
-//used for easily creating commands
 var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
@@ -261,7 +259,6 @@ function installAndroidStudioApk (path, context, callback) {
 
 
 //the following methods are used exlusively for async.waterfall tasks
-
 var eclipseTasksFindProjectName = function(context, decoder, path) {
 	return function(next) {
 		//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
@@ -561,33 +558,8 @@ var sanitizeBoolean = function (bool) {
 //find a way to show errors/process of build in the strider test page!
 //		./android list sdk --all lists all the things
 //	   	./android update sdk --all --no-ui --filter 4 gets the fourth thing only in that list
-//use -r for adb install or ".apk" to reinstall the app
-/*
 
-use http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1 to get the package + activity
-*/
-// ONLY USE -data-wipe OPTION IF YOUR LOCAL FOLDER HAS AN I/O ERROR
-//Error: Could not access the Package Manager.  Is the system running?  <-- ping the install command until this goes away 
-//if the apk isnt there in the first place bad things will happen. what do?
-
-/*
-+ "output=\"Error: Could not access the Package Manager.  Is the system running?\" \n"
-+ "until [[ \"$output\" != \"Error: Could not access the Package Manager.  Is the system running?\" ]] \n"
-+ "do \n"
-+ "output=$(find $directory -type f -name \*.apk | xargs adb install) \n"
-+ "done";
-*/							
-
-//pm uninstall com.example.android.activityinstrumentation
-//./gradlew assembleDebugTest
-//./gradlew installDebugTest
-
-//not enough RAM. lower the memory size of the emulator to fix this (find hidden .android/avd/emulator.avd/config.ini file)
-//you need to use AAPT android tool in order to get the apk information on what package to find for testing
-//I recommend just putting these in a separate script and then calling those scripts. this is getting ridiculous
-
-//get path vars:
-//process.env.PATH
+//not enough RAM? lower the memory size of the emulator to fix this (find hidden .android/avd/emulator.avd/config.ini file)
 
 //you can update test-project and lib-project
 //https://developer.android.com/tools/help/android.html

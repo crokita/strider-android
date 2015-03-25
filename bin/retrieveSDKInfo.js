@@ -1,23 +1,6 @@
 //this is an intermediate module which may modify the data after commands.js creates the result
 var cmd = require('./commands');
 
-//TODO:  cd bin/; find $directory -type f -name \*.apk | xargs adb install'; should be a part of the testing phase, not the prepare phase
-//var isLibraryAppend 	= 	androidDir + ' update project --subprojects -p ${HOME}/.strider/data/*/.; ' +  
-//							'cd sdl_android_tests; ant clean debug; cd bin/; ';
-//var isNotLibraryAppend 	= 	androidDir + ' update project --path ${HOME}/.strider/data/*/.; ' +
-//							'cd sdl_android_tests; ant clean debug; cd bin/; ' + 
-//							'find $directory -type f -name \*.apk | xargs adb install ';
-
-/*
-TODO: USE lib-project INSTEAD OF project. ALSO GIVE THE USER THE OPTION TO SELECT WHETHER A LIBRARY IS BEING TESTED
-TODO: MIGHT NOT NEED THE ABOVE NOW
-${HOME}/android-sdk-linux/tools/android update project --subprojects -p .
-cd into android tests
-ant clean debug
-
-USE VVV
-find $directory -type f -name \*.apk to return the apk file (in the bin directory of the specified project)
-*/
 module.exports = {
 	
 	getDeviceList: function (sdkLocation, callback) {
@@ -117,9 +100,7 @@ var parseTargetList = function (input) {
 		var type = element[2].replace("Type: ", "");
 		var api = element[3].replace("API level: ", "");
 		var abis = element[4].replace("Tag/ABIs :", "");
-		//console.log("Name: " + name);
-		//console.log("Type: " + type);
-		//console.log("ABIs: " + abis);
+		
 		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
