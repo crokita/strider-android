@@ -35,3 +35,4 @@ TODO LIST:
 *  Support for IntelliJ IDEA projects?
 *  Remove the apks from the emulator when it's finished?
 *  Option to automatically set up the Android SDK?
+*  Kill the currently running emulator if the user decides to switch emulators between retests
