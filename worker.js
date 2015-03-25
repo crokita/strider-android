@@ -30,9 +30,9 @@ module.exports = {
 			// or a fn(context, done(err, didrun))
 
 			//string style
-			environment: ''
+			environment: '',
 			//object style
-			/*prepare: function (context, done) {
+			prepare: function (context, done) {
 				var configData = {
 					device: config.device,
 					isLibrary: config.isLibrary,
@@ -43,7 +43,7 @@ module.exports = {
 				//context.comment("This is a comment. It gets shown on the Strider webpage");
 
 				SDK.findEmulator(context, function (result) {
-					if (!result) { //if it didn't return a matching emulator then start a new one
+					/*if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator\n");
 						SDK.startEmulator(configData, context, function (code) {
 							done(null, true);
@@ -52,10 +52,11 @@ module.exports = {
 					else {
 						context.out("Found running emulator: " + result + "\n");
 						done(null, true);
-					}
+					}*/
+					done(null, true);
 				});
 				
-			},
+			}/*,
 			//function style (calling done is a MUST)
 			test: function (context, done) {
 				var configData = {

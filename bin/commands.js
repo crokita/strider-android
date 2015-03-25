@@ -492,7 +492,12 @@ var runTheTests = function(context, decoder, path) {
 			context.out(data);
 			fullOutputResults = fullOutputResults.concat(data);
 		});
-		
+		/*
+		NOTES: The first parameter of done() determines the test status
+		if it's 0, null or undefined the test passes
+		if it's a non-zero number it fails
+		if it's a string it's an error
+		*/
 		runTestsCmd.on('close', function (code) {
 			//check whether the unit tests have passed
 			var result = fullOutputResults.search(/OK \(\d* test(s*)\)/g);
