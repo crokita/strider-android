@@ -335,7 +335,6 @@ var eclipseTasksSecond = function(context, decoder, path) {
 
 var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
-		context.comment("RESIGN THE DEBUG APK");
 		//find and resign the test apk
 		process.chdir("bin"); //the apk is in the bin directory
 		findAndResign("\*debug-unaligned.apk", context, path, function (debugTestApkName) {
@@ -354,8 +353,6 @@ var eclipseTasksThird = function(context, decoder, path) {
 
 var eclipseTasksFourth = function(context, decoder, path) {
 	return function (debugTestApkName, packageName, next) {
-		context.comment("RESIGN THE PROJECT APK");
-
 		//find and resign the project apk so the security error doesn't pop up
 		process.chdir("../");
 		process.chdir("../");
@@ -391,7 +388,7 @@ var eclipseTasksFifth = function(context, decoder, path) {
 			process.chdir("bin"); //the apk is in the bin directory
 			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
 				context.out(stdout);
-				next(null, debugApkName, debugTestApkName);
+				next(null, debugApkName, debugTestApkName, packageName);
 			});
 		});
 	};
