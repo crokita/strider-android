@@ -335,9 +335,9 @@ var eclipseTasksSecond = function(context, decoder, path) {
 
 var eclipseTasksThird = function(context, decoder, path) {
 	return function (next) {
-		//install the test apk
+		//find and resign the test apk
 		process.chdir("bin"); //the apk is in the bin directory
-		findAndInstall("\*debug-unaligned.apk", context, path, function (debugTestApkName) {
+		findAndResign("\*debug-unaligned.apk", context, path, function (debugTestApkName) {
 			//source for the aapt solution (dljava):
 			//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
 			var getPackageCmd = path.aapt + " dump badging " + debugTestApkName + "|awk -F\" \" \'/package/ {print $2}\'|awk -F\"\'\" \'/name=/ {print $2}\'";
@@ -353,7 +353,7 @@ var eclipseTasksThird = function(context, decoder, path) {
 
 var eclipseTasksFourth = function(context, decoder, path) {
 	return function (debugTestApkName, packageName, next) {
-		//install the project apk
+		//find and resign the project apk so the security error doesn't pop up
 		process.chdir("../");
 		process.chdir("../");
 		process.chdir(path.projectFolderName);
@@ -369,7 +369,7 @@ var eclipseTasksFourth = function(context, decoder, path) {
 		antCleanCommand.on('close', function (code) { 
 			process.chdir("bin"); //the apk is in the bin directory
 
-			findAndInstall("\*debug-unaligned.apk", context, path, function (apkName) {
+			findAndResign("\*debug-unaligned.apk", context, path, function (apkName) {
 				next(null, debugTestApkName, apkName, packageName); //return the name of the project apk
 			});
 
@@ -379,14 +379,16 @@ var eclipseTasksFourth = function(context, decoder, path) {
 
 var eclipseTasksFifth = function(context, decoder, path) {
 	return function (debugTestApkName, debugApkName, packageName, next) {
-		//now re-sign the apk files so the security error doesn't pop up
-		resignApk(debugApkName, context, function () {
+		//now install the apk files
+		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+			context.out(stdout);
 			process.chdir("../");
 			process.chdir("../");
 			process.chdir(path.testFolderName);
 			process.chdir("bin"); //the apk is in the bin directory
-			resignApk(debugTestApkName, context, function () {
-				next(null, debugTestApkName, debugApkName, packageName);
+			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+				context.out(stdout);
+				next(null, debugApkName, debugTestApkName);
 			});
 		});
 	};
