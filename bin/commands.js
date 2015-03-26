@@ -96,7 +96,7 @@ module.exports = {
 					"name": resultPair[0],
 					"pid": resultPair[1]
 				}
-				processFullArray.push(pairObj);
+				processPairArray.push(pairObj);
 			}
 			console.log(processPairArray);
 			return callback(null);
