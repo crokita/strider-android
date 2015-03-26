@@ -449,6 +449,19 @@ var studioTasksThird = function(context, decoder, path) {
 
 var studioTasksFourth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, next) {
+		//now install the apk files
+		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+			context.out(stdout);
+			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+				context.out(stdout);
+				next(null, debugApkName, debugTestApkName, stdout);
+			});
+		});
+	};
+}
+
+var studioTasksFifth = function(context, decoder, path) {
+	return function (debugApkName, debugTestApkName, next) {
 		//get the test package name
 		//source for the aapt solution (dljava):
 		//http://stackoverflow.com/questions/4567904/how-to-start-an-application-using-android-adb-tools?rq=1
@@ -457,20 +470,6 @@ var studioTasksFourth = function(context, decoder, path) {
 		child.exec(getPackageCmd, function (err, stdout, stderr) {	
 			stdout = stdout.replace(/\n/g, ""); //make sure theres no newline characters
 			next(null, debugApkName, debugTestApkName, stdout); //return the package name
-		});
-
-	};
-}
-
-var studioTasksFifth = function(context, decoder, path) {
-	return function (debugApkName, debugTestApkName, packageName, next) {
-		//now install the apk files
-		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-			context.out(stdout);
-			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-				context.out(stdout);
-				next(null, debugApkName, debugTestApkName, packageName, stdout);
-			});
 		});
 	};
 }
@@ -552,7 +551,7 @@ var findAndResign = function (regex, context, path, callback) {
 		var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 							+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
 							+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
-							+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
+							+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../; rm -r unzip-output";
 		child.exec(resignCommand, function (err, stdout, stderr) {
 			context.out(stdout);
 			callback();
