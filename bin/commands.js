@@ -432,14 +432,14 @@ var studioTasksSecond = function(context, decoder, path) {
 
 var studioTasksThird = function(context, decoder, path) {
 	return function (next) {
-		//find the debug apk and the test apk, then install both
+		//find the debug apk and the test apk, then resign both so the security error doesn't pop up
 		process.chdir("Application"); 
 		process.chdir("build"); 
 		process.chdir("outputs"); 
 		process.chdir("apk"); 
 
-		findAndInstall("\*debug-unaligned.apk", context, path, function (debugApkName) {
-			findAndInstall("\*test-unaligned.apk", context, path, function (debugTestApkName) {
+		findAndResign("\*debug-unaligned.apk", context, path, function (debugApkName) {
+			findAndResign("\*test-unaligned.apk", context, path, function (debugTestApkName) {
 				next(null, debugApkName, debugTestApkName); //return the names of the apks
 			});
 		});
@@ -464,10 +464,12 @@ var studioTasksFourth = function(context, decoder, path) {
 
 var studioTasksFifth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, packageName, next) {
-		//now re-sign the apk files so the security error doesn't pop up
-		resignApk(debugApkName, context, function () {
-			resignApk(debugTestApkName, context, function () {
-				next(null, debugApkName, debugTestApkName, packageName);
+		//now install the apk files
+		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
+			context.out(stdout);
+			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
+				context.out(stdout);
+				next(null, debugApkName, debugTestApkName, packageName, stdout);
 			});
 		});
 	};
@@ -535,6 +537,25 @@ var findAndInstall = function (regex, context, path, callback) {
 		child.exec(path.adb + " install -r " + apkName, function (err, stdout, stderr) {
 			context.out(stdout);
 			callback(apkName); //return the name of the apk
+		});
+
+	});
+}
+
+//finds an apk based on a regex input, resigns it and returns the name of the apk
+var findAndResign = function (regex, context, path, callback) {
+	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
+		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
+		apkName = sanitizeString(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+
+		context.out("Apk Name: " + apkName);
+		var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
+							+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
+							+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
+							+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
+		child.exec(resignCommand, function (err, stdout, stderr) {
+			context.out(stdout);
+			callback();
 		});
 
 	});
