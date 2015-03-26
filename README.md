@@ -36,3 +36,4 @@ TODO LIST:
 *  Remove the apks from the emulator when it's finished?
 *  Option to automatically set up the Android SDK?
 *  Kill the currently running emulator if the user decides to switch emulators between retests
+*  Move the installation logic into the prepare phase

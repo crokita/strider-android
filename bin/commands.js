@@ -3,6 +3,7 @@ var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var async = require('async');
 
+var workers = []; //emulators go here so they can be killed when necessary
 
 var sdkTools =  {
 	"aapt": {
@@ -110,7 +111,7 @@ module.exports = {
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
 		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
-		//workers.push(emulatorCommand);
+		workers.push(emulatorCommand);
 		var adbCommand = child.spawn(adb, ["wait-for-device"]);
 		//workers.push(adbCommand);
 
