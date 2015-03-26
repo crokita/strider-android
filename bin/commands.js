@@ -514,7 +514,7 @@ var runTheTests = function(context, decoder, path) {
 
 //this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
 var resignApk = function (apkName, context, callback) {
-	context.out("Apk Name: " + apkName);
+	context.out("Apk Name: " + apkName + "\n");
 	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
 	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
@@ -554,7 +554,7 @@ var findAndResign = function (regex, context, path, callback) {
 							+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../; rm -r unzip-output";
 		child.exec(resignCommand, function (err, stdout, stderr) {
 			context.out(stdout);
-			callback();
+			callback(apkName);
 		});
 
 	});
