@@ -85,23 +85,23 @@ module.exports = {
 	},
 
 	findEmulator: function (context, callback) {
-		child.exec("ps aco command o pid --no-header", function (err, stdout, stderr) {
-			//convert the processes result into a list
-			var processArray = stdout.split("\n"); //returns an array of strings, which include the process name and id
-			var processPairArray = []; //a cleaner version of processArray
+		//child.exec("ps aco command o pid --no-header", function (err, stdout, stderr) {
+		//	//convert the processes result into a list
+		//	var processArray = stdout.split("\n"); //returns an array of strings, which include the process name and id
+		//	var processPairArray = []; //a cleaner version of processArray
+		//	
+		//	for (var index = 0; index < processArray.length; index++) {
+		//		var resultPair = processArray[index].match(/\S*/g);
+		//		var pairObj = {
+		//			"name": resultPair[0],
+		//			"pid": resultPair[1]
+		//		}
+		//		processPairArray.push(pairObj);
+		//	}
+		//	console.log(processPairArray);
+		//	return callback(null);
+		//});
 
-			for (var index = 0; index < processArray.length; index++) {
-				var resultPair = processArray[index].match(/\S*/g);
-				var pairObj = {
-					"name": resultPair[0],
-					"pid": resultPair[1]
-				}
-				processPairArray.push(pairObj);
-			}
-			console.log(processPairArray);
-			return callback(null);
-		});
-/*
 		child.exec("ps aco command --no-header", function (err, stdout, stderr) {
 			//convert the processes result into a list
 			var processArray = stdout.split("\n");
@@ -116,7 +116,7 @@ module.exports = {
 			//no matches
 			return callback(null);
 		});
-*/
+
 	},
 
 	startEmulator: function (config, context, callback) {
