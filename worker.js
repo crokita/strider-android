@@ -51,7 +51,14 @@ module.exports = {
 					}
 					else {
 						context.out("Found running emulator: " + result + "\n");
-						done(null, true);
+						//if the found emulator is the same as the emulator we want to run then leave it alone
+						//if the found emulator is different then kill it and start the proper one
+						if (result == config.device) {
+							done(null, true);
+						}
+						else {
+							
+						}
 					}
 				});
 				
