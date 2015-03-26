@@ -454,7 +454,7 @@ var studioTasksFourth = function(context, decoder, path) {
 			context.out(stdout);
 			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
 				context.out(stdout);
-				next(null, debugApkName, debugTestApkName, stdout);
+				next(null, debugApkName, debugTestApkName);
 			});
 		});
 	};
