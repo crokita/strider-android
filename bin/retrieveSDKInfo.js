@@ -102,7 +102,7 @@ var parseTargetList = function (input) {
 		var abis = element[4].replace("Tag/ABIs :", "");
 
 		if (abis.trim() == "no ABIs." || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. stop
-			return false;
+			return true;
 		}
 
 		var abiList = abis.split(",");
