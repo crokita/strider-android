@@ -420,33 +420,34 @@ var studioTasksFirst = function(context, decoder, path) {
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
-		fs.chmod("gradlew", 755, function () { //allow execution of gradlew
-			if (path.sdkLocation) {//specify the android sdk location in gradle's local.properties file
-				child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
-					next(null);
-				});
-			}
-			else {
+		if (path.sdkLocation) {//specify the android sdk location in gradle's local.properties file
+			child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				next(null);
-			}
-		});
+			});
+		}
+		else {
+			next(null);
+		}
 	};
 }
 
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
+		fs.chmod("gradlew", 777, function () { //allow execution of gradlew
+			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
-		assembleCommand.stdout.on('data', function (data) {
-			context.out(decoder.write(data));
+			assembleCommand.stdout.on('data', function (data) {
+				context.out(decoder.write(data));
+			});
+			assembleCommand.stderr.on('data', function (data) {
+				context.out(decoder.write(data));
+			});
+			assembleCommand.on('close', function (code) {
+				next(null);
+			});
 		});
-		assembleCommand.stderr.on('data', function (data) {
-			context.out(decoder.write(data));
-		});
-		assembleCommand.on('close', function (code) {
-			next(null);
-		});
+
 	};
 }
 
