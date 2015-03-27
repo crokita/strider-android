@@ -101,7 +101,7 @@ var parseTargetList = function (input) {
 		var api = element[3].replace("API level: ", "");
 		var abis = element[4].replace("Tag/ABIs :", "");
 
-		if (abis == "no ABIs." || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. stop
+		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. stop
 			return false;
 		}
 
