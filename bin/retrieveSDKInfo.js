@@ -113,13 +113,14 @@ var parseTargetList = function (input) {
 			api: api,
 			abis: abiList
 		};
-		console.log(targetFound);
 		targetList.push(targetFound);
 		return true;
 	});
 
 	if (success) {
 		//return the list of android targets
+		console.log("success");
+		console.log(targetList);
 		return targetList;
 	}
 	else {
