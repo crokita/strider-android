@@ -434,7 +434,7 @@ var studioTasksFirst = function(context, decoder, path) {
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		fs.chmod("gradlew", 777, function () { //allow execution of gradlew
+		fs.chmod("gradlew", 755, function () { //allow execution of gradlew
 			var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 			assembleCommand.stdout.on('data', function (data) {
