@@ -80,7 +80,7 @@ var parseDeviceList = function (input) {
 		
 		deviceList.push(deviceObj);
 	}	
-	console.log(deviceList);
+
 	return deviceList;
 }
 
