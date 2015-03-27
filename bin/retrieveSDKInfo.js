@@ -94,19 +94,21 @@ var parseTargetList = function (input) {
 	}
 	var targetList = [];
 
+	console.log(groupedList);
+
 	var success = groupedList.every(function (element, index, array) {
 		var id = element[0].replace("id: ", "");
 		var name = element[1].replace("Name: ", "");
 		var type = element[2].replace("Type: ", "");
 		var api = element[3].replace("API level: ", "");
 		var abis = element[4].replace("Tag/ABIs :", "");
-		
+		/*
 		console.log(id);
 		console.log(name);
 		console.log(type);
 		console.log(api);
 		console.log(abis);
-
+*/
 		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
