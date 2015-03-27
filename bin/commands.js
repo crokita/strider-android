@@ -64,12 +64,6 @@ module.exports = {
 		var abi = sanitizeString(data.abi.replace("default/", ""));
 		var sdkLocation = sanitizeString(data.sdkLocation);
 
-		console.log("Adding Device");
-		console.log(name);
-		console.log(target);
-		console.log(abi);
-		
-
 		var commandInPath = "echo | android create avd -n " + name + " -t " + target + " -b " + abi;
 		var commandNotInPath = "echo | ./android create avd -n " + name + " -t " + target + " -b " + abi;
 
