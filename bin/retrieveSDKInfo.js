@@ -102,13 +102,7 @@ var parseTargetList = function (input) {
 		var type = element[2].replace("Type: ", "");
 		var api = element[3].replace("API level: ", "");
 		var abis = element[4].replace("Tag/ABIs :", "");
-		/*
-		console.log(id);
-		console.log(name);
-		console.log(type);
-		console.log(api);
-		console.log(abis);
-*/
+
 		if (abis == "no ABIs" || type != "Platform") {//a platform which has no ABIs cannot run on an emulator. error out
 			return false;
 		}
@@ -127,6 +121,8 @@ var parseTargetList = function (input) {
 
 	if (success) {
 		//return the list of android targets
+		console.log("SUCCESS");
+		console.log(targetList);
 		return targetList;
 	}
 	else {
