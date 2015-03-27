@@ -80,7 +80,7 @@ var parseDeviceList = function (input) {
 		
 		deviceList.push(deviceObj);
 	}	
-
+	console.log(deviceList);
 	return deviceList;
 }
 
@@ -119,8 +119,6 @@ var parseTargetList = function (input) {
 
 	if (success) {
 		//return the list of android targets
-		console.log("success");
-		console.log(targetList);
 		return targetList;
 	}
 	else {
