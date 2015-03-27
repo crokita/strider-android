@@ -238,7 +238,7 @@ var goToAndroid = function (location, toolObj) {
 }
 
 function installEclipseApk (path, context, callback) {
-
+	console.log("INSTALL ME");
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 
 	var tasks = [];
