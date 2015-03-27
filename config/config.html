@@ -19,7 +19,7 @@
         <input type="checkbox" ng-model="isLibrary" ng-click="changeIsLibrary()">
         <br><br>-->
         <p> 
-            In an Eclipse project you should have two folders in the root directory: one with your test project and one that has a project to be tested. 
+            In an Eclipse project you should have two folders in the project root directory: one with your test project and one that has a project to be tested. 
             <br> You should specify what the name of your testing folder is and what your project folder is below. 
             <br> If you don't input anything in Test Folder Name then strider-android will pick the first one that contains 'test' in the name (case insensitive).
             <br> If you don't input anything in Project Folder Name then strider-android will pick the first one that doesn't contain 'test' in the name (case insensitive).
@@ -40,11 +40,11 @@
     <!-- SDK Directory -->
     <p>
         If you do not have an environmental variable set up for your Android SDK home directory then you may specify it here.
-        Include a full directory from your root to the folder name of the SDK
+        Include a full directory from your home (echo ${HOME}) to the folder name of the SDK
         <br>
         This will only work on Linux-based machines
         <br>
-        Example input (if the folder for the sdk is in the root directory): android-sdk-linux
+        Example input (if the folder for the sdk is in the home directory): android-sdk-linux
     </p>
     SDK Directory: <input type="text" ng-model="sdkLocation" ng-focus="focusSdkLocation()" ng-blur="blurSdkLocation()"> </input>
     <i ng-if="savingSdkLocation == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
