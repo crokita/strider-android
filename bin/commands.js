@@ -439,11 +439,13 @@ var studioTasksFirst = function(context, decoder, path) {
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
 		if (path.sdkLocation != "") {//specify the android sdk location in gradle's local.properties file
+			console.log("NO SDK LOCATION");
 			child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				next(null);
 			});
 		}
 		else { //sdk location would be in ANDROID_HOME. continue
+			console.log("REFERENCE THE PATH");
 			next(null);
 		}
 	};
