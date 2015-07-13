@@ -43,6 +43,7 @@ module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
+		var sdkLocation = sanitizeString(data.sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -52,6 +53,7 @@ module.exports = {
 	getTargetList: function (sdkLocation, callback) {
 		var commandInPath = "android list targets";
 		var commandNotInPath = "./android list targets";
+		var sdkLocation = sanitizeString(data.sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -201,10 +203,10 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 			//process.chdir(initialDir);
 	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
 	    });
-	    workers.push(commandExec);
+	    //workers.push(commandExec);
 	}
 	else {
-		//go to the directory of the SDK
+		//go to the directory of the SDK tool
 		var error = goToAndroid(location, toolObj);
 		if (error != null) {
 			//process.chdir(initialDir);
@@ -232,7 +234,7 @@ var goToAndroid = function (location, toolObj) {
 		return "The SDK directory specified does not exist";
 	}
 	//allow execution of the requested tool
-	fs.chmodSync(toolObj["tool"], '755');
+	fs.chmodSync(toolObj["tool"], '111'); //give only execute permissions
 
 	return null;
 }
@@ -433,7 +435,7 @@ var studioTasksFirst = function(context, decoder, path) {
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		fs.chmodSync("gradlew", '755');
+		fs.chmodSync("gradlew", '111'); //give only execute permissions
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {

@@ -90,7 +90,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		});*/
 	}
 
-	//remembers the name of the device selectged
+	//remembers the name of the device selected
 	$scope.selectDevice = function (index) {
 		$scope.deviceSelected = $scope.deviceResults[index].name;
 		$scope.config.device = $scope.deviceResults[index].name;
