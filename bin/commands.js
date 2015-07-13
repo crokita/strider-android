@@ -134,6 +134,7 @@ module.exports = {
 		var adbCommand;
 
 		if (sdkLocation == "") { //assume android tool is in the path if no location is specified
+			console.log("if you see this then it's working");
 			emulatorCommand = child.spawn("emulator", ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
 			//workers.push(emulatorCommand);
 			adbCommand = child.spawn("adb", ["wait-for-device"]);
@@ -160,6 +161,7 @@ module.exports = {
 	},
 
 	installApk: function (config, context, callback) {
+		console.log("if you see this then it's working even more");
 		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
 		//var isLibrary = sanitizeBoolean(config.isLibrary);
 		var testFolderName = sanitizeString(config.testFolderName);
