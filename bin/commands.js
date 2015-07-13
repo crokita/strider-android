@@ -133,7 +133,7 @@ module.exports = {
 		var emulatorCommand;
 		var adbCommand;
 
-		if (!location) { //assume android tool is in the path if no location is specified
+		if (sdkLocation != "") { //assume android tool is in the path if no location is specified
 			emulatorCommand = child.spawn("emulator", ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
 			//workers.push(emulatorCommand);
 			adbCommand = child.spawn("adb", ["wait-for-device"]);
