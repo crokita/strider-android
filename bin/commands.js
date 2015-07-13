@@ -199,7 +199,13 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 	if (!location) { //assume android tool is in the path if no location is specified
 		var commandExec = child.exec(commandInPath, function (err, stdout, stderr) {
 			//process.chdir(initialDir);
-	        return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
+			if (!err) {
+				return callback(null, stdout);
+			}
+			else {
+				return callback("Cannot retrieve data. Chances are your android tool is not in the PATH.", stdout);
+			}
+	        
 	    });
 	    //workers.push(commandExec);
 	}
@@ -232,7 +238,7 @@ var goToAndroid = function (location, toolObj) {
 		return "The SDK directory specified does not exist";
 	}
 	//allow execution of the requested tool
-	fs.chmodSync(toolObj["tool"], '111'); //give only execute permissions
+	fs.chmodSync(toolObj["tool"], '555'); //give read and execute permissions
 
 	return null;
 }
@@ -433,7 +439,7 @@ var studioTasksFirst = function(context, decoder, path) {
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		fs.chmodSync("gradlew", '111'); //give only execute permissions
+		fs.chmodSync("gradlew", '555'); //give read and execute permissions
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {
