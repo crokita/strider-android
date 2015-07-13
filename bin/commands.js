@@ -209,7 +209,7 @@ module.exports = {
 var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotInPath, callback) {
 	//var initialDir = process.cwd();
 	var location = sdkLocation;
-	if (!location) { //assume android tool is in the path if no location is specified
+	if (location == "") { //assume android tool is in the path if no location is specified
 		var commandExec = child.exec(commandInPath, function (err, stdout, stderr) {
 			//process.chdir(initialDir);
 			if (!err) {
