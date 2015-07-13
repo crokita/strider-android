@@ -43,7 +43,7 @@ module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
-		var sdkLocation = sanitizeString(data.sdkLocation);
+		var sdkLocation = sanitizeString(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -53,7 +53,7 @@ module.exports = {
 	getTargetList: function (sdkLocation, callback) {
 		var commandInPath = "android list targets";
 		var commandNotInPath = "./android list targets";
-		var sdkLocation = sanitizeString(data.sdkLocation);
+		var sdkLocation = sanitizeString(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
