@@ -172,7 +172,7 @@ module.exports = {
 		path.projectFolderName = projectFolderName;
 		path.testFolderName = testFolderName;
 
-		if (!sdkLocation) { //assume tools is in the path if no location is specified
+		if (sdkLocation == "") { //assume tools is in the path if no location is specified
 			path.aapt = "aapt";
 			path.adb = "adb";
 			path.android = "android";
@@ -438,12 +438,12 @@ var studioTasksFirst = function(context, decoder, path) {
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 
-		if (path.sdkLocation) {//specify the android sdk location in gradle's local.properties file
+		if (path.sdkLocation != "") {//specify the android sdk location in gradle's local.properties file
 			child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				next(null);
 			});
 		}
-		else {
+		else { //sdk location would be in ANDROID_HOME. continue
 			next(null);
 		}
 	};
