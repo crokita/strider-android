@@ -43,6 +43,7 @@ module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
+		var sdkLocation = sanitizeString(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -52,6 +53,7 @@ module.exports = {
 	getTargetList: function (sdkLocation, callback) {
 		var commandInPath = "android list targets";
 		var commandNotInPath = "./android list targets";
+		var sdkLocation = sanitizeString(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -128,10 +130,21 @@ module.exports = {
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
-		var emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
-		//workers.push(emulatorCommand);
-		var adbCommand = child.spawn(adb, ["wait-for-device"]);
-		//workers.push(adbCommand);
+		var emulatorCommand;
+		var adbCommand;
+
+		if (!location) { //assume android tool is in the path if no location is specified
+			emulatorCommand = child.spawn("emulator", ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
+			//workers.push(emulatorCommand);
+			adbCommand = child.spawn("adb", ["wait-for-device"]);
+			//workers.push(adbCommand);
+		}
+		else {
+			emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
+			//workers.push(emulatorCommand);
+			adbCommand = child.spawn(adb, ["wait-for-device"]);
+			//workers.push(adbCommand);
+		}
 
 		emulatorCommand.stdout.on('data', function (data) {
 			context.out(data);
@@ -589,7 +602,7 @@ var sanitizeString = function (string) {
 	if (!string) {
 		return "";
 	}
-	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
+	var matches = string.match(/[a-zA-Z\d\.\_\-\/\\*]/g);
 	return matches.join("");
 }
 
