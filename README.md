@@ -4,7 +4,8 @@ A Strider plugin for automating Android projects developed in Eclipse and Androi
 
 Requirements:
 *  Linux (tested only on Ubuntu so far)
-*  Android SDK installed. It is recommended to add it to your PATH
+*  Android SDK installed. It is recommended to add it to your PATH.
+   * The path for the SDK <b>must</b> go under the variable ANDROID_HOME
 *  Ant installed for Eclipse projects
 *  Over 512 MB of memory for running the emulator and for gradle
 *  Java Runtime Environment (JRE) or Java Development Kit (JDK)
