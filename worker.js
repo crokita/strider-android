@@ -1,4 +1,5 @@
 var SDK = require("./bin/retrieveSDKInfo");
+var async = require('async');
 
 module.exports = {
 	// Initialize the plugin for a job
