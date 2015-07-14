@@ -3,7 +3,7 @@
 A Strider plugin for automating Android projects developed in Eclipse and Android Studio IDEs
 
 Requirements:
-*  Linux (tested only on Ubuntu so far)
+*  Linux or Mac OS
 *  Android SDK installed. It is recommended to add it to your PATH.
    * The path for the SDK <b>must</b> go under the variable ANDROID_HOME
    * The following directories in the SDK must be added to the path in order for all the necessary tools to function:
