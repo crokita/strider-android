@@ -127,7 +127,7 @@ module.exports = {
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
 
 		//var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		var absoluteSdk = sdkLocation;
+		var absoluteSdk = sdkLocation + "/";
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
