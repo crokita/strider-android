@@ -565,7 +565,7 @@ var resignApk = function (apkName, context, callback) {
 
 //finds an apk based on a regex input, installs it and returns the name of the apk
 var findAndInstall = function (regex, context, path, callback) {
-	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
+	child.exec("find ./ -type f -name " + regex, function (err, stdout, stderr) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
 		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
@@ -579,7 +579,7 @@ var findAndInstall = function (regex, context, path, callback) {
 
 //finds an apk based on a regex input, resigns it and returns the name of the apk
 var findAndResign = function (regex, context, path, callback) {
-	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
+	child.exec("find ./ -type f -name " + regex, function (err, stdout, stderr) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
 		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
