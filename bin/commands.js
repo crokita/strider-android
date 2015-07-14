@@ -180,10 +180,10 @@ module.exports = {
 			path.emulator = "emulator";
 		}
 		else {
-			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
-			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
-			path.emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+			path.aapt = sdkLocation + sdkTools["aapt"]["toolFull"];
+			path.adb = sdkLocation + sdkTools["adb"]["toolFull"];
+			path.android = sdkLocation + sdkTools["android"]["toolFull"];
+			path.emulator = sdkLocation + sdkTools["emulator"]["toolFull"];
 		}
 
 		if (ide == "Eclipse") {
