@@ -71,6 +71,26 @@ var parseDeviceList = function (input) {
 	if (list.length == 1) {
 		return null;
 	}
+
+	//sort through all the device information
+	var deviceObj = {};
+	for (var index = 0; index < list.length; index += 1) {
+		var line = list[index];
+		if (line.search("Name:") != -1) {
+			deviceObj.name = line.replace("Name:", "").trim();
+		}
+		else if (line.search("Target:") != -1) {
+			deviceObj.target = line.replace("Target:", "").trim();
+		}
+		else if (line.search("Tag/ABI:") != -1) {
+			deviceObj.abi = line.replace("Tag/ABI:", "").trim();
+		}
+		else if (line.charAt(0) == "-") { //end of device information. make a new one
+			deviceList.push(deviceObj);
+			deviceObj = {};
+		}
+	}	
+	/*
 	for (var index = 0; index < list.length; index += 6) {
 		var deviceObj = {
 			name: list[index].replace("Name:", "").trim(),
@@ -80,6 +100,7 @@ var parseDeviceList = function (input) {
 		
 		deviceList.push(deviceObj);
 	}	
+	*/
 
 	return deviceList;
 }
