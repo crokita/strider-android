@@ -168,6 +168,8 @@ module.exports = {
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
 		var ide = sanitizeName(config.ide);
 
+		var absoluteSdk = sdkLocation + "/";
+
 		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
 		path.sdkLocation = sdkLocation;
 		path.projectFolderName = projectFolderName;
@@ -180,10 +182,10 @@ module.exports = {
 			path.emulator = "emulator";
 		}
 		else {
-			path.aapt = sdkLocation + sdkTools["aapt"]["toolFull"];
-			path.adb = sdkLocation + sdkTools["adb"]["toolFull"];
-			path.android = sdkLocation + sdkTools["android"]["toolFull"];
-			path.emulator = sdkLocation + sdkTools["emulator"]["toolFull"];
+			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
+			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
+			path.emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 		}
 
 		if (ide == "Eclipse") {
