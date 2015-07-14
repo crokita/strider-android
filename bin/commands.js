@@ -43,7 +43,7 @@ module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
-		var sdkLocation = sanitizeString(sdkLocation);
+		var sdkLocation = sanitizeSDK(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -53,7 +53,7 @@ module.exports = {
 	getTargetList: function (sdkLocation, callback) {
 		var commandInPath = "android list targets";
 		var commandNotInPath = "./android list targets";
-		var sdkLocation = sanitizeString(sdkLocation);
+		var sdkLocation = sanitizeSDK(sdkLocation);
 
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
@@ -61,10 +61,10 @@ module.exports = {
 	},
 
 	addDevice: function (data, callback) {
-		var name = "\"" + sanitizeString(data.name) + "\"";
-		var target = sanitizeString(data.target);
-		var abi = sanitizeString(data.abi.replace("default/", ""));
-		var sdkLocation = sanitizeString(data.sdkLocation);
+		var name = "\"" + sanitizeName(data.name) + "\"";
+		var target = sanitizeName(data.target);
+		var abi = sanitizeName(data.abi.replace("default/", ""));
+		var sdkLocation = sanitizeSDK(data.sdkLocation);
 
 		var commandInPath = "echo | android create avd -n " + name + " -t " + target + " -b " + abi;
 		var commandNotInPath = "echo | ./android create avd -n " + name + " -t " + target + " -b " + abi;
@@ -75,8 +75,8 @@ module.exports = {
 	},
 
 	deleteDevice: function (data, callback) {
-		var deviceName = "\"" + sanitizeString(data.name) + "\"";
-		var sdkLocation = sanitizeString(data.sdkLocation);
+		var deviceName = "\"" + sanitizeName(data.name) + "\"";
+		var sdkLocation = sanitizeSDK(data.sdkLocation);
 
 		var commandInPath = "android delete avd -n " + deviceName;
 		var commandNotInPath = "./android delete avd -n " + deviceName;
@@ -122,11 +122,12 @@ module.exports = {
 	},
 
 	startEmulator: function (config, context, callback) {
-		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
-		var deviceName = sanitizeString(config.device);
-		var sdkLocation = sanitizeString(config.sdkLocation);
+		//var deviceName = "\"" + sanitizeName(config.device) + "\"";
+		var deviceName = sanitizeName(config.device);
+		var sdkLocation = sanitizeSDK(config.sdkLocation);
 
-		var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+		//var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
+		var absoluteSdk = sdkLocation;
 		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
 
@@ -160,12 +161,12 @@ module.exports = {
 	},
 
 	installApk: function (config, context, callback) {
-		//var deviceName = "\"" + sanitizeString(config.device) + "\"";
+		//var deviceName = "\"" + sanitizeSDK(config.device) + "\"";
 		//var isLibrary = sanitizeBoolean(config.isLibrary);
-		var testFolderName = sanitizeString(config.testFolderName);
-		var projectFolderName = sanitizeString(config.projectFolderName);
-		var sdkLocation = sanitizeString(config.sdkLocation);
-		var ide = sanitizeString(config.ide);
+		var testFolderName = sanitizeName(config.testFolderName);
+		var projectFolderName = sanitizeName(config.projectFolderName);
+		var sdkLocation = sanitizeSDK(config.sdkLocation);
+		var ide = sanitizeName(config.ide);
 
 		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
 		path.sdkLocation = sdkLocation;
@@ -179,9 +180,6 @@ module.exports = {
 			path.emulator = "emulator";
 		}
 		else {
-			//set up the absolute locations of the android tools for reference
-			var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-			path.absoluteSdk = absoluteSdk;
 			path.aapt = absoluteSdk + sdkTools["aapt"]["toolFull"];
 			path.adb = absoluteSdk + sdkTools["adb"]["toolFull"];
 			path.android = absoluteSdk + sdkTools["android"]["toolFull"];
@@ -241,8 +239,6 @@ var executeAndroid = function (sdkLocation, toolObj, commandInPath, commandNotIn
 //goes to the tools folder of the SDK given a location. also gives permission to execute the android tool
 //returns null if successful. returns a string error if not
 var goToAndroid = function (location, toolObj) {
-	process.chdir(process.env.HOME);
-
 	try {
 	  	process.chdir(location);
 	  	process.chdir(toolObj["location"]); //go to the tool location
@@ -437,7 +433,7 @@ var studioTasksFirst = function(context, decoder, path) {
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-		//FIX ME
+		
 		if (path.sdkLocation != "") {//specify the android sdk location in gradle's local.properties file
 			child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				next(null);
@@ -569,7 +565,7 @@ var resignApk = function (apkName, context, callback) {
 var findAndInstall = function (regex, context, path, callback) {
 	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
-		apkName = sanitizeString(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
 		child.exec(path.adb + " install -r " + apkName, function (err, stdout, stderr) {
 			context.out(stdout);
@@ -583,7 +579,7 @@ var findAndInstall = function (regex, context, path, callback) {
 var findAndResign = function (regex, context, path, callback) {
 	child.exec("find $directory -type f -name " + regex, function (err, stdout, stderr) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
-		apkName = sanitizeString(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
+		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
 		context.out("Apk Name: " + apkName);
 		var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
@@ -598,11 +594,19 @@ var findAndResign = function (regex, context, path, callback) {
 	});
 }
 
-var sanitizeString = function (string) {
+var sanitizeName = function (string) {
 	if (!string) {
 		return "";
 	}
-	var matches = string.match(/[a-zA-Z\d\.\_\-\/\\*]/g);
+	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
+	return matches.join("");
+}
+
+var sanitizeSDK = function (string) {
+	if (!string) {
+		return "";
+	}
+	var matches = string.match(/[a-zA-Z\d\.\_\-\/*]/g);
 	return matches.join("");
 }
 
