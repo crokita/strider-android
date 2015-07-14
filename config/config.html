@@ -38,18 +38,22 @@
     <div ng-if="ide == 'AndroidStudio'" class="well"> 
         No extra configurations required for Android Studio
     </div>
+
     <!-- SDK Directory -->
-    <p>
-        If you do not have an environmental variable set up for your Android SDK directory then you may specify it here.
+    <h4> Android SDK Directory </h4>
+    <div class="well well-sm">
+        <p>
+            If you do not have an environmental variable set up for your Android SDK directory then you may specify it here.
+            <br>
+            This will only work on Linux-based machines
+            <br>
+            You must provide an absolute location to your SDK directory (ie. /root/android-sdk-linux)</b>
+            <h5> Warning: Only the alphanumeric characters, -, _, ., and / are allowed. All other characters will be ignored </h5>
+        </p>
+        SDK Directory: <input type="text" ng-model="sdkLocation" ng-focus="focusSdkLocation()" ng-blur="blurSdkLocation()"> </input>
+        <i ng-if="savingSdkLocation == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
         <br>
-        This will only work on Linux-based machines
-        <br>
-        You must provide an absolute location to your SDK directory (ie. /root/android-sdk-linux)</b>
-        <h5> Warning: Only the alphanumeric characters, -, _, ., and / are allowed. All other characters will be ignored </h5>
-    </p>
-    SDK Directory: <input type="text" ng-model="sdkLocation" ng-focus="focusSdkLocation()" ng-blur="blurSdkLocation()"> </input>
-    <i ng-if="savingSdkLocation == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
-    <br>
+    </div>
 
     <!-- General device settings -->
     <h4> Device Settings </h4>
@@ -109,6 +113,18 @@
         <br><br>
         <button ng-click="createDevice()" class="btn btn-primary">Create New Device</button>
         <br>
+
+    </div>
+
+    <!-- Java documentation -->
+    <h4> Java Documentation </h4>
+    <div class="well well-sm">
+
+        <div class="checkbox">
+            <label>
+              <input type="checkbox" ng-model="javadocs" ng-click="toggleJavaDocs()"> Enable Java documentation generation (requires a JDK)
+            </label>
+        </div>
 
     </div>
 

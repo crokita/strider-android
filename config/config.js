@@ -21,6 +21,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
+		$scope.javadocs = false; //generate documentation
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -46,6 +47,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.projectFolderName = $scope.config.projectFolderName;
 		$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
+		$scope.javadocs = $scope.config.javadocs;
 	});
 
 	//save all data into the config 
@@ -67,6 +69,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.toAndroidStudio = function () {
 		$scope.ide = "AndroidStudio";
 		$scope.config.ide = $scope.ide;
+		$scope.save();
+	}
+
+	//toggles whether to generate java documentation
+	$scope.toggleJavaDocs = function () {
+		$scope.config.javadocs = !$scope.javadocs; //because of how ng-click is working the actual value is set to the opposite one intended
 		$scope.save();
 	}
 

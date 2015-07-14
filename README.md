@@ -9,6 +9,7 @@ Requirements:
 *  Ant installed for Eclipse projects
 *  Over 512 MB of memory for running the emulator and for gradle
 *  Java Runtime Environment (JRE) or Java Development Kit (JDK)
+   * The JDK is required if you want java documentation generation
 
 
 An Android device must be selected through the config webpage before clicking "Test"
