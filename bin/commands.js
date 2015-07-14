@@ -200,9 +200,11 @@ module.exports = {
 
 		if (ide == "Eclipse") {
 			context.out("Generating documentation");
+			return callback(null, null);
 		}
 		else if (ide == "AndroidStudio") {
 			context.out("Generating documentation");
+			return callback(null, null);
 		}
 		else {
 			return callback("No IDE or invalid IDE specified", null);
