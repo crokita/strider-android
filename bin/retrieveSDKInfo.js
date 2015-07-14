@@ -90,6 +90,8 @@ var parseDeviceList = function (input) {
 			deviceObj = {};
 		}
 	}	
+	//reached the end. push the last device onto deviceList
+	deviceList.push(deviceObj);
 	/*
 	for (var index = 0; index < list.length; index += 6) {
 		var deviceObj = {
