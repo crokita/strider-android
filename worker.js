@@ -87,7 +87,7 @@ module.exports = {
 
 				//execute the task(s) added above
 				async.waterfall(tasks, function (err, result) {
-					callback(err, result);
+					done(err, result);
 				});
 				
 			},
