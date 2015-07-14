@@ -56,6 +56,15 @@ module.exports = {
 			}
 			return callback(err, output);
 		});
+	},
+
+	generateJavaDocs: function (configData, context, callback) {
+		cmd.generateJavaDocs(configData, context, function (err, output) {
+			if (err) {
+				context.out(err); //print the error
+			}
+			return callback(err, output);
+		});
 	}
 
 }
