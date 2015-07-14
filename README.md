@@ -6,6 +6,10 @@ Requirements:
 *  Linux (tested only on Ubuntu so far)
 *  Android SDK installed. It is recommended to add it to your PATH.
    * The path for the SDK <b>must</b> go under the variable ANDROID_HOME
+   * The following directories in the SDK must be added to the path in order for all the necessary tools to function:
+      * tools
+      * platform-tools
+      * build-tools/21.1.2
 *  Ant installed for Eclipse projects
 *  Over 512 MB of memory for running the emulator and for gradle
 *  Java Runtime Environment (JRE) or Java Development Kit (JDK)

@@ -583,7 +583,7 @@ var findAndResign = function (regex, context, path, callback) {
 		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
 		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
 
-		context.out("Apk Name: " + apkName);
+		context.out("Apk Name: " + apkName + "\n");
 		var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
 							+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
 							+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
