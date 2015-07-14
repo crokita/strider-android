@@ -199,11 +199,30 @@ module.exports = {
 		var absoluteSdk = sdkLocation + "/";
 
 		if (ide == "Eclipse") {
-			context.out("Generating documentation");
+			context.out("Generating documentation...");
+
 			return callback(null, null);
 		}
 		else if (ide == "AndroidStudio") {
-			context.out("Generating documentation");
+			context.out("Generating documentation...");
+
+			var destinationPath = "${HOME}/.strider/data/*/";
+			var sourcePath = "${HOME}/.strider/data/*/Application/src/main/";
+			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "java"]);
+
+			javaDocCommand.stdout.on('data', function (data) {
+				context.out(data);
+			});
+
+			javaDocCommand.stderr.on('data', function (data) {
+				context.out(data);
+			});
+
+			javaDocCommand.on('close', function (code) {
+				context.out("Documentation saved in " + destinationPath);
+				return callback(code);
+			});
+
 			return callback(null, null);
 		}
 		else {
