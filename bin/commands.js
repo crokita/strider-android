@@ -437,7 +437,7 @@ var studioTasksFirst = function(context, decoder, path) {
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 		
 		if (path.sdkLocation != "") {//specify the android sdk location in gradle's local.properties file
-			child.exec("echo \"sdk.dir=${HOME}/" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
+			child.exec("echo \"sdk.dir=" + path.sdkLocation + "\" >> local.properties; ", function (err, stdout, stderr) {
 				next(null);
 			});
 		}
