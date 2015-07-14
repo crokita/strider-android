@@ -40,3 +40,4 @@ TODO LIST:
 *  Kill the currently running emulator if the user decides to switch emulators between retests
 *  Move the installation logic into the prepare phase
 *  Sometimes even after waiting for the device to boot it's still not enough time to wait for pushing an apk install on the device
+*  Automatic documentation generation
