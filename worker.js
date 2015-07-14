@@ -49,13 +49,8 @@ module.exports = {
 				if (configData.javadocs) { //user wants documentation generation
 					tasks.push( 
 						function (next) {
-							SDK.generateJavaDocs(configData, context, function (err, result) {
-								if (!result) {
-									next(null);
-								}
-								else {
-									next(null);
-								}
+							SDK.generateJavaDocs(configData, context, function (result) {
+								next(null);
 							});
 						}
 					);

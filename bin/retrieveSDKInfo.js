@@ -59,11 +59,8 @@ module.exports = {
 	},
 
 	generateJavaDocs: function (configData, context, callback) {
-		cmd.generateJavaDocs(configData, context, function (err, output) {
-			if (err) {
-				context.out(err); //print the error
-			}
-			return callback(err, output);
+		cmd.generateJavaDocs(configData, context, function (result) {
+			return callback(result);
 		});
 	}
 
