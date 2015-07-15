@@ -39,7 +39,9 @@ var emulators = [
 ];
 
 var emulatorPortLow = 5554; //the lowest the port number can be for an android emulator
-var emulatorPortHigh = 5680; //the highest the port number can be for an andoird emulator
+var emulatorPortHigh = 5680; //the highest the port number can be for an android emulator
+//this stores an array of values which contain the device name and serial number. for physical devices they would be the same thing
+var deviceNameSerialPairs = []; 
 
 
 module.exports = {
@@ -51,6 +53,8 @@ module.exports = {
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
 		});
+
+		deviceNameSerialPairs = "I have data!";
 	},
 
 	getTargetList: function (sdkLocation, callback) {
@@ -148,6 +152,8 @@ module.exports = {
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback(code);
 		});
+
+		context.out(deviceNameSerialPairs);
 	},
 
 	installApk: function (config, context, callback) {

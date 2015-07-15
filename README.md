@@ -36,8 +36,6 @@ If your computer fails due to not having enough memory than changing the hw.ramS
 
 TODO LIST: 
 *  Test this plugin for real android devices instead of just emulators
-*  Figure out why a refresh is needed to show the output of the testing process on the webpage
-*  Figure out why past builds don't show output
 *  Allow the user to select a subset of tests to perform
 *  Support for IntelliJ IDEA projects?
 *  Remove the apks from the emulator when it's finished?
@@ -45,4 +43,3 @@ TODO LIST:
 *  Kill the currently running emulator if the user decides to switch emulators between retests
 *  Move the installation logic into the prepare phase
 *  Sometimes even after waiting for the device to boot it's still not enough time to wait for pushing an apk install on the device
-*  Automatic documentation generation
