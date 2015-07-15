@@ -153,7 +153,7 @@ module.exports = {
 			return callback(code);
 		});
 
-		context.out(deviceNameSerialPairs);
+		context.out("HEY! " + deviceNameSerialPairs);
 	},
 
 	installApk: function (config, context, callback) {
