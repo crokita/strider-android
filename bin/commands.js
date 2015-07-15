@@ -199,16 +199,22 @@ module.exports = {
 		var absoluteSdk = sdkLocation + "/";
 
 		if (ide == "Eclipse") {
-			context.out("Generating documentation...");
+			context.out("Generating documentation...\n");
 
 			return callback(null, null);
 		}
 		else if (ide == "AndroidStudio") {
-			context.out("Generating documentation...");
+			context.out("Generating documentation...\n");
 
 			//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+			//get to the project main directory
+			process.chdir(process.env.HOME);
+			process.chdir(".strider"); //go to the root project directory
+			process.chdir("data"); 
+			process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+
 			var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
-			var sourcePath = "${HOME}/.strider/data/*/Application/src/main/java:${HOME}/.strider/data/*/Application/tests/src";
+			var sourcePath = "Application/src/main/java:Application/tests/src";
 			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
 			javaDocCommand.stdout.on('data', function (data) {
