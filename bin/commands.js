@@ -154,6 +154,7 @@ module.exports = {
 		var projectFolderName = sanitizeName(config.projectFolderName);
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
 		var ide = sanitizeName(config.ide);
+		var javadocs = sanitizeBoolean(config.javadocs);
 
 		var absoluteSdk = sdkLocation + "/";
 
@@ -161,6 +162,7 @@ module.exports = {
 		path.sdkLocation = sdkLocation;
 		path.projectFolderName = projectFolderName;
 		path.testFolderName = testFolderName;
+		path.javadocs = javadocs;
 
 		if (sdkLocation == "") { //assume tools is in the path if no location is specified
 			path.aapt = "aapt";
@@ -189,54 +191,8 @@ module.exports = {
 			return callback("No IDE or invalid IDE specified", null);
 		}
 
-	},
-
-	generateJavaDocs: function (config, context, callback) {
-		var testFolderName = sanitizeName(config.testFolderName);
-		var projectFolderName = sanitizeName(config.projectFolderName);
-		var sdkLocation = sanitizeSDK(config.sdkLocation);
-		var ide = sanitizeName(config.ide);
-		var absoluteSdk = sdkLocation + "/";
-
-		if (ide == "Eclipse") {
-			context.out("Generating documentation...\n");
-
-			return callback(null);
-		}
-		else if (ide == "AndroidStudio") {
-			context.out("Generating documentation...\n");
-
-			//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
-			//get to the project main directory
-			process.chdir(process.env.HOME);
-			process.chdir(".strider"); //go to the root project directory
-			process.chdir("data"); 
-			process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-
-			var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
-			var sourcePath = "Application/src/main/java:Application/tests/src";
-			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
-
-			javaDocCommand.stdout.on('data', function (data) {
-				context.out(data);
-			});
-
-			javaDocCommand.stderr.on('data', function (data) {
-				context.out(data);
-			});
-
-			javaDocCommand.on('close', function (code) {
-				context.out("Documentation saved in " + destinationPath + "\n");
-				return callback(code);
-			});
-
-			//return callback(null);
-		}
-		else {
-			return callback("No IDE or invalid IDE specified");
-		}
-
 	}
+
 }
 
 //this function will NOT check for malicious sdkLocation commands. please sanitize beforehand and use the sdkTools obj for toolObj
@@ -290,13 +246,15 @@ var goToAndroid = function (location, toolObj) {
 
 function installEclipseApk (path, context, callback) {
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-
 	var tasks = [];
 	if (path.projectFolderName == '') { //automatically try to find the main project if none is specified
 		tasks.push(eclipseTasksFindProjectName(context, decoder, path));
 	}
 	if (path.testFolderName == '') { //automatically try to find the test project if none is specified
 		tasks.push(eclipseTasksFindTestName(context, decoder, path));
+	}
+	if (path.javadocs) { //generate documentation
+		tasks.push(eclipseTasksGenerateJavaDocs(context, decoder, path));
 	}
 	tasks.push(eclipseTasksFirst(context, decoder, path));
 	tasks.push(eclipseTasksSecond(context, decoder, path));
@@ -311,9 +269,11 @@ function installEclipseApk (path, context, callback) {
 }
 
 function installAndroidStudioApk (path, context, callback) {
-
 	var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 	var tasks = [];
+	if (path.javadocs) { //generate documentation
+		tasks.push(studioTasksGenerateJavaDocs(context, decoder, path));
+	}
 	tasks.push(studioTasksFirst(context, decoder, path));
 	tasks.push(studioTasksSecond(context, decoder, path));
 	tasks.push(studioTasksThird(context, decoder, path));
@@ -350,6 +310,67 @@ var eclipseTasksFindTestName = function(context, decoder, path) {
         	next(null);
     	});
 	};
+}
+
+var eclipseTasksGenerateJavaDocs = function (context, decoder, path) {
+	return function (next) {
+		//get to the project main directory
+		process.chdir(process.env.HOME);
+		process.chdir(".strider"); //go to the root project directory
+		process.chdir("data"); 
+		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+		context.out("Generating documentation...\n");
+
+		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
+		var sourcePath = path.projectFolderName + "/src:" + path.testFolderName + "/src";
+		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
+
+		javaDocCommand.stdout.on('data', function (data) {
+			context.out(data);
+		});
+
+		javaDocCommand.stderr.on('data', function (data) {
+			context.out(data);
+		});
+
+		javaDocCommand.on('close', function (code) {
+			context.out("Documentation saved in " + destinationPath + "\n");
+			next(null);
+		});	
+	}
+
+}
+
+var studioTasksGenerateJavaDocs = function (context, decoder, path) {
+	return function (next) {
+		//get to the project main directory
+		process.chdir(process.env.HOME);
+		process.chdir(".strider"); //go to the root project directory
+		process.chdir("data"); 
+		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
+		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+
+		context.out("Generating documentation...\n");
+		
+		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
+		var sourcePath = "Application/src/main/java:Application/tests/src";
+		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
+
+		javaDocCommand.stdout.on('data', function (data) {
+			context.out(data);
+		});
+
+		javaDocCommand.stderr.on('data', function (data) {
+			context.out(data);
+		});
+
+		javaDocCommand.on('close', function (code) {
+			context.out("Documentation saved in " + destinationPath + "\n");
+			next(null);
+		});	
+	}
+
 }
 
 var eclipseTasksFirst = function(context, decoder, path) {

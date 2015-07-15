@@ -56,12 +56,6 @@ module.exports = {
 			}
 			return callback(err, output);
 		});
-	},
-
-	generateJavaDocs: function (configData, context, callback) {
-		cmd.generateJavaDocs(configData, context, function (result) {
-			return callback(result);
-		});
 	}
 
 }
