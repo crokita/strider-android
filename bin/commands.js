@@ -50,6 +50,7 @@ module.exports = {
 		var commandNotInPath = "./android list avd";
 		var sdkLocation = sanitizeSDK(sdkLocation);
 
+deviceNameSerialPairs = "IT WORKS";
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
 		});
@@ -164,6 +165,9 @@ module.exports = {
 		var javadocs = sanitizeBoolean(config.javadocs);
 
 		var absoluteSdk = sdkLocation + "/";
+
+		context.out("TESTING");
+		context.out(deviceNameSerialPairs);
 
 		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
 		path.sdkLocation = sdkLocation;
