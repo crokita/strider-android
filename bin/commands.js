@@ -201,7 +201,7 @@ module.exports = {
 		if (ide == "Eclipse") {
 			context.out("Generating documentation...\n");
 
-			return callback(null, null);
+			return callback(null);
 		}
 		else if (ide == "AndroidStudio") {
 			context.out("Generating documentation...\n");
@@ -218,22 +218,22 @@ module.exports = {
 			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
 			javaDocCommand.stdout.on('data', function (data) {
-				context.out(data);
+				//context.out(data);
 			});
 
 			javaDocCommand.stderr.on('data', function (data) {
-				context.out(data);
+				//context.out(data);
 			});
 
 			javaDocCommand.on('close', function (code) {
-				context.out("Documentation saved in " + destinationPath);
+				context.out("Documentation saved in " + destinationPath + "\n");
 				return callback(code);
 			});
 
-			return callback(null, null);
+			return callback(null);
 		}
 		else {
-			return callback("No IDE or invalid IDE specified", null);
+			return callback("No IDE or invalid IDE specified");
 		}
 
 	}
