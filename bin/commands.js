@@ -230,7 +230,7 @@ module.exports = {
 				return callback(code);
 			});
 
-			return callback(null);
+			//return callback(null);
 		}
 		else {
 			return callback("No IDE or invalid IDE specified");
