@@ -206,9 +206,10 @@ module.exports = {
 		else if (ide == "AndroidStudio") {
 			context.out("Generating documentation...");
 
-			var destinationPath = "${HOME}/.strider/data/*/";
-			var sourcePath = "${HOME}/.strider/data/*/Application/src/main/";
-			/*var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "java"]);
+			//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+			var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
+			var sourcePath = "${HOME}/.strider/data/*/Application/src/main/java:${HOME}/.strider/data/*/Application/tests/src";
+			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
 			javaDocCommand.stdout.on('data', function (data) {
 				context.out(data);
@@ -221,7 +222,7 @@ module.exports = {
 			javaDocCommand.on('close', function (code) {
 				context.out("Documentation saved in " + destinationPath);
 				return callback(code);
-			});*/
+			});
 
 			return callback(null, null);
 		}
