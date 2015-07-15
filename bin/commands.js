@@ -38,6 +38,9 @@ var emulators = [
 	"emulator-x86"
 ];
 
+var emulatorPortLow = 5554; //the lowest the port number can be for an android emulator
+var emulatorPortHigh = 5680; //the highest the port number can be for an andoird emulator
+
 
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
