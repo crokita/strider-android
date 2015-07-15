@@ -218,11 +218,11 @@ module.exports = {
 			var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
 			javaDocCommand.stdout.on('data', function (data) {
-				//context.out(data);
+				context.out(data);
 			});
 
 			javaDocCommand.stderr.on('data', function (data) {
-				//context.out(data);
+				context.out(data);
 			});
 
 			javaDocCommand.on('close', function (code) {
