@@ -289,7 +289,7 @@ function installAndroidStudioApk (path, context, callback) {
 
 //the following methods are used exlusively for async.waterfall tasks
 var eclipseTasksFindProjectName = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//attempt to figure out which folder is the test folder (the first folder found that has "test" in the name)
 		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 -regex ".*[tT][eE][sS][tT].*" -type d', function (err, stdout, stderr) {
 			//grab only the first result
@@ -301,7 +301,7 @@ var eclipseTasksFindProjectName = function(context, decoder, path) {
 }
 
 var eclipseTasksFindTestName = function(context, decoder, path) {
-	return function(next) {
+	return function (next) {
 		//attempt to figure out which folder is the project folder (the first folder found that doesn't have "test" in the name)
 		//WARNING: this command ignores hidden directories and the "." directory!
 		child.exec('cd ${HOME}/.strider/data/*/.; find . -maxdepth 1 ! -regex ".*[tT][eE][sS][tT].*" -not -path \'*\/\\.*\' -not -path \'.\' -type d', function (err, stdout, stderr) {
