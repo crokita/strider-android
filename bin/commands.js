@@ -54,7 +54,6 @@ module.exports = {
 			callback(err, output);
 		});
 
-		deviceNameSerialPairs = "I have data!";
 	},
 
 	getTargetList: function (sdkLocation, callback) {
@@ -153,7 +152,6 @@ module.exports = {
 			return callback(code);
 		});
 
-		context.out("HEY! " + deviceNameSerialPairs);
 	},
 
 	installApk: function (config, context, callback) {
