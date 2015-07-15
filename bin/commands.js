@@ -335,7 +335,7 @@ var eclipseTasksGenerateJavaDocs = function (context, decoder, path) {
 		});
 
 		javaDocCommand.on('close', function (code) {
-			context.out("Documentation saved in " + destinationPath + "\n");
+			context.out("Documentation saved in " + destinationPath + "\n\n\n");
 			next(null);
 		});	
 	}
@@ -366,7 +366,7 @@ var studioTasksGenerateJavaDocs = function (context, decoder, path) {
 		});
 
 		javaDocCommand.on('close', function (code) {
-			context.out("Documentation saved in " + destinationPath + "\n");
+			context.out("Documentation saved in " + destinationPath + "\n\n\n");
 			next(null);
 		});	
 	}
@@ -602,7 +602,7 @@ var runTheTests = function(context, decoder, path) {
 	};
 }
 
-
+/*
 //this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
 var resignApk = function (apkName, context, callback) {
 	context.out("Apk Name: " + apkName + "\n");
@@ -631,6 +631,7 @@ var findAndInstall = function (regex, context, path, callback) {
 
 	});
 }
+*/
 
 //finds an apk based on a regex input, resigns it and returns the name of the apk
 var findAndResign = function (regex, context, path, callback) {
