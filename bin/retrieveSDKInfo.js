@@ -63,7 +63,7 @@ module.exports = {
 			});
 		}
 		else {
-			getDeviceList(configData.sdkLocation, function (err, emulatorResult, physicalResult) {
+			this.getDeviceList(configData.sdkLocation, function (err, emulatorResult, physicalResult) {
 				var deviceList = physicalResult;
 
 				var foundDevice = false;
