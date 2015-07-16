@@ -14,6 +14,29 @@ var DEVICE_NAME = "name"; //a constant for getting the device name. it's a strin
 var SERIAL_NAME = "serialName"; //a constant for getting the serial name. it's a string
 var PORT_NUMBER = "port"; //a constant for getting the port number. it's a number
 
+//find a device by a value. valueType is what the parameter is (i.e. device name, serial number). use the constants provided by module exports
+//if null is passed in as the value then return every value found from valueType and return it as an array
+var findDeviceInfo = function (value, valueType) {
+	if (value != null) {
+		for(var index = 0; index < devices.length; index++) {
+			var device = devices[index];
+			if (device[valueType] == value) {
+				return device;
+			}
+		}
+		//if the device isn't found, return null
+		return null;
+	}
+	else {
+		var allResults = [];
+		for(var index = 0; index < devices.length; index++) {
+			var device = devices[index];
+			allResults.push(device[valueType]);
+		}
+		return allResults;
+	}
+}
+
 module.exports = {
 	DEVICE_NAME: DEVICE_NAME,
 	SERIAL_NAME: SERIAL_NAME, 
@@ -124,29 +147,6 @@ var generatePortNumber = function () {
 	//now pick a random element in possiblePorts and make that the emulator port
 	var randomNumber = Math.floor(Math.random() * possiblePorts.length);
 	return possiblePorts[randomNumber];
-}
-
-//find a device by a value. valueType is what the parameter is (i.e. device name, serial number). use the constants provided by module exports
-//if null is passed in as the value then return every value found from valueType and return it as an array
-var findDeviceInfo = function (value, valueType) {
-	if (value != null) {
-		for(var index = 0; index < devices.length; index++) {
-			var device = devices[index];
-			if (device[valueType] == value) {
-				return device;
-			}
-		}
-		//if the device isn't found, return null
-		return null;
-	}
-	else {
-		var allResults = [];
-		for(var index = 0; index < devices.length; index++) {
-			var device = devices[index];
-			allResults.push(device[valueType]);
-		}
-		return allResults;
-	}
 }
 
 //add a device or emulator given a name and the serial number. for physical devices they would be the same thing
