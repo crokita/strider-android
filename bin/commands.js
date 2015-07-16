@@ -2,6 +2,7 @@ var child = require('child_process');
 var fs = require('fs');
 var StringDecoder = require('string_decoder').StringDecoder;
 var async = require('async');
+var manager = require('./deviceManager');
 
 //var workers = []; //emulators go here so they can be killed when necessary
 
@@ -38,11 +39,6 @@ var emulators = [
 	"emulator-x86"
 ];
 
-var emulatorPortLow = 5554; //the lowest the port number can be for an android emulator
-var emulatorPortHigh = 5680; //the highest the port number can be for an android emulator
-//this stores an array of values which contain the device name and serial number. for physical devices they would be the same thing
-var deviceNameSerialPairs = []; 
-
 
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
@@ -50,7 +46,6 @@ module.exports = {
 		var commandNotInPath = "./android list avd";
 		var sdkLocation = sanitizeSDK(sdkLocation);
 
-deviceNameSerialPairs = "IT WORKS";
 		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
 			callback(err, output);
 		});
@@ -116,6 +111,7 @@ deviceNameSerialPairs = "IT WORKS";
 	},
 
 	startEmulator: function (config, context, callback) {
+		/*
 		//var deviceName = "\"" + sanitizeName(config.device) + "\"";
 		var deviceName = sanitizeName(config.device);
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
@@ -151,6 +147,21 @@ deviceNameSerialPairs = "IT WORKS";
 		
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback(code);
+		});*/
+		var deviceName = sanitizeName(config.device);
+		var sdkLocation = sanitizeSDK(config.sdkLocation);
+
+		var absoluteSdk = sdkLocation + "/";
+		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
+
+		if (sdkLocation == "") { //assume android tool is in the path if no location is specified
+			adb = "adb";
+			emulator = "emulator";
+		}
+
+		manager.startEmulator(adb, emulator, deviceName, function (code) {
+			return callback(code);
 		});
 
 	},
@@ -165,9 +176,6 @@ deviceNameSerialPairs = "IT WORKS";
 		var javadocs = sanitizeBoolean(config.javadocs);
 
 		var absoluteSdk = sdkLocation + "/";
-
-		context.out("TESTING");
-		context.out(deviceNameSerialPairs);
 
 		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
 		path.sdkLocation = sdkLocation;
