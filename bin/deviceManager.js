@@ -68,7 +68,7 @@ var generatePortNumber = function () {
 
 //find a device by a value. valueType is what the parameter is (i.e. device name, serial number). use the constants provided by module exports
 //if null is passed in as the value then return every value found from valueType and return it as an array
-var findDeviceInfo: function (value, valueType) {
+var findDeviceInfo = function (value, valueType) {
 	if (value != null) {
 		for(var index = 0; index < devices.length; index++) {
 			var device = devices[index];
