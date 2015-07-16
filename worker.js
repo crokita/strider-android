@@ -45,7 +45,7 @@ module.exports = {
 					isEmulator: config.isEmulator
 				};
 
-				if (isEmulator) {
+				if (config.isEmulator) {
 					SDK.startEmulator(configData, context, function () {
 						done(null, true);
 					});
