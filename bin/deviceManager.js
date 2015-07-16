@@ -100,7 +100,7 @@ module.exports = {
 		});
 	},
 
-	stopEmulator: function (adb, deviceName, context, callback) {
+	stopEmulator: function (adb, deviceName, decoder, callback) {
 		var foundEmulator = manager.findDeviceInfo(deviceName, manager.DEVICE_NAME);
 		//found the emulator to delete
 		if (foundEmulator != null) {
@@ -108,16 +108,19 @@ module.exports = {
 
 			var adbCommand = child.spawn(adb, ["-s", serialName, "emu", "kill"]);
 
-			adbCommand.stdout.on('data', function (data) {
-				context.out(data);
-			});
+			var fullOutputResults = "";
 
+			adbCommand.stdout.on('data', function (data) {
+				var data = decoder.write(data);
+				fullOutputResults = fullOutputResults.concat(data);
+			});
 			adbCommand.stderr.on('data', function (data) {
-				context.out(data);
+				var data = decoder.write(data);
+				fullOutputResults = fullOutputResults.concat(data);
 			});
 			
-			adbCommand.on('close', function (code) { //emulator booted
-				return callback(null, "Emulator " + deviceName + " stopped");
+			adbCommand.on('close', function (code) {
+				return callback(null, fullOutputResults);
 			});
 		}
 		else {
@@ -138,7 +141,7 @@ module.exports = {
 			context.out(data);
 		});
 
-		adbCommand.on('close', function (code) { //emulator booted
+		adbCommand.on('close', function (code) {
 			return callback();
 		});
 	},
@@ -152,12 +155,12 @@ module.exports = {
 		var fullOutputResults = "";
 
 		runTestsCmd.stdout.on('data', function (data) {
-			var data = decoder.write(data)
+			var data = decoder.write(data);
 			context.out(data);
 			fullOutputResults = fullOutputResults.concat(data);
 		});
 		runTestsCmd.stderr.on('data', function (data) {
-			var data = decoder.write(data)
+			var data = decoder.write(data);
 			context.out(data);
 			fullOutputResults = fullOutputResults.concat(data);
 		});

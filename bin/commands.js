@@ -97,6 +97,7 @@ module.exports = {
 	},
 
 	stopEmulator: function (data, callback) {
+		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
 		var deviceName = "\"" + sanitizeName(data.name) + "\"";
 		var sdkLocation = sanitizeSDK(data.sdkLocation);
 
@@ -107,7 +108,7 @@ module.exports = {
 			adb = "adb";
 		}
 
-		manager.stopEmulator(adb, deviceName, context, function (err, output) {
+		manager.stopEmulator(adb, deviceName, decoder, function (err, output) {
 			callback(err, output);
 		});
 	},

@@ -119,6 +119,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			else {
 				$scope.toConsole(data.error);
 			}
+			//now update the device list
+			$scope.retrieveDevices();
 		});
 	}
 
