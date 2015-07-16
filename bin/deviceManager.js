@@ -66,6 +66,41 @@ module.exports = {
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback();
 		});
+	},
+
+	//this file needs to run it because the adb doesn't know which device to launch the tests on
+	//run the unit tests given the package and activity
+	runTests: function (adb, packageName, activityName, decoder, context, callback) {
+		var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+		var fullOutputResults = "";
+
+		runTestsCmd.stdout.on('data', function (data) {
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults = fullOutputResults.concat(data);
+		});
+		runTestsCmd.stderr.on('data', function (data) {
+			var data = decoder.write(data)
+			context.out(data);
+			fullOutputResults = fullOutputResults.concat(data);
+		});
+		
+		//NOTES: The first parameter of done() determines the test status
+		//if it's 0, null or undefined the test passes
+		//if it's a non-zero number it fails
+		//if it's a string it's an error
+		
+		runTestsCmd.on('close', function (code) {
+			//check whether the unit tests have passed
+			var result = fullOutputResults.search(/OK \(\d* test(s*)\)/g);
+			if (result == -1) {
+				return callback(1, true); //non-zero number will cause a failure
+			}
+			else {
+				return callback(null, true); //the tests passed
+			}
+			
+		});
 	}
 }
 
