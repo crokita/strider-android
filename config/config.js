@@ -26,7 +26,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
 		$scope.javadocs = false; //generate documentation
 		$scope.runningModel = {};
-		$scope.runningModel.isRunning = $scope.isRunning;
+		$scope.runningModel.isRunning = $scope.isRunning; //function for if emulator is still running
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
