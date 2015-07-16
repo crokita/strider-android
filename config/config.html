@@ -61,9 +61,9 @@
         <button ng-click="retrieveDevices()" class="btn btn-primary">Grab Android Devices</button>
         <br>
 
-        <div ng-if="deviceResults != ''">
+        <div ng-if="emulatorResults != ''">
             <br>
-            Click on any row to select the corresponding device
+            Click on any row to select the corresponding emulator
             <table class="table" >
                 <tr>
                     <th>Name</th>
@@ -71,12 +71,27 @@
                     <th>ABI</th>
                     <th></th>
                 </tr>
-                <tr ng-repeat="(key, value) in deviceResults">
+                <tr ng-repeat="(key, value) in emulatorResults">
                     <div ng-model="deviceList">
-                        <th ng-click="selectDevice(key)">[[value.name]]</th>
-                        <th ng-click="selectDevice(key)">[[value.target]]</th>
-                        <th ng-click="selectDevice(key)">[[value.abi]]</th>
+                        <th ng-click="selectEmulator(key)">[[value.name]]</th>
+                        <th ng-click="selectEmulator(key)">[[value.target]]</th>
+                        <th ng-click="selectEmulator(key)">[[value.abi]]</th>
                         <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
+                    </div> 
+                </tr>
+            </table>
+        </div>
+        <br><br>
+        <div ng-if="physicalResults != ''">
+            <br>
+            Click on any row to select the corresponding physical device
+            <table class="table" >
+                <tr>
+                    <th>Name</th>
+                </tr>
+                <tr ng-repeat="(key, value) in physicalResults">
+                    <div ng-model="deviceList">
+                        <th ng-click="selectPhysical(key)">[[value.name]]</th>
                     </div> 
                 </tr>
             </table>

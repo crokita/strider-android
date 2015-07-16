@@ -5,11 +5,12 @@ A Strider plugin for automating Android projects developed in Eclipse and Androi
 Requirements:
 *  Linux or Mac OS
 *  Android SDK installed. It is recommended to add it to your PATH.
-   * The path for the SDK <b>must</b> go under the variable ANDROID_HOME
-   * The following directories in the SDK must be added to the path in order for all the necessary tools to function:
+   * The PATH for the SDK <b>must</b> go under the variable ANDROID_HOME
+   * The following directories in the SDK must be added to the PATH in order for all the necessary tools to function:
       * tools
       * platform-tools
       * build-tools/21.1.2
+   * If you choose not to add the SDK to your PATH then you may specify the location in the plugin
 *  Ant installed for Eclipse projects
 *  Over 512 MB of memory for running the emulator and for gradle
 *  Java Runtime Environment (JRE) or Java Development Kit (JDK)
@@ -17,10 +18,10 @@ Requirements:
 
 
 An Android device must be selected through the config webpage before clicking "Test"
-WARNING: An emulator has to be started through this plugin in order for functionality. Having an emulator exist before starting Strider may result in trouble if you attempt to select the same emulator for testing.
+WARNING: An emulator has to be started through this plugin in order for functionality. Having an emulator run before starting Strider may result in trouble if you attempt to select the same emulator for testing.
 
 #### Custom configurations on the webpage:
-*  If you don't have your Android SDK in your path you can specify it in a text field in the plugin
+*  If you don't have your Android SDK in your PATH you can specify it in a text field in the plugin
 *  strider-android can grab your existing android devices or create a new one. They can also be deleted in the config page
 *  If you create a new device then name, target level and ABI are required
  

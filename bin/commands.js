@@ -42,12 +42,20 @@ var emulators = [
 
 module.exports = {
 	getDeviceList: function (sdkLocation, callback) {
+		//http://developer.android.com/tools/help/adb.html#devicestatus
 		var commandInPath = "android list avd";
 		var commandNotInPath = "./android list avd";
 		var sdkLocation = sanitizeSDK(sdkLocation);
 
-		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, output) {
-			callback(err, output);
+		//first get all the emulators
+		executeAndroid(sdkLocation, sdkTools["android"], commandInPath, commandNotInPath, function (err, emulators) {
+			//now get all the physical devices
+			var commandInPath2 = "adb devices";
+			var commandNotInPath2 = "./adb devices";
+			executeAndroid(sdkLocation, sdkTools["adb"], commandInPath2, commandNotInPath2, function (err, physicals) {
+				callback(err, emulators, physicals);
+			});
+
 		});
 
 	},

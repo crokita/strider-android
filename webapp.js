@@ -39,10 +39,13 @@ module.exports = {
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
             var sdkLocation = req.param('sdk');
-            SDK.getDeviceList(sdkLocation,  function (err, result) {
+            SDK.getDeviceList(sdkLocation,  function (err, emulators, physicals) {
                 var data = {
                     error: err,
-                    result: result
+                    result: {
+                        emulators: emulators,
+                        physicals: physicals
+                    }
                 }
                 res.json(data);
             });  

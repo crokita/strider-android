@@ -4,13 +4,18 @@ var cmd = require('./commands');
 module.exports = {
 	
 	getDeviceList: function (sdkLocation, callback) {
-		cmd.getDeviceList(sdkLocation, function (err, output) {
-			var result = null;
-			if (output != null) {
-				result = parseDeviceList(output);
+		cmd.getDeviceList(sdkLocation, function (err, emulators, physicals) {
+			var emulatorResult = null;
+			var physicalResult = null;
+
+			if (emulators != null) {
+				emulatorResult = parseEmulators(emulators);
+			}
+			if (physicals != null) {
+				physicalResult = parsePhysicals(physicals);
 			}
 			
-	        return callback(err, result);
+	        return callback(err, emulatorResult, physicalResult);
 	    });
 	},
 	
@@ -60,8 +65,8 @@ module.exports = {
 
 }
 
-//this function takes the list of android devices that are usuable and converts each name, target, abi to an object and returns a list
-var parseDeviceList = function (input) {
+//this function takes the list of android emulators that are usuable and converts each name, target, abi to an object and returns a list
+var parseEmulators = function (input) {
 	var deviceList = [];
 	var list = input.split("\n");
 	//remove the first line
@@ -103,6 +108,33 @@ var parseDeviceList = function (input) {
 		deviceList.push(deviceObj);
 	}	
 	*/
+
+	return deviceList;
+}
+
+//this function takes the list of android physical devices that are usuable and returns a list of device names
+var parsePhysicals = function (input) {
+	var deviceList = [];
+	var list = input.split("\n");
+	//remove the first line
+	list.splice(0,1);
+
+	//check whether the list is empty
+	if (list.length == 1) {
+		return null;
+	}
+
+	//sort through all the device information. ignore emulators
+	for (var index = 0; index < list.length; index += 1) {
+		var line = list[index];
+		if (line.search(/emulator-\d\d\d\d/g) == -1) { //if it isn't an emulator
+			//get the name and the state of the device
+			var nameAndState = line.split("\t"); //they are separated by one tab
+			if (nameAndState[1] == "device") { //it's an online, connected device. include it
+				deviceList.push(nameAndState[0]); //add just the name
+			}
+		}
+	}	
 
 	return deviceList;
 }

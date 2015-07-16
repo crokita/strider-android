@@ -10,7 +10,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	$scope.initializeData = function () {
 		//reset data that shouldn't persist
-		$scope.deviceResults = "";
+		//$scope.deviceResults
+		$scope.emulatorResults = "";
+		$scope.physicalResults = "";
 		$scope.targetResults = "";
 		$scope.dataResult = "";
 		//user configurations for devices
@@ -88,7 +90,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 		$http.get('/ext/android/devices' + urlParams).success(function(data, status, headers, config) {
 			$scope.toConsole(data.error);
-			$scope.deviceResults = data.result;
+			$scope.emulatorResults = data.result.emulators;
+			$scope.physicalResults = data.result.physicals;
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
@@ -99,12 +102,19 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	}
 
 	//remembers the name of the device selected
-	$scope.selectDevice = function (index) {
-		$scope.deviceSelected = $scope.deviceResults[index].name;
-		$scope.config.device = $scope.deviceResults[index].name;
+	$scope.selectEmulator = function (index) {
+		$scope.deviceSelected = $scope.emulatorResults[index].name;
+		$scope.config.device = $scope.emulatorResults[index].name;
 		$scope.save();
 	}
 	
+	//remembers the name of the device selected
+	$scope.selectPhysical = function (index) {
+		$scope.deviceSelected = $scope.physicalResults[index].name;
+		$scope.config.device = $scope.physicalResults[index].name;
+		$scope.save();
+	}
+
 	//retrieves a list of available Android targets and their ABIs
 	$scope.retrieveTargets = function () {
 		$scope.save();
