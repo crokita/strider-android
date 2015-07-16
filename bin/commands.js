@@ -160,7 +160,7 @@ module.exports = {
 			emulator = "emulator";
 		}
 
-		manager.startEmulator(adb, emulator, deviceName, function (result) {
+		manager.startEmulator(adb, emulator, deviceName, context, function (result) {
 			context.out(result);
 			return callback();
 		});

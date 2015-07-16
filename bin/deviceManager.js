@@ -20,8 +20,8 @@ module.exports = {
 	PORT_NUMBER: PORT_NUMBER,
 	findDeviceInfo: findDeviceInfo,
 
-	//starts an emulator with a given adb location, emulator location, and device name. the rest is automatically handled
-	startEmulator: function(adb, emulator, deviceName, callback) {
+	//starts an emulator with a given adb location, emulator location, and device name. It also requires a context for logging
+	startEmulator: function(adb, emulator, deviceName, context, callback) {
 		//check if the emulator is already running. it may be possible to have this work for physical devices, too
 		var checkDevice = findDeviceInfo(deviceName, DEVICE_NAME);
 		if (checkDevice != null) { //if it was found, exit immediately
