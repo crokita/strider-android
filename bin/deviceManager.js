@@ -101,7 +101,7 @@ module.exports = {
 	},
 
 	stopEmulator: function (adb, deviceName, decoder, callback) {
-		var foundEmulator = findDeviceInfo(deviceName, manager.DEVICE_NAME);
+		var foundEmulator = findDeviceInfo(deviceName, DEVICE_NAME);
 		//found the emulator to delete
 		if (foundEmulator != null) {
 			var serialName = foundEmulator.serialName;
