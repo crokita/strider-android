@@ -21,6 +21,20 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.targetOptions = "";
 		$scope.abiOptions = "";
 		$scope.eclipseModel = {}; //for eclipse configurations
+
+$scope.sampleModel = {};
+$scope.sampleModel.isRunning = function (name) {
+		console.log(name);
+		var running = false;
+		for (var index = 0; index < $scope.runningEmulators.length; index++) {
+			if ($scope.runningEmulators[index] == name) {
+				running = true;
+				index = $scope.runningEmulators.length;
+			}
+		}
+		return running;
+	}
+
 		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
