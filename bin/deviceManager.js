@@ -48,7 +48,7 @@ module.exports = {
 			addDevice(deviceName, serialName, port);
 			return callback("Started up emulator " + deviceName + "\n");
 		});
-	}
+	},
 
 	//install an apk given a path, the apk name, and context. path contains the adb command and the device name
 	installApk: function (path, apkName, context, callback) {
@@ -62,7 +62,7 @@ module.exports = {
 		adbCommand.stderr.on('data', function (data) {
 			context.out(data);
 		});
-		
+
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback();
 		});
