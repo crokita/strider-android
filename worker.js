@@ -43,9 +43,11 @@ module.exports = {
 					sdkLocation: config.sdkLocation,
 					javadocs: config.javadocs
 				};
-				//context.comment("This is a comment. It gets shown on the Strider webpage");
 
-				SDK.findEmulator(context, function (result) {
+				SDK.startEmulator(configData, context, function () {
+					done(null, true);
+				});
+				/*SDK.findEmulator(context, function (result) {
 					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator " + configData.device + "\n");
 						SDK.startEmulator(configData, context, function (code) {
@@ -63,7 +65,7 @@ module.exports = {
 							
 						//}
 					}
-				});
+				});*/
 				
 			},
 			//function style (calling done is a MUST)

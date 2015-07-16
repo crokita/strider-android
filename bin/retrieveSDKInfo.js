@@ -44,8 +44,8 @@ module.exports = {
 	},
 
 	startEmulator: function (configData, context, callback) {
-		cmd.startEmulator(configData, context, function (result) {
-			return callback(result);
+		cmd.startEmulator(configData, context, function () {
+			return callback();
 		});
 	},
 

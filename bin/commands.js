@@ -160,8 +160,9 @@ module.exports = {
 			emulator = "emulator";
 		}
 
-		manager.startEmulator(adb, emulator, deviceName, function (code) {
-			return callback(code);
+		manager.startEmulator(adb, emulator, deviceName, function (result) {
+			context.out(result);
+			return callback();
 		});
 
 	},
@@ -340,7 +341,7 @@ var eclipseTasksGenerateJavaDocs = function (context, decoder, path) {
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
 		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
 		context.out("Generating documentation...\n");
-
+		//the colon with only work with linux and mac, as with many things in this program
 		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
 		var sourcePath = path.projectFolderName + "/src:" + path.testFolderName + "/src";
 		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
@@ -372,6 +373,7 @@ var studioTasksGenerateJavaDocs = function (context, decoder, path) {
 
 		context.out("Generating documentation...\n");
 		
+		//the colon with only work with linux and mac, as with many things in this program
 		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
 		var sourcePath = "Application/src/main/java:Application/tests/src";
 		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);

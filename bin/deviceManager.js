@@ -22,6 +22,11 @@ module.exports = {
 
 	//starts an emulator with a given adb location, emulator location, and device name. the rest is automatically handled
 	startEmulator: function(adb, emulator, deviceName, callback) {
+		//check if the emulator is already running. it may be possible to have this work for physical devices, too
+		var checkDevice = findDeviceInfo(deviceName, DEVICE_NAME);
+		if (checkDevice != null) { //if it was found, exit immediately
+			return callback("Found already running emulator: " + deviceName + "\n");
+		}
 		//we need a way to identify the process once it starts running, since there could be more than one emulator/device
 		//give it a port number and remember it
 		var port = generatePortNumber();
@@ -41,7 +46,7 @@ module.exports = {
 		adbCommand.on('close', function (code) { //emulator booted
 			//now save the emulator information in devices
 			addDevice(deviceName, serialName, port);
-			return callback(code);
+			return callback("Started up emulator " + deviceName + "\n");
 		});
 	}
 }
@@ -76,6 +81,8 @@ var findDeviceInfo = function (value, valueType) {
 				return device;
 			}
 		}
+		//if the device isn't found, return null
+		return null;
 	}
 	else {
 		var allResults = [];
