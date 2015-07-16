@@ -6,17 +6,21 @@ module.exports = {
 	
 	getDeviceList: function (sdkLocation, callback) {
 		cmd.getDeviceList(sdkLocation, function (err, emulators, physicals) {
-			var emulatorResult = null;
+			var emulatorsResult = null;
 			var physicalResult = null;
 
 			if (emulators != null) {
-				emulatorResult = parseEmulators(emulators);
+				emulatorsResult = parseEmulators(emulators);
 			}
 			if (physicals != null) {
 				physicalResult = parsePhysicals(physicals);
 			}
 
-	        return callback(err, emulatorResult, physicalResult);
+
+			var runningEmulators = physicalResult.emulators;
+			var physicals = physicalResult.devices;
+
+	        return callback(err, emulatorsResult, physicals, runningEmulators);
 	    });
 	},
 	
@@ -41,6 +45,12 @@ module.exports = {
 		cmd.deleteDevice(data, function (err, output) {			
 	        return callback(err, output);
 	    });
+	},
+
+	stopEmulator: function (data, callback) {
+		cmd.stopEmulator(data, function (err, output) {
+			return callback(err, output);
+		});
 	},
 
 	findEmulator: function (context, callback) {
@@ -140,9 +150,10 @@ var parseEmulators = function (input) {
 	return deviceList;
 }
 
-//this function takes the list of android physical devices that are usuable and returns a list of device names
+//this function takes the list of android physical devices that are usuable and returns a list of device names AND running emulators
 var parsePhysicals = function (input) {
 	var deviceList = [];
+	var emulatorList = [];
 	var list = input.split("\n");
 	//remove the first line
 	list.splice(0,1);
@@ -152,7 +163,7 @@ var parsePhysicals = function (input) {
 		return null;
 	}
 
-	//sort through all the device information. ignore emulators
+	//sort through all the device information. put RUNNING emulators in another field
 	for (var index = 0; index < list.length; index += 1) {
 		var line = list[index];
 		var nameAndState = line.split("\t"); //they are separated by one tab
@@ -166,10 +177,19 @@ var parsePhysicals = function (input) {
 				deviceList.push(nameAndState[0]); //add just the name
 			}
 		}
-
+		else { //check if it's a running emulator and add it to the other list
+			if (nameAndState[1] == "device") { //it's an online, connected emulator. include it
+				emulatorList.push(nameAndState[0]); //add just the name
+			}
+		}
 	}	
 
-	return deviceList;
+	var finalObj = {
+		emulators: emulatorList,
+		devices: deviceList
+	}
+
+	return finalObj;
 }
 
 //this function takes the list of android targets that are usuable and returns a list of them

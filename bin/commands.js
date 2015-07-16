@@ -96,6 +96,22 @@ module.exports = {
 		});
 	},
 
+	stopEmulator: function (data, callback) {
+		var deviceName = "\"" + sanitizeName(data.name) + "\"";
+		var sdkLocation = sanitizeSDK(data.sdkLocation);
+
+		var absoluteSdk = sdkLocation + "/";
+		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
+
+		if (sdkLocation == "") { //assume android tool is in the path if no location is specified
+			adb = "adb";
+		}
+
+		manager.stopEmulator(adb, deviceName, context, function (err, output) {
+			callback(err, output);
+		});
+	}
+
 	findEmulator: function (context, callback) {
 		//child.exec("ps aco command o pid --no-header", function (err, stdout, stderr) {
 

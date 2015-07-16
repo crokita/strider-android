@@ -100,6 +100,31 @@ module.exports = {
 		});
 	},
 
+	stopEmulator: function (adb, deviceName, context, callback) {
+		var foundEmulator = manager.findDeviceInfo(deviceName, manager.DEVICE_NAME);
+		//found the emulator to delete
+		if (foundEmulator != null) {
+			var serialName = foundEmulator.serialName;
+
+			var adbCommand = child.spawn(adb, ["-s", serialName, "emu", "kill"]);
+
+			adbCommand.stdout.on('data', function (data) {
+				context.out(data);
+			});
+
+			adbCommand.stderr.on('data', function (data) {
+				context.out(data);
+			});
+			
+			adbCommand.on('close', function (code) { //emulator booted
+				return callback(null, "Emulator " + deviceName + " stopped");
+			});
+		}
+		else {
+			return callback("No emulator found running for name " + deviceName, null);
+		}
+	}
+
 	//install an apk given a path, the apk name, and context. path contains the adb command and the device name
 	installApk: function (path, apkName, context, callback) {
 		var device = findDeviceInfo(path.device, DEVICE_NAME);		

@@ -39,12 +39,13 @@ module.exports = {
     globalRoutes: function (app, context) {
         app.get('/devices', function(req, res) {
             var sdkLocation = req.param('sdk');
-            SDK.getDeviceList(sdkLocation,  function (err, emulators, physicals) {
+            SDK.getDeviceList(sdkLocation,  function (err, emulators, physicals, runningEmulators) {
                 var data = {
                     error: err,
                     result: {
                         emulators: emulators,
-                        physicals: physicals
+                        physicals: physicals,
+                        runningEmulators: runningEmulators
                     }
                 }
                 res.json(data);
@@ -75,6 +76,16 @@ module.exports = {
 
         app.put('/devices', function(req, res) { 
             SDK.deleteDevice(req.body, function (err, result) {
+                var data = {
+                    error: err,
+                    result: result
+                }
+                res.send(data);
+            });
+        });
+
+        app.put('/stop', function(req, res) { 
+            SDK.stopEmulator(req.body, function (err, result) {
                 var data = {
                     error: err,
                     result: result

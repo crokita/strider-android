@@ -13,6 +13,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//$scope.deviceResults
 		$scope.emulatorResults = "";
 		$scope.physicalResults = "";
+		$scope.runningEmulators = "";
 		$scope.targetResults = "";
 		$scope.dataResult = "";
 		//user configurations for devices
@@ -94,6 +95,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			$scope.toConsole(data.error);
 			$scope.emulatorResults = data.result.emulators;
 			$scope.physicalResults = data.result.physicals;
+			$scope.runningEmulators = data.result.runningEmulators;
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
@@ -101,6 +103,37 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			console.log(config);
 			$scope.result = data;
 		});*/
+	}
+
+	//check if the emulator is running
+	$scope.isRunning = function (name) {
+		var running = false;
+		for (var index = 0; index < $scope.runningEmulators.length; index++) {
+			if ($scope.runningEmulators[index] == name) {
+				running = true;
+				index = $scope.runningEmulators.length;
+			}
+		}
+		return running;
+	}
+
+	//kills the process of an emulator
+	$scope.stopEmulator = function (name) {
+		var data =  {
+			name: name,
+			sdkLocation: $scope.config.sdkLocation
+		}
+
+		//use the put method because Express does not allow a body for a delete request
+		//see http://stackoverflow.com/questions/22186671/angular-resource-delete-wont-send-body-to-express-js-server
+		$http.put('/ext/android/stop', data).success(function(data, status, headers, config) {
+			if (data.result != null) {
+				$scope.toConsole(data.result);
+			}
+			else {
+				$scope.toConsole(data.error);
+			}
+		});
 	}
 
 	//remembers the name of the device selected

@@ -69,13 +69,19 @@
                     <th>Name</th>
                     <th>Target</th>
                     <th>ABI</th>
-                    <th></th>
+                    <th>Stop</th>
+                    <th>Delete</th>
                 </tr>
                 <tr ng-repeat="(key, value) in emulatorResults">
                     <div ng-model="deviceList">
                         <th ng-click="selectEmulator(key)">[[value.name]]</th>
                         <th ng-click="selectEmulator(key)">[[value.target]]</th>
                         <th ng-click="selectEmulator(key)">[[value.abi]]</th>
+                        <th> 
+                            <div ng-if"isRunning(value.name)"> 
+                                <button ng-click="stopEmulator(value.name)" class="btn btn-warning">Stop device</button>
+                            </div>
+                        </th>
                         <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
                     </div> 
                 </tr>
