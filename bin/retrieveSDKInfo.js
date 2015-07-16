@@ -55,10 +55,6 @@ module.exports = {
 		});
 	},
 
-	addPhysicalDevice: function (name) {
-		return manager.addDevice(name, name, null);
-	},
-
 	installApk: function (configData, context, callback) {
 		//do one preliminary check as to whether a physical device is connected (if testing on a physical device) 
 		if (configData.isEmulator) {
@@ -69,6 +65,9 @@ module.exports = {
 		else {
 			this.getDeviceList(configData.sdkLocation, function (err, emulatorResult, physicalResult) {
 				var deviceList = physicalResult;
+				
+				console.log("HEY");
+				console.log(deviceList);
 
 				var foundDevice = false;
 				for(var index = 0; index < deviceList.length; index++) {
