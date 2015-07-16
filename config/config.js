@@ -110,8 +110,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	
 	//remembers the name of the device selected
 	$scope.selectPhysical = function (index) {
-		$scope.deviceSelected = $scope.physicalResults[index].name;
-		$scope.config.device = $scope.physicalResults[index].name;
+		$scope.deviceSelected = $scope.physicalResults[index];
+		$scope.config.device = $scope.physicalResults[index];
 		$scope.save();
 	}
 
