@@ -1,5 +1,6 @@
 //this is an intermediate module which may modify the data after commands.js creates the result
 var cmd = require('./commands');
+var manager = require('./deviceManager');
 
 module.exports = {
 	
@@ -14,8 +15,7 @@ module.exports = {
 			if (physicals != null) {
 				physicalResult = parsePhysicals(physicals);
 			}
-			console.log(physicalResult);
-			
+
 	        return callback(err, emulatorResult, physicalResult);
 	    });
 	},
@@ -128,13 +128,18 @@ var parsePhysicals = function (input) {
 	//sort through all the device information. ignore emulators
 	for (var index = 0; index < list.length; index += 1) {
 		var line = list[index];
-		if (line.search(/emulator-\d\d\d\d/g) == -1) { //if it isn't an emulator
-			//get the name and the state of the device
-			var nameAndState = line.split("\t"); //they are separated by one tab
+		var nameAndState = line.split("\t"); //they are separated by one tab
+
+		//use deviceManager to see if it's an emulator that is running
+		//the only reason that manager is being used instead of doing a regex is because someone who really likes
+		//breaking things may name their emulator "emulator-XXXX" and then all is hopeless
+		var result = manager.findDeviceInfo(nameAndState[0], manager.SERIAL_NAME);
+		if (result == null) {//it's not an emulator
 			if (nameAndState[1] == "device") { //it's an online, connected device. include it
 				deviceList.push(nameAndState[0]); //add just the name
 			}
 		}
+
 	}	
 
 	return deviceList;

@@ -31,6 +31,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.testFolderName = "";
 		$scope.projectFolderName = "";
 		$scope.sdkLocation = "";
+		$scope.isEmulator = true; //this isn't shown to the user. default to true, even though it doesn't matter what it is
 	}
 
 
@@ -50,6 +51,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.testFolderName = $scope.config.testFolderName;
 		$scope.sdkLocation = $scope.config.sdkLocation;
 		$scope.javadocs = $scope.config.javadocs;
+		$scope.isEmulator = $scope.config.isEmulator;
 	});
 
 	//save all data into the config 
@@ -105,6 +107,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.selectEmulator = function (index) {
 		$scope.deviceSelected = $scope.emulatorResults[index].name;
 		$scope.config.device = $scope.emulatorResults[index].name;
+		$scope.isEmulator = true;
 		$scope.save();
 	}
 	
@@ -112,6 +115,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.selectPhysical = function (index) {
 		$scope.deviceSelected = $scope.physicalResults[index];
 		$scope.config.device = $scope.physicalResults[index];
+		$scope.isEmulator = false;
 		$scope.save();
 	}
 

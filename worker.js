@@ -41,12 +41,19 @@ module.exports = {
 					testFolderName: config.testFolderName,
 					ide: config.ide,
 					sdkLocation: config.sdkLocation,
-					javadocs: config.javadocs
+					javadocs: config.javadocs,
+					isEmulator: config.isEmulator
 				};
 
-				SDK.startEmulator(configData, context, function () {
+				if (isEmulator) {
+					SDK.startEmulator(configData, context, function () {
+						done(null, true);
+					});
+				}
+				else { //don't start emulators if a physical device was selected
 					done(null, true);
-				});
+				}
+
 				/*SDK.findEmulator(context, function (result) {
 					if (!result) { //if it didn't return a matching emulator then start a new one
 						context.out("No emulator found. Starting up emulator " + configData.device + "\n");
@@ -77,7 +84,8 @@ module.exports = {
 					testFolderName: config.testFolderName,
 					ide: config.ide,
 					sdkLocation: config.sdkLocation,
-					javadocs: config.javadocs
+					javadocs: config.javadocs,
+					isEmulator: config.isEmulator
 				};
 
 				SDK.installApk(configData, context, function (err, result) {
