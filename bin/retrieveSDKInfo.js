@@ -55,6 +55,10 @@ module.exports = {
 		});
 	},
 
+	addPhysicalDevice: function (name) {
+		manager.addDevice(name, name, null);
+	},
+
 	installApk: function (configData, context, callback) {
 		//do one preliminary check as to whether a physical device is connected (if testing on a physical device) 
 		if (configData.isEmulator) {
@@ -80,7 +84,7 @@ module.exports = {
 					});
 				}
 				else {
-					context.out("The physical device " + configData.device + " isn't connected! Stopping test process");
+					context.out("The physical device " + configData.device + " isn't connected! Stopping test process\n");
 					return callback(1, false);
 				}
 		    });			

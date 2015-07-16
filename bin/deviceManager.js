@@ -37,11 +37,22 @@ var findDeviceInfo = function (value, valueType) {
 	}
 }
 
+//add a device or emulator given a name and the serial number. for physical devices they would be the same thing
+var addDevice = function (name, serialName, port) {
+	var device = {};
+	device.name = name;
+	device.serialName = serialName;
+	device.port = port;
+	devices.push(device);
+	return;
+}
+
 module.exports = {
 	DEVICE_NAME: DEVICE_NAME,
 	SERIAL_NAME: SERIAL_NAME, 
 	PORT_NUMBER: PORT_NUMBER,
 	findDeviceInfo: findDeviceInfo,
+	addDevice: addDevice,
 
 	//starts an emulator with a given adb location, emulator location, and device name. It also requires a context for logging
 	startEmulator: function(adb, emulator, deviceName, context, callback) {
@@ -147,14 +158,4 @@ var generatePortNumber = function () {
 	//now pick a random element in possiblePorts and make that the emulator port
 	var randomNumber = Math.floor(Math.random() * possiblePorts.length);
 	return possiblePorts[randomNumber];
-}
-
-//add a device or emulator given a name and the serial number. for physical devices they would be the same thing
-var addDevice = function (name, serialName, port) {
-	var device = {};
-	device.name = name;
-	device.serialName = serialName;
-	device.port = port;
-	devices.push(device);
-	return;
 }

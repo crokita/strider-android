@@ -51,6 +51,8 @@ module.exports = {
 					});
 				}
 				else { //don't start emulators if a physical device was selected
+					//add the physical device to device manager
+					SDK.addPhysicalDevice(configData.device);
 					done(null, true);
 				}
 
