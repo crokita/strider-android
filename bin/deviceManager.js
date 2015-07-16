@@ -70,8 +70,10 @@ module.exports = {
 
 	//this file needs to run it because the adb doesn't know which device to launch the tests on
 	//run the unit tests given the package and activity
-	runTests: function (adb, packageName, activityName, decoder, context, callback) {
-		var runTestsCmd = child.spawn(adb, ["shell", "am", "instrument", "-w", packageName+"/"+activityName]);
+	runTests: function (path, packageName, activityName, decoder, context, callback) {
+		var device = findDeviceInfo(path.device, DEVICE_NAME);
+
+		var runTestsCmd = child.spawn(path.adb, ["-s", device.serialName, "shell", "am", "instrument", "-w", packageName+"/"+activityName]);
 		var fullOutputResults = "";
 
 		runTestsCmd.stdout.on('data', function (data) {

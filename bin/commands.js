@@ -574,7 +574,7 @@ var runTheTests = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, packageName, next) {
 		//run the tests!
 		var activityName = "android.test.InstrumentationTestRunner"; //use this when running test apps
-		manager.runTests(path.adb, packageName, activityName, decoder, context, function (result, didRun) {
+		manager.runTests(path, packageName, activityName, decoder, context, function (result, didRun) {
 			return next(result, didRun);
 		});
 	};
