@@ -108,6 +108,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.deviceSelected = $scope.emulatorResults[index].name;
 		$scope.config.device = $scope.emulatorResults[index].name;
 		$scope.isEmulator = true;
+		$scope.config.isEmulator = true;
 		$scope.save();
 	}
 	
@@ -116,6 +117,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.deviceSelected = $scope.physicalResults[index];
 		$scope.config.device = $scope.physicalResults[index];
 		$scope.isEmulator = false;
+		$scope.config.isEmulator = false;
 		$scope.save();
 	}
 
