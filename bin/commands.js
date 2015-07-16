@@ -110,7 +110,7 @@ module.exports = {
 		manager.stopEmulator(adb, deviceName, context, function (err, output) {
 			callback(err, output);
 		});
-	}
+	},
 
 	findEmulator: function (context, callback) {
 		//child.exec("ps aco command o pid --no-header", function (err, stdout, stderr) {
