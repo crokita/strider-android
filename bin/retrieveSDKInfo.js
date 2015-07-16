@@ -33,7 +33,6 @@ module.exports = {
 				}
 				emulatorsResult[index].running = running;
 			}
-
 	        return callback(err, emulatorsResult, physicals);
 	    });
 	},
