@@ -75,10 +75,10 @@ module.exports = {
 
 				if (foundDevice) {
 					//a device is found. temporarily add the device to the deviceManager list. it will be removed once the tests end
-					manager.addDevice(configData.name, configData.name, null);
+					manager.addDevice(configData.device, configData.device, null);
 
 					cmd.installApk(configData, context, function (err, output) {
-						manager.removeDevice(configData.name); //remove it once the testing is done, no matter what
+						manager.removeDevice(configData.device); //remove it once the testing is done, no matter what
 						return callback(err, output);
 					});
 				}
