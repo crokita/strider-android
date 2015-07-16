@@ -13,7 +13,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		//$scope.deviceResults
 		$scope.emulatorResults = "";
 		$scope.physicalResults = "";
-		$scope.runningEmulators = "";
 		$scope.targetResults = "";
 		$scope.dataResult = "";
 		//user configurations for devices
@@ -21,20 +20,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.targetOptions = "";
 		$scope.abiOptions = "";
 		$scope.eclipseModel = {}; //for eclipse configurations
-
-$scope.sampleModel = {};
-$scope.sampleModel.isRunning = function (name) {
-		console.log(name);
-		var running = false;
-		for (var index = 0; index < $scope.runningEmulators.length; index++) {
-			if ($scope.runningEmulators[index] == name) {
-				running = true;
-				index = $scope.runningEmulators.length;
-			}
-		}
-		return running;
-	}
-
 		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
@@ -109,7 +94,6 @@ $scope.sampleModel.isRunning = function (name) {
 			$scope.toConsole(data.error);
 			$scope.emulatorResults = data.result.emulators;
 			$scope.physicalResults = data.result.physicals;
-			$scope.runningEmulators = data.result.runningEmulators;
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
@@ -117,19 +101,6 @@ $scope.sampleModel.isRunning = function (name) {
 			console.log(config);
 			$scope.result = data;
 		});*/
-	}
-
-	//check if the emulator is running
-	$scope.isRunning = function (name) {
-		console.log(name);
-		var running = false;
-		for (var index = 0; index < $scope.runningEmulators.length; index++) {
-			if ($scope.runningEmulators[index] == name) {
-				running = true;
-				index = $scope.runningEmulators.length;
-			}
-		}
-		return running;
 	}
 
 	//kills the process of an emulator

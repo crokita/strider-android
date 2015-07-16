@@ -20,7 +20,21 @@ module.exports = {
 			var runningEmulators = physicalResult.emulators;
 			var physicals = physicalResult.devices;
 
-	        return callback(err, emulatorsResult, physicals, runningEmulators);
+			//now for each emulator found, give a value as to whether it is running
+			//it will then have name, target, abi, and running
+			for (var index = 0; index < emulatorsResult.length; index++) {
+
+				var running = false;
+				for (var subindex = 0; subindex < runningEmulators.length; subindex++) {
+					if (emulatorsResult[index].name == runningEmulators[subindex]) {
+						running = true;
+						subindex = runningEmulators.length;
+					}
+				}
+				emulatorsResult[index].running = running;
+			}
+
+	        return callback(err, emulatorsResult, physicals);
 	    });
 	},
 	
