@@ -123,7 +123,7 @@ module.exports = {
 		else {
 			return callback("No emulator found running for name " + deviceName, null);
 		}
-	}
+	},
 
 	//install an apk given a path, the apk name, and context. path contains the adb command and the device name
 	installApk: function (path, apkName, context, callback) {
