@@ -37,7 +37,6 @@ If your computer fails due to not having enough memory than changing the hw.ramS
 *  The config file for the hw.ramSize is in .android/avd/your_emulator_name.avd/config.ini, probably in your root directory
 
 TODO LIST: 
-*  Test this plugin for real android devices instead of just emulators
 *  Allow the user to select a subset of tests to perform
 *  Support for IntelliJ IDEA projects?
 *  Option to automatically set up the Android SDK?
