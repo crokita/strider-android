@@ -94,8 +94,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 			$scope.toConsole(data.error);
 			$scope.emulatorResults = data.result.emulators;
 			$scope.physicalResults = data.result.physicals;
-
-			console.log($scope.emulatorResults);
 		});
 		/*
 		$http.get('/crokita/auto_dummy/api/android/devices').success(function(data, status, headers, config) {
