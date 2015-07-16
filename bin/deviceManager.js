@@ -88,7 +88,7 @@ var findDeviceInfo = function (value, valueType) {
 }
 
 //add a device or emulator given a name and the serial number. for physical devices they would be the same thing
-var addDevice: function (name, serialName, port) {
+var addDevice = function (name, serialName, port) {
 	var device = {};
 	device.name = name;
 	device.serialName = serialName;
