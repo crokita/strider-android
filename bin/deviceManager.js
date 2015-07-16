@@ -15,10 +15,10 @@ var SERIAL_NAME = "serial"; //a constant for getting the serial name. it's a str
 var PORT_NUMBER = "port"; //a constant for getting the port number. it's a number
 
 module.exports = {
-	DEVICE_NAME: DEVICE_NAME;
-	SERIAL_NAME: SERIAL_NAME; 
-	PORT_NUMBER: PORT_NUMBER;
-	findDeviceInfo: findDeviceInfo;
+	DEVICE_NAME: DEVICE_NAME,
+	SERIAL_NAME: SERIAL_NAME, 
+	PORT_NUMBER: PORT_NUMBER,
+	findDeviceInfo: findDeviceInfo,
 
 	//starts an emulator with a given adb location, emulator location, and device name. the rest is automatically handled
 	startEmulator: function(adb, emulator, deviceName, callback) {
