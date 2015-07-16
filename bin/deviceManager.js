@@ -52,7 +52,7 @@ module.exports = {
 
 	//install an apk given a path, the apk name, and context. path contains the adb command and the device name
 	installApk: function (path, apkName, context, callback) {
-		var device = findDeviceInfo(DEVICE_NAME, path.device);
+		var device = findDeviceInfo(path.device, DEVICE_NAME);
 		var adbCommand = child.spawn(path.adb, ["-s", device.serialName, "install", "-r", apkName]);
 
 		adbCommand.stdout.on('data', function (data) {
