@@ -79,7 +79,7 @@
                         <th ng-click="selectEmulator(key)">[[value.abi]]</th>
                         <th> 
                             <div ng-if"value.running == true"> 
-                                <button ng-click="stopEmulator(value.name)" class="btn btn-warning">Stop device</button>
+                                <button ng-click="stopEmulator([[value.name]])" class="btn btn-warning">Stop device</button>
                             </div>
                         </th>
                         <th><button ng-click="deleteDevice(value.name)" class="btn btn-danger">Delete device</button></th>
