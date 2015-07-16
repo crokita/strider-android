@@ -25,6 +25,8 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
 		$scope.javadocs = false; //generate documentation
+		$scope.runningModel = {};
+		$scope.runningModel.isRunning = $scope.isRunning;
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -107,7 +109,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	//check if the emulator is running
 	$scope.isRunning = function (name) {
-		console.log(name);
 		var running = false;
 		for (var index = 0; index < $scope.runningEmulators.length; index++) {
 			if ($scope.runningEmulators[index] == name) {
