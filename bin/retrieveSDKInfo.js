@@ -65,10 +65,6 @@ module.exports = {
 		else {
 			this.getDeviceList(configData.sdkLocation, function (err, emulatorResult, physicalResult) {
 				var deviceList = physicalResult;
-				
-				console.log("HEY");
-				console.log(deviceList);
-
 				var foundDevice = false;
 				for(var index = 0; index < deviceList.length; index++) {
 					if (configData.device == deviceList[index]) {
@@ -78,7 +74,11 @@ module.exports = {
 				}
 
 				if (foundDevice) {
+					//a device is found. temporarily add the device to the deviceManager list. it will be removed once the tests end
+					manager.addDevice(configData.name, configData.name, null);
+
 					cmd.installApk(configData, context, function (err, output) {
+						manager.removeDevice(configData.name); //remove it once the testing is done, no matter what
 						return callback(err, output);
 					});
 				}
