@@ -81,7 +81,7 @@ module.exports = {
 				}
 				else {
 					context.out("The physical device " + configData.device + " isn't connected! Stopping test process");
-					return (1, false);
+					return callback(1, false);
 				}
 		    });			
 		}
