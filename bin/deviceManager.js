@@ -10,9 +10,9 @@ var devices = [];
 }
 */
 
-var DEVICE_NAME: "name"; //a constant for getting the device name. it's a string
-var SERIAL_NAME: "serial"; //a constant for getting the serial name. it's a string
-var PORT_NUMBER: "port"; //a constant for getting the port number. it's a number
+var DEVICE_NAME = "name"; //a constant for getting the device name. it's a string
+var SERIAL_NAME = "serial"; //a constant for getting the serial name. it's a string
+var PORT_NUMBER = "port"; //a constant for getting the port number. it's a number
 
 module.exports = {
 	DEVICE_NAME: DEVICE_NAME;
