@@ -14,6 +14,7 @@ module.exports = {
 			if (physicals != null) {
 				physicalResult = parsePhysicals(physicals);
 			}
+			console.log(physicalResult);
 			
 	        return callback(err, emulatorResult, physicalResult);
 	    });
