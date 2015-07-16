@@ -51,6 +51,7 @@ module.exports = {
 					});
 				}
 				else { //don't start emulators if a physical device was selected
+					context.out("Using physical device " + configData.device);
 					done(null, true);
 				}
 
