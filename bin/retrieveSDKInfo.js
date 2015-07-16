@@ -56,12 +56,36 @@ module.exports = {
 	},
 
 	installApk: function (configData, context, callback) {
-		cmd.installApk(configData, context, function (err, output) {
-			/*if (err) {
-				context.out(err); //print the error
-			}*/
-			return callback(err, output);
-		});
+		//do one preliminary check as to whether a physical device is connected (if testing on a physical device) 
+		if (configData.isEmulator) {
+			cmd.installApk(configData, context, function (err, output) {
+				return callback(err, output);
+			});
+		}
+		else {
+			getDeviceList(configData.sdkLocation, function (err, emulatorResult, physicalResult) {
+				var deviceList = physicalResult;
+
+				var foundDevice = false;
+				for(var index = 0; index < deviceList.length; index++) {
+					if (configData.device == deviceList[index]) {
+						foundDevice = true;
+						index = deviceList.length; //bail out of the loop
+					}
+				}
+
+				if (foundDevice) {
+					cmd.installApk(configData, context, function (err, output) {
+						return callback(err, output);
+					});
+				}
+				else {
+					context.out("The physical device " + configData.device + " isn't connected! Stopping test process");
+					return (1, false);
+				}
+		    });			
+		}
+
 	}
 
 }

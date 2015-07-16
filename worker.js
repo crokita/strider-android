@@ -1,5 +1,6 @@
 var SDK = require("./bin/retrieveSDKInfo");
 var async = require('async');
+var manager = require('./deviceManager');
 
 module.exports = {
 	// Initialize the plugin for a job
