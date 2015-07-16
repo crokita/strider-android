@@ -98,7 +98,7 @@ module.exports = {
 
 	stopEmulator: function (data, callback) {
 		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-		var deviceName = "\"" + sanitizeName(data.name) + "\"";
+		var deviceName = sanitizeName(data.name);
 		var sdkLocation = sanitizeSDK(data.sdkLocation);
 
 		var absoluteSdk = sdkLocation + "/";
