@@ -102,6 +102,7 @@ module.exports = {
 		var device = findDeviceInfo(path.device, DEVICE_NAME);
 		context.out("HEY");
 		context.out(devices);
+		/*
 		var adbCommand = child.spawn(path.adb, ["-s", device.serialName, "install", "-r", apkName]);
 
 		adbCommand.stdout.on('data', function (data) {
@@ -115,6 +116,7 @@ module.exports = {
 		adbCommand.on('close', function (code) { //emulator booted
 			return callback();
 		});
+*/
 	},
 
 	//this file needs to run it because the adb doesn't know which device to launch the tests on
