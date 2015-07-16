@@ -56,7 +56,7 @@ module.exports = {
 	},
 
 	addPhysicalDevice: function (name) {
-		manager.addDevice(name, name, null);
+		return manager.addDevice(name, name, null);
 	},
 
 	installApk: function (configData, context, callback) {
