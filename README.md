@@ -17,6 +17,7 @@ Requirements:
 
 
 An Android device must be selected through the config webpage before clicking "Test"
+WARNING: An emulator has to be started through this plugin in order for functionality. Having an emulator exist before starting Strider may result in trouble if you attempt to select the same emulator for testing.
 
 #### Custom configurations on the webpage:
 *  If you don't have your Android SDK in your path you can specify it in a text field in the plugin

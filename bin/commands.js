@@ -111,43 +111,6 @@ module.exports = {
 	},
 
 	startEmulator: function (config, context, callback) {
-		/*
-		//var deviceName = "\"" + sanitizeName(config.device) + "\"";
-		var deviceName = sanitizeName(config.device);
-		var sdkLocation = sanitizeSDK(config.sdkLocation);
-
-		//var absoluteSdk = process.env.HOME + "/" + sdkLocation + "/";
-		var absoluteSdk = sdkLocation + "/";
-		var adb = absoluteSdk + sdkTools["adb"]["toolFull"];
-		var emulator = absoluteSdk + sdkTools["emulator"]["toolFull"];
-
-		var emulatorCommand;
-		var adbCommand;
-
-		if (sdkLocation == "") { //assume android tool is in the path if no location is specified
-			emulatorCommand = child.spawn("emulator", ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
-			//workers.push(emulatorCommand);
-			adbCommand = child.spawn("adb", ["wait-for-device"]);
-			//workers.push(adbCommand);
-		}
-		else {
-			emulatorCommand = child.spawn(emulator, ["-avd", deviceName, "-no-skin", "-no-audio", "-no-window", "-no-boot-anim"]);
-			//workers.push(emulatorCommand);
-			adbCommand = child.spawn(adb, ["wait-for-device"]);
-			//workers.push(adbCommand);
-		}
-
-		emulatorCommand.stdout.on('data', function (data) {
-			context.out(data);
-		});
-
-		emulatorCommand.stderr.on('data', function (data) {
-			context.out(data);
-		});
-		
-		adbCommand.on('close', function (code) { //emulator booted
-			return callback(code);
-		});*/
 		var deviceName = sanitizeName(config.device);
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
 
@@ -167,6 +130,7 @@ module.exports = {
 
 	},
 
+	//this function installs the project and test apks and runs the tests
 	installApk: function (config, context, callback) {
 		//var deviceName = "\"" + sanitizeSDK(config.device) + "\"";
 		//var isLibrary = sanitizeBoolean(config.isLibrary);
@@ -175,6 +139,7 @@ module.exports = {
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
 		var ide = sanitizeName(config.ide);
 		var javadocs = sanitizeBoolean(config.javadocs);
+		var device = sanitizeName(config.device);
 
 		var absoluteSdk = sdkLocation + "/";
 
@@ -183,6 +148,7 @@ module.exports = {
 		path.projectFolderName = projectFolderName;
 		path.testFolderName = testFolderName;
 		path.javadocs = javadocs;
+		path.device = device;
 
 		if (sdkLocation == "") { //assume tools is in the path if no location is specified
 			path.aapt = "aapt";
@@ -490,6 +456,16 @@ var eclipseTasksFourth = function(context, decoder, path) {
 var eclipseTasksFifth = function(context, decoder, path) {
 	return function (debugTestApkName, debugApkName, packageName, next) {
 		//now install the apk files
+		manager.installApk(path, debugApkName, context, function() {
+			process.chdir("../");
+			process.chdir("../");
+			process.chdir(path.testFolderName);
+			process.chdir("bin"); //the apk is in the bin directory
+			manager.installApk(path, debugTestApkName, context, function() {
+				next(null, debugApkName, debugTestApkName, packageName);
+			});
+		});
+		/*
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 			context.out(stdout);
 			process.chdir("../");
@@ -501,6 +477,7 @@ var eclipseTasksFifth = function(context, decoder, path) {
 				next(null, debugApkName, debugTestApkName, packageName);
 			});
 		});
+		*/
 	};
 }
 
@@ -562,13 +539,19 @@ var studioTasksThird = function(context, decoder, path) {
 var studioTasksFourth = function(context, decoder, path) {
 	return function (debugApkName, debugTestApkName, next) {
 		//now install the apk files
+		manager.installApk(path, debugApkName, context, function() {
+			manager.installApk(path, debugTestApkName, context, function() {
+				next(null, debugApkName, debugTestApkName);
+			});
+		});
+		/*
 		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
 			context.out(stdout);
 			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
 				context.out(stdout);
 				next(null, debugApkName, debugTestApkName);
 			});
-		});
+		});*/
 	};
 }
 

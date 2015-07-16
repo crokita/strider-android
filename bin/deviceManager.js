@@ -11,7 +11,7 @@ var devices = [];
 */
 
 var DEVICE_NAME = "name"; //a constant for getting the device name. it's a string
-var SERIAL_NAME = "serial"; //a constant for getting the serial name. it's a string
+var SERIAL_NAME = "serialName"; //a constant for getting the serial name. it's a string
 var PORT_NUMBER = "port"; //a constant for getting the port number. it's a number
 
 module.exports = {
@@ -47,6 +47,24 @@ module.exports = {
 			//now save the emulator information in devices
 			addDevice(deviceName, serialName, port);
 			return callback("Started up emulator " + deviceName + "\n");
+		});
+	}
+
+	//install an apk given a path, the apk name, and context. path contains the adb command and the device name
+	installApk: function (path, apkName, context, callback) {
+		var device = findDeviceInfo(DEVICE_NAME, path.device);
+		var adbCommand = child.spawn(path.adb, ["-s", device.serialName, "install", "-r", apkName]);
+
+		adbCommand.stdout.on('data', function (data) {
+			context.out(data);
+		});
+
+		adbCommand.stderr.on('data', function (data) {
+			context.out(data);
+		});
+		
+		adbCommand.on('close', function (code) { //emulator booted
+			return callback();
 		});
 	}
 }
