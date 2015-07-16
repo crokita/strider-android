@@ -107,6 +107,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 
 	//check if the emulator is running
 	$scope.isRunning = function (name) {
+		console.log(name);
 		var running = false;
 		for (var index = 0; index < $scope.runningEmulators.length; index++) {
 			if ($scope.runningEmulators[index] == name) {
