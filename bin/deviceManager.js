@@ -49,13 +49,16 @@ var addDevice = function (name, serialName, port) {
 
 //remove a device or emulator by the name of the device
 var removeDevice = function (name) {
+	var newDevices = [];
+
+	//methodology: add all items that don't match to a new array. then assign it to devices
 	for(var index = 0; index < devices.length; index++) {
 		var device = devices[index];
-		if (device["name"] == name) { //found it. remove it and bail
-			devices = devices.splice(index, 1);
-			index = devices.length;
+		if (device["name"] != name) { //no match. it's not the searching element. add it to the array
+			newDevices.push(device);
 		}
 	}
+	devices = newDevices;
 	return;
 }
 
