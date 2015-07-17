@@ -382,6 +382,7 @@ var studioTasksGenerateJavaDocs = function (context, decoder, path) {
 		
 		//the colon with only work with linux and mac, as with many things in this program
 		var destinationPath = path.javadocDirectory;
+		context.out("Destination path: " + destinationPath);
 		var sourcePath = "Application/src/main/java:Application/tests/src";
 		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
