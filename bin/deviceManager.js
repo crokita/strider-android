@@ -120,6 +120,8 @@ module.exports = {
 			});
 			
 			adbCommand.on('close', function (code) {
+				//remove the device
+				removeDevice(deviceName);
 				return callback(null, fullOutputResults);
 			});
 		}
