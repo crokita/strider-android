@@ -157,25 +157,24 @@
 
         <!-- Documentation output directory -->
         <h4> Output Directory </h4>
-        <div class="well well-sm">
-            <p>
-                Specify a custom location to store the javadocs. The default location is at the root of the project.
-                <br>
-                For Android Studio projects this would be where Application/ and gradlew is.
-                <br>
-                For Eclipse this would be at the same level as the project and test folders. 
-                <br>
-                Be mindful of which IDE you've selected as the project structures are different for each
-                <br> 
-                One more thing: The output will not be stored in some folder. You can specify a directory for the output to go to.
-                <br>
-                Even if the directories don't exist, the javadoc tool will create them automatically for you
-                <h5> Warning: Only the alphanumeric characters, -, _, ., and / are allowed. All other characters will be ignored </h5>
-            </p>
-            Javadoc Directory: <input type="text" ng-model="javadocDirectory" ng-focus="focusJavadocDirectory()" ng-blur="blurJavadocDirectory()"> </input>
-            <i ng-if="savingJavadocDirectory == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
+        <br>
+        <p>
+            Specify a custom location to store the javadocs. The default location is at the root of the project.
             <br>
-        </div>
+            For Android Studio projects this would be where Application/ and gradlew are.
+            <br>
+            For Eclipse this would be at the same level as the project and test folders. 
+            <br>
+            Be mindful of which IDE you've selected as the project structures are different for each
+            <br> 
+            One more thing: The output will not be stored in some folder. You can specify a directory for the output to go to.
+            <br>
+            Even if the directories don't exist, the javadoc tool will create them automatically for you
+            <h5> Warning: Only the alphanumeric characters, -, _, ., and / are allowed. All other characters will be ignored </h5>
+        </p>
+        Javadoc Directory: <input type="text" ng-model="javadocDirectory" ng-focus="focusJavadocDirectory()" ng-blur="blurJavadocDirectory()"> </input>
+        <i ng-if="savingJavadocDirectory == true" class="fa fa-cog fa-spin"></i> <!-- a spinner to indicate that the text field isn't saved yet -->
+        <br>
 
     </div>
 

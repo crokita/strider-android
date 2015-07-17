@@ -175,6 +175,7 @@ module.exports = {
 		var ide = sanitizeName(config.ide);
 		var javadocs = sanitizeBoolean(config.javadocs);
 		var device = sanitizeName(config.device);
+		var javadocDirectory = sanitizeSDK(config.javadocDirectory);
 
 		var absoluteSdk = sdkLocation + "/";
 
@@ -184,6 +185,7 @@ module.exports = {
 		path.testFolderName = testFolderName;
 		path.javadocs = javadocs;
 		path.device = device;
+		path.javadocDirectory = javadocDirectory;
 
 		if (sdkLocation == "") { //assume tools is in the path if no location is specified
 			path.aapt = "aapt";
