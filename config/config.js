@@ -23,6 +23,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
+		$scope.savingJavadocDirectory = false; //for the spinner javadocDirectory
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -33,6 +34,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.javadocs = false; //generate documentation
 		$scope.isEmulator = true; //this isn't shown to the user. default to true, even though it doesn't matter what it is
 		$scope.autoStop = false; //automatically kill the emulator when the testing ends
+		$scope.javadocDirectory = "";
 	}
 
 
@@ -54,6 +56,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.javadocs = $scope.config.javadocs;
 		$scope.isEmulator = $scope.config.isEmulator;
 		$scope.autoStop = $scope.config.autoStop;
+		$scope.javadocDirectory = $scope.config.javadocDirectory;
 	});
 
 	//save all data into the config 
@@ -245,6 +248,11 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.savingSdkLocation = true;
 	}
 
+	//lets user know the input of where the Javadoc output directory is located isnt saved
+	$scope.focusJavadocDirectory = function () {
+		$scope.savingJavadocDirectory = true;
+	}
+
 	//saves the input of what is the Eclipse testing folder name
 	$scope.blurTestFolderName = function () {
 		$scope.eclipseModel.savingTestFolderName = false;
@@ -263,6 +271,13 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	$scope.blurSdkLocation = function () {
 		$scope.savingSdkLocation = false;
 		$scope.config.sdkLocation = $scope.sdkLocation;
+		$scope.save();
+	}
+
+	//saves the input of where the Javadoc output directory is located
+	$scope.blurJavadocDirectory = function () {
+		$scope.savingJavadocDirectory = false;
+		$scope.config.javadocDirectory = $scope.javadocDirectory;
 		$scope.save();
 	}
 

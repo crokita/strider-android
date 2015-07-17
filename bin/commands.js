@@ -340,10 +340,10 @@ var eclipseTasksGenerateJavaDocs = function (context, decoder, path) {
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d <LOCATION>
 		context.out("Generating documentation...\n");
 		//the colon with only work with linux and mac, as with many things in this program
-		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
+		var destinationPath = path.javadocDirectory;
 		var sourcePath = path.projectFolderName + "/src:" + path.testFolderName + "/src";
 		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
@@ -370,12 +370,12 @@ var studioTasksGenerateJavaDocs = function (context, decoder, path) {
 		process.chdir(".strider"); //go to the root project directory
 		process.chdir("data"); 
 		process.chdir(fs.readdirSync(".")[0]); //attempt to go into the first thing found in the directory (yes this is dumb)
-		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d /Users/chrisrokita/Documents/javadoc-output
+		//javadoc -sourcepath ./Application/src/main/java:./Application/tests/src -subpackages com -d <LOCATION>
 
 		context.out("Generating documentation...\n");
 		
 		//the colon with only work with linux and mac, as with many things in this program
-		var destinationPath = "/Users/chrisrokita/Documents/javadoc-output";
+		var destinationPath = path.javadocDirectory;
 		var sourcePath = "Application/src/main/java:Application/tests/src";
 		var javaDocCommand = child.spawn("javadoc", ["-d", destinationPath, "-sourcepath", sourcePath, "-subpackages", "com"]);
 
@@ -538,7 +538,7 @@ var studioTasksFirst = function(context, decoder, path) {
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		//fs.chmodSync("gradlew", '555'); //give read and execute permissions
+		fs.chmodSync("gradlew", '555'); //give read and execute permissions
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {
