@@ -538,7 +538,7 @@ var studioTasksFirst = function(context, decoder, path) {
 var studioTasksSecond = function(context, decoder, path) {
 	return function (next) {
 		//create the APKs
-		fs.chmodSync("gradlew", '555'); //give read and execute permissions
+		//fs.chmodSync("gradlew", '555'); //give read and execute permissions
 		var assembleCommand = child.spawn("./gradlew", ["assembleDebug"]);
 
 		assembleCommand.stdout.on('data', function (data) {
