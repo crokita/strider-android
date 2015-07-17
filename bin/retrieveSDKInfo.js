@@ -21,7 +21,7 @@ module.exports = {
 			var physicals = physicalResult.devices;
 
 			//running emulators will have their serial name instead of the device name. convert it to the device name
-			for (int index = 0; index < runningEmulators.length; index++) {
+			for (var index = 0; index < runningEmulators.length; index++) {
 				runningEmulators[index] = manager.findDeviceInfo(runningEmulators[index], manager.SERIAL_NAME).name;
 			}
 
