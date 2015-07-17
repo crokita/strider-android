@@ -113,6 +113,14 @@
         </div>
         <br>
 
+        <br>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="autoStop" ng-click="toggleAutoStop()"> Automatically kill the emulator after testing
+                </label>
+            </div>
+        <br>
+
         <h4> Add a new virtual device here: </h4>
         <h5> Warning: Only the alphanumeric characters, -, _, and . are allowed. All other characters will be ignored </h5>
         <br>
@@ -143,7 +151,7 @@
 
         <div class="checkbox">
             <label>
-              <input type="checkbox" ng-model="javadocs" ng-click="toggleJavaDocs()"> Enable Java documentation generation (requires a JDK)
+                <input type="checkbox" ng-model="javadocs" ng-click="toggleJavaDocs()"> Enable Java documentation generation (requires a JDK)
             </label>
         </div>
 

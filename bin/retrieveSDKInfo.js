@@ -1,6 +1,7 @@
 //this is an intermediate module which may modify the data after commands.js creates the result
 var cmd = require('./commands');
 var manager = require('./deviceManager');
+var StringDecoder = require('string_decoder').StringDecoder;
 
 module.exports = {
 	
@@ -85,9 +86,30 @@ module.exports = {
 
 	installApk: function (configData, context, callback) {
 		//do one preliminary check as to whether a physical device is connected (if testing on a physical device) 
+		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
+		var sdkLocation = sanitizeSDK(config.sdkLocation);
+		var absoluteSdk = sdkLocation + "/";
+		var adb;
+
+		if (sdkLocation == "") { //assume tools is in the path if no location is specified
+			adb = "adb";
+		}
+		else {
+			adb = absoluteSdk + cmd.sdkTools["adb"]["toolFull"];
+		}
+
 		if (configData.isEmulator) {
 			cmd.installApk(configData, context, function (err, output) {
-				return callback(err, output);
+				if (configData.autoStop) { //kill the emulator
+					manager.stopEmulator(adb, configData.device, decoder, function (err, result) {
+						context.out(result);
+						return callback(err, output);
+					});
+				}
+				else {
+					return callback(err, output);
+				}
+				
 			});
 		}
 		else {

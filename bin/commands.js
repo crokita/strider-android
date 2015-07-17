@@ -41,6 +41,8 @@ var emulators = [
 
 
 module.exports = {
+	sdkTools: sdkTools,
+
 	getDeviceList: function (sdkLocation, callback) {
 		//http://developer.android.com/tools/help/adb.html#devicestatus
 		var commandInPath = "android list avd";

@@ -23,7 +23,6 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.eclipseModel.savingProjectFolderName = false; //for the spinner projectFolderName
 		$scope.eclipseModel.savingTestFolderName = false; //for the spinner testFolderName
 		$scope.savingSdkLocation = false; //for the spinner sdkLocation
-		$scope.javadocs = false; //generate documentation
 		//config-dependent variables
 		$scope.ide = "";
 		$scope.deviceSelected = "";
@@ -31,7 +30,9 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.testFolderName = "";
 		$scope.projectFolderName = "";
 		$scope.sdkLocation = "";
+		$scope.javadocs = false; //generate documentation
 		$scope.isEmulator = true; //this isn't shown to the user. default to true, even though it doesn't matter what it is
+		$scope.autoStop = false; //automatically kill the emulator when the testing ends
 	}
 
 
@@ -52,6 +53,7 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 		$scope.sdkLocation = $scope.config.sdkLocation;
 		$scope.javadocs = $scope.config.javadocs;
 		$scope.isEmulator = $scope.config.isEmulator;
+		$scope.autoStop = $scope.config.autoStop;
 	});
 
 	//save all data into the config 
@@ -79,6 +81,12 @@ app.controller('AndroidController', ['$scope', '$http', function ($scope, $http)
 	//toggles whether to generate java documentation
 	$scope.toggleJavaDocs = function () {
 		$scope.config.javadocs = !$scope.javadocs; //because of how ng-click is working the actual value is set to the opposite one intended
+		$scope.save();
+	}
+
+	//toggles whether to kill emulator once testing ends
+	$scope.toggleAutoStop = function () {
+		$scope.config.autoStop = !$scope.autoStop; //because of how ng-click is working the actual value is set to the opposite one intended
 		$scope.save();
 	}
 

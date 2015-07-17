@@ -42,7 +42,8 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation,
 					javadocs: config.javadocs,
-					isEmulator: config.isEmulator
+					isEmulator: config.isEmulator,
+					autoStop: config.autoStop
 				};
 
 				if (config.isEmulator) {
@@ -86,7 +87,8 @@ module.exports = {
 					ide: config.ide,
 					sdkLocation: config.sdkLocation,
 					javadocs: config.javadocs,
-					isEmulator: config.isEmulator
+					isEmulator: config.isEmulator,
+					autoStop: config.autoStop
 				};
 
 				SDK.installApk(configData, context, function (err, result) {
