@@ -42,4 +42,3 @@ TODO LIST:
 *  Option to automatically set up the Android SDK?
 *  Move the installation logic into the prepare phase
 *  Sometimes even after waiting for the device to boot it's still not enough time to wait for pushing an apk install on the device
-*  Give the user the option to automatically kill the emulator after testing

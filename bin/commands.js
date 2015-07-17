@@ -39,10 +39,18 @@ var emulators = [
 	"emulator-x86"
 ];
 
+var sanitizeSDK = function (string) {
+	if (!string) {
+		return "";
+	}
+	var matches = string.match(/[a-zA-Z\d\.\_\-\/*]/g);
+	return matches.join("");
+}
 
 module.exports = {
 	sdkTools: sdkTools,
-
+	sanitizeSDK: sanitizeSDK,
+	
 	getDeviceList: function (sdkLocation, callback) {
 		//http://developer.android.com/tools/help/adb.html#devicestatus
 		var commandInPath = "android list avd";
@@ -662,14 +670,6 @@ var sanitizeName = function (string) {
 		return "";
 	}
 	var matches = string.match(/[a-zA-Z\d\.\_\-*]/g);
-	return matches.join("");
-}
-
-var sanitizeSDK = function (string) {
-	if (!string) {
-		return "";
-	}
-	var matches = string.match(/[a-zA-Z\d\.\_\-\/*]/g);
 	return matches.join("");
 }
 
