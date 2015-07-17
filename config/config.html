@@ -78,8 +78,7 @@
                         <th ng-click="selectEmulator(key)">[[value.target]]</th>
                         <th ng-click="selectEmulator(key)">[[value.abi]]</th>
                         <th> 
-                            [[value.running]]
-                            <div ng-if="value.running"> <!-- PROBLEM CODE --> 
+                            <div ng-if="value.running">
                                 <button ng-click="stopEmulator(value.name)" class="btn btn-warning">Stop device</button>
                             </div>
                         </th>
