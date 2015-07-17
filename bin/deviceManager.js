@@ -122,6 +122,8 @@ module.exports = {
 			adbCommand.on('close', function (code) {
 				//remove the device
 				removeDevice(deviceName);
+				//add the fact that the device was stopped to fullOutputResults
+				fullOutputResults.concat("\n Emulator " + deviceName + " was stopped.");
 				return callback(null, fullOutputResults);
 			});
 		}
