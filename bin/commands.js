@@ -177,6 +177,10 @@ module.exports = {
 		var device = sanitizeName(config.device);
 		var javadocDirectory = sanitizeSDK(config.javadocDirectory);
 
+		if (javadocDirectory == "") {//if nothing was specified, make it the root project directory
+			javadocDirectory = ".";
+		}
+
 		var absoluteSdk = sdkLocation + "/";
 
 		var path = {}; //pass this object to installation functions to help with using android tools or user-specified locations
@@ -358,7 +362,7 @@ var eclipseTasksGenerateJavaDocs = function (context, decoder, path) {
 		});
 
 		javaDocCommand.on('close', function (code) {
-			context.out("Documentation saved in " + destinationPath + "\n\n\n");
+			context.out("Documentation saved in " + process.cwd() + "/" + destinationPath + "\n\n\n");
 			next(null);
 		});	
 	}
@@ -390,7 +394,7 @@ var studioTasksGenerateJavaDocs = function (context, decoder, path) {
 		});
 
 		javaDocCommand.on('close', function (code) {
-			context.out("Documentation saved in " + destinationPath + "\n\n\n");
+			context.out("Documentation saved in " + process.cwd() + "/" + destinationPath + "\n\n\n");
 			next(null);
 		});	
 	}
