@@ -20,8 +20,10 @@ module.exports = {
 			var runningEmulators = physicalResult.emulators;
 			var physicals = physicalResult.devices;
 
-			console.log(runningEmulators);
-			console.log(physicals);
+			//running emulators will have their serial name instead of the device name. convert it to the device name
+			for (int index = 0; index < runningEmulators.length; index++) {
+				runningEmulators[index] = manager.findDeviceInfo(runningEmulators[index], manager.SERIAL_NAME).name;
+			}
 
 			//now for each emulator found, give a value as to whether it is running
 			//it will then have name, target, abi, and running
