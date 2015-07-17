@@ -123,7 +123,7 @@ module.exports = {
 				//remove the device
 				removeDevice(deviceName);
 				//add the fact that the device was stopped to fullOutputResults
-				fullOutputResults.concat("\n Emulator " + deviceName + " was stopped.");
+				fullOutputResults = fullOutputResults.concat("\n Emulator " + deviceName + " was stopped.");
 				return callback(null, fullOutputResults);
 			});
 		}
