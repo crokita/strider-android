@@ -87,7 +87,7 @@ module.exports = {
 	installApk: function (configData, context, callback) {
 		//do one preliminary check as to whether a physical device is connected (if testing on a physical device) 
 		var decoder = new StringDecoder('utf8'); //helps convert the buffer byte data into something human-readable
-		var sdkLocation = sanitizeSDK(config.sdkLocation);
+		var sdkLocation = cmd.sanitizeSDK(config.sdkLocation);
 		var absoluteSdk = sdkLocation + "/";
 		var adb;
 
