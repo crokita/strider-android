@@ -1,6 +1,6 @@
 {
   "name": "strider-android",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A Strider plugin for Android testing",
   "main": "webapp.js",
   "scripts": {
