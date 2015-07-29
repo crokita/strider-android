@@ -123,28 +123,6 @@ module.exports = {
 		});
 	},
 
-	findEmulator: function (context, callback) {
-		//child.exec("ps aco command o pid --no-header", function (err, stdout, stderr) {
-
-		child.exec("ps aco command", function (err, stdout, stderr) {
-			//convert the processes result into a list
-			var processArray = stdout.split("\n");
-			//remove the first item
-			processArray.splice(0,1);
-			//return the first emulator found
-			for (var index = 0; index < processArray.length; index++) {
-				for (var subindex = 0; subindex < emulators.length; subindex++) {
-					if (processArray[index] == emulators[subindex]) {
-						return callback(processArray[index]);
-					}
-				}
-			}
-			//no matches
-			return callback(null);
-		});
-
-	},
-
 	startEmulator: function (config, context, callback) {
 		var deviceName = sanitizeName(config.device);
 		var sdkLocation = sanitizeSDK(config.sdkLocation);
@@ -507,19 +485,6 @@ var eclipseTasksFifth = function(context, decoder, path) {
 				next(null, debugApkName, debugTestApkName, packageName);
 			});
 		});
-		/*
-		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-			context.out(stdout);
-			process.chdir("../");
-			process.chdir("../");
-			process.chdir(path.testFolderName);
-			process.chdir("bin"); //the apk is in the bin directory
-			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-				context.out(stdout);
-				next(null, debugApkName, debugTestApkName, packageName);
-			});
-		});
-		*/
 	};
 }
 
@@ -586,14 +551,6 @@ var studioTasksFourth = function(context, decoder, path) {
 				next(null, debugApkName, debugTestApkName);
 			});
 		});
-		/*
-		child.exec(path.adb + " install -r " + debugApkName, function (err, stdout, stderr) {
-			context.out(stdout);
-			child.exec(path.adb + " install -r " + debugTestApkName, function (err, stdout, stderr) {
-				context.out(stdout);
-				next(null, debugApkName, debugTestApkName);
-			});
-		});*/
 	};
 }
 
@@ -621,37 +578,6 @@ var runTheTests = function(context, decoder, path) {
 		});
 	};
 }
-
-/*
-//this method is not part of the async.waterfall tasks. pass in any apk to have it automatically resigned
-var resignApk = function (apkName, context, callback) {
-	context.out("Apk Name: " + apkName + "\n");
-	//assumes you are in the same directory as the apks. ASSUMES THE INPUT IS SANITIZED
-	var resignCommand = "mkdir unzip-output; cd unzip-output; jar xf ../" + apkName + "; "
-						+ "rm -r META-INF; ls | xargs jar -cvf " + apkName + "; "
-						+ "jarsigner -digestalg SHA1 -sigalg MD5withRSA -keystore ${HOME}/.android/debug.keystore -storepass android -keypass android " + apkName + " androiddebugkey; "
-						+ "rm ../" + apkName + "; mv " + apkName + " ../" + apkName + "; cd ../ rm -r unzip-output";
-	child.exec(resignCommand, function (err, stdout, stderr) {
-		context.out(stdout);
-		callback();
-	});
-
-}
-
-//finds an apk based on a regex input, installs it and returns the name of the apk
-var findAndInstall = function (regex, context, path, callback) {
-	child.exec("find ./ -type f -name " + regex, function (err, stdout, stderr) {
-		var apkName = stdout.slice(2); //remove the "./" characters at the beginning
-		apkName = sanitizeName(apkName.replace(/\n/g, "")); //make sure theres no newline characters. then sanitize
-
-		child.exec(path.adb + " install -r " + apkName, function (err, stdout, stderr) {
-			context.out(stdout);
-			callback(apkName); //return the name of the apk
-		});
-
-	});
-}
-*/
 
 //finds an apk based on a regex input, resigns it and returns the name of the apk
 var findAndResign = function (regex, context, path, callback) {
@@ -684,8 +610,6 @@ var sanitizeName = function (string) {
 var sanitizeBoolean = function (bool) {
 	return ("" + bool == "true");
 }
-
-//TODO: should it uninstall the apks from the device on completion?
 
 //./android update sdk --no-ui to fix dependency issues
 //find a way to show errors/process of build in the strider test page!

@@ -56,26 +56,6 @@ module.exports = {
 					context.out("Using physical device " + configData.device);
 					done(null, true);
 				}
-
-				/*SDK.findEmulator(context, function (result) {
-					if (!result) { //if it didn't return a matching emulator then start a new one
-						context.out("No emulator found. Starting up emulator " + configData.device + "\n");
-						SDK.startEmulator(configData, context, function (code) {
-							done(null, true);
-						});
-					}
-					else {
-						context.out("Found running emulator: " + result + "\n");
-						//if the found emulator is the same as the emulator we want to run then leave it alone
-						//if the found emulator is different then kill it and start the proper one
-						//if (result == config.device) { TODO: fix this. config.device and the emulator name that returns aren't the same name
-							done(null, true);
-						//}
-						//else {
-							
-						//}
-					}
-				});*/
 				
 			},
 			//function style (calling done is a MUST)
